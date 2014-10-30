@@ -41,16 +41,64 @@ editor.on("change", function(cm){
         if (lines[i].match(/Pad/)) {
             pad_line = lines[i].substring(lines[i].indexOf('[') + 1).split(' ');
 
+            //console.log(pad_line);
+
             var x1 = pad_line[0].slice(0, -2)*100;
             var y1 = pad_line[1].slice(0, -2)*100;
             var x2 = pad_line[2].slice(0, -2)*100;
             var y2 = pad_line[3].slice(0, -2)*100;
             var thickness = pad_line[4].slice(0, -2)*100;
 
-            pads[0].pad.attr({x: x1 - thickness});
-            pads[0].pad.attr({y: y1 - thickness});
-            pads[0].pad.attr({height: y2 - y1 + thickness});
-            pads[0].pad.attr({width: thickness});
+            //console.log(x1,y1,x2,y2,thickness);
+
+            var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
+            var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
+
+            //console.log(line_length, angle);
+
+            if (angle == 0) {
+                var x = x1 - thickness/2;
+                var y = y1 - thickness/2;
+                var width = line_length + thickness;
+                var height = thickness;
+            } else if (angle == -90) {
+                var x = x2 - thickness/2;
+                var y = y2 - thickness/2;
+                var width = thickness;
+                var height = line_length + thickness;
+            } else if (angle == 90) {
+                var x = x1 - thickness/2;
+                var y = y1 - thickness/2;
+                var width = thickness;
+                var height = line_length + thickness;
+            } else if (angle == 180) {
+                var x = x2 - thickness/2;
+                var y = y2 - thickness/2;
+                var width = line_length + thickness;
+                var height = thickness;
+            } else {
+                console.log("Rotated pad is not supported.");
+                return;
+            }
+
+            //console.log(x,y,height,width);
+
+            if (height < 0 || width < 0) {
+                console.log("Not valid pad.");
+                return;
+            }
+
+            pads[0].pad.attr({x: x});
+            pads[0].pad.attr({y: y});
+            pads[0].pad.attr({height: height});
+            pads[0].pad.attr({width: width});
+
+            pads[0].pad_line_ref.attr({x1: x1});
+            pads[0].pad_line_ref.attr({y1: y1});
+            pads[0].pad_line_ref.attr({x2: x2});
+            pads[0].pad_line_ref.attr({y2: y2});
+
+            console.log("Pad updated with attributes " + pads[0].pad.attr());
         }
     }
 });
