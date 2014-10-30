@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8">
+    <title>gEDA pcb footprint drawer</title>
+    <script src="lib/jquery-2.1.1.min.js"></script>
+    <script src="lib/snap.svg-min.js"></script>
+    <script src="lib/codemirror.js"></script>
+    <script src="lib/sprintf.min.js"></script>
+    <script src="lib/jquery-ui.js"></script>
+    <script src="lib/jquery.hotkeys.js"></script>
+    <script src="keymap/vim.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel=stylesheet href="lib/codemirror.css">
+    <link rel=stylesheet href="style.css">
+</head>
+<body>
+    <div id=container>
+        <div id="graphical_editor">
+            <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="zoom_slider"></div>
+        </div>
+        <div id="code"><textarea id=footprint_code></textarea></div>
+    </div>
+    <script src="footgen.js"></script>
+</body>
+</html>

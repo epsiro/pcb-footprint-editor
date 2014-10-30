@@ -1,0 +1,10 @@
+div#pad, div#pin {
+    float: left;
+    border: 1px dashed gray;
+    padding: 10px;
+    margin: 10px;
+}
+
+.ref {
+    font-family: monospace;
+}

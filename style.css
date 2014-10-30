@@ -1,0 +1,37 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div#container {
+    white-space: nowrap;
+}
+
+div#graphical_editor {
+    display: inline-block;
+    width: 50%;
+    border-right: 1px solid #444;
+}
+
+div#code {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+div#zoom_slider {
+    position: fixed;
+    top: 20px;
+    left: calc(50% - 30px );
+    height: calc(100% - 40px);
+}
+
+.ui-slider {
+    background: white;
+    border: 2px solid gray;
+}
+
+.ui-slider .ui-slider-range {
+        background: #ccc;
+}
