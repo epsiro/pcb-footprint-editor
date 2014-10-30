@@ -8,6 +8,14 @@ div#container {
     white-space: nowrap;
 }
 
+svg#svg {
+    position:fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:50%
+}
+
 div#graphical_editor {
     display: inline-block;
     width: 50%;
@@ -23,7 +31,7 @@ div#code {
 div#zoom_slider {
     position: fixed;
     top: 20px;
-    left: calc(50% - 30px );
+    left: 50%;
     height: calc(100% - 40px);
 }
 
