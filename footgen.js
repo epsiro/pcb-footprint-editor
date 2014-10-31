@@ -43,6 +43,22 @@ var editor = CodeMirror.fromTextArea(document.getElementById("footprint_code"), 
   vimMode: true
 });
 
+editor.on("beforeChange", function (cm, change) {
+
+    /* Only update pad if it has been changed by the code and not by the
+     * graphical interface */
+    for (var i = 0; i < pads.length; i++) {
+        if(pads[i].pad.dragging == true) {
+            return;
+        }
+    }
+
+    var cursor = cm.getCursor();
+    values = parse_pad_line(cm.getLine(cursor.line));
+
+    console.log("values ", values);
+});
+
 editor.on("change", function(cm){
 
     /* Only update pad if it has been changed by the code and not by the
