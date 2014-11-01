@@ -74,11 +74,23 @@ editor.on("change", function(cm, change){
     }
 });
 
-var hl_line = editor.getLine(0);
+var hl_line = editor.addLineClass(0, "background", "selected_pad");
 
 editor.on("cursorActivity", function(cm, change){
-    editor.removeLineClass(hl_line, "background");
-    hl_line = editor.addLineClass(editor.getCursor().line, "background", "selected_pad");
+
+    if (editor.getLine(editor.getCursor().line).match(/Pad/)) {
+
+        // Remove old selected
+        editor.removeLineClass(hl_line, "background");
+
+        if (hl_line.text.match(/Pad/)) {
+            objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
+        }
+
+        // Show new selected
+        hl_line = editor.addLineClass(editor.getCursor().line, "background", "selected_pad");
+        objects[editor.getCursor().line].pad.attr({ stroke: "#445" });
+    }
 });
 
 function Pad(pad_number, line_number) {
