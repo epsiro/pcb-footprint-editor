@@ -1,6 +1,6 @@
 (function() {
 
-var pads = new Array();
+var objects = new Array();
 var zoom_level = 1;
 var origin_x = 300;
 var origin_y = 300;
@@ -47,8 +47,8 @@ editor.on("change", function(cm, change){
 
     /* Only update pad if it has been changed by the code and not by the
      * graphical interface */
-    for (var i = 0; i < pads.length; i++) {
-        if(pads[i].pad.dragging == true) {
+    for (var i = 2; i < objects.length; i++) {
+        if(objects[i].pad.dragging == true) {
             return;
         }
     }
@@ -60,15 +60,15 @@ editor.on("change", function(cm, change){
 
             values = parse_pad_line(changed_line);
 
-            for (var i = 0; i < pads.length; i++) {
-                if (pads[i].line_number == change.to.line) {
-                    pads[i].x1 = values.x1;
-                    pads[i].y1 = values.y1;
-                    pads[i].x2 = values.x2;
-                    pads[i].y2 = values.y2;
-                    pads[i].thickness = values.thickness;
-                    pads[i].draw();
-                }
+            if (objects.length >= change.to.line + 1 &&
+                objects[change.to.line].line_number == change.to.line) {
+
+                objects[change.to.line].x1 = values.x1;
+                objects[change.to.line].y1 = values.y1;
+                objects[change.to.line].x2 = values.x2;
+                objects[change.to.line].y2 = values.y2;
+                objects[change.to.line].thickness = values.thickness;
+                objects[change.to.line].draw();
             }
         }
     }
@@ -355,10 +355,10 @@ zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoo
 
 
 var add_pad = function() {
-    pad_instance = new Pad(pads.length, editor.lineCount() - 1);
+    pad_instance = new Pad(objects.length, objects.length);
     zoom_group.add(pad_instance.pad_group);
-    pads.push(pad_instance);
-    //console.log(pads);
+    objects.push(pad_instance);
+    //console.log(objects);
 }
 
 $(document).bind('keydown', 'p', add_pad);
@@ -366,6 +366,9 @@ $(document).bind('keydown', 'p', add_pad);
 var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
 var element_end = ')';
 editor.setValue(element_header + element_end);
+
+objects.push("placeholder");
+objects.push("placeholder");
 
 
 })();
