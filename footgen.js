@@ -139,6 +139,8 @@ function Pad(pad_number, line_number) {
         this.oh = parseInt(this.attr('height'), 10);
 
         this.dragging = true;
+
+        highlight_pad();
     };
 
     var move_pad = function(dx, dy, posx, posy) {
@@ -216,6 +218,8 @@ function Pad(pad_number, line_number) {
 
     var move_end = function() {
         this.dragging = false;
+
+        unhighlight_pad();
     };
 
     var change_cursor = function(e, mouse_x, mouse_y) {
@@ -260,10 +264,12 @@ function Pad(pad_number, line_number) {
     };
 
     var unhighlight_pad = function(e) {
-        parentThis.pad.attr({
-            stroke: "none"
-        });
-        editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+        if (this.dragging != true) {
+            parentThis.pad.attr({
+                stroke: "none"
+            });
+            editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+        }
     };
 
     this.pad.mousemove(change_cursor);
