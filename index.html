@@ -19,7 +19,14 @@
         <div id="graphical_editor">
             <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
-        <div id="code"><textarea id=footprint_code></textarea></div>
+        <div id="code">
+            <div id="controls">
+                <input type="file" id="file_to_load">
+                <button id="load_file" >Load component from file</button>
+                <button id="save_file" >Save component to file</button>
+            </div>
+            <textarea id="footprint_code" ></textarea>
+        </div>
         <div id="zoom_slider"></div>
     </div>
     <script src="footgen.js"></script>
