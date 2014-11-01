@@ -32,6 +32,10 @@ div#code {
     background: #eee;
 }
 
+.error_pad {
+    background: #f99 !important;
+}
+
 div#zoom_slider {
     position: fixed;
     top: 20px;

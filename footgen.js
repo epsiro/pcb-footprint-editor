@@ -81,7 +81,7 @@ editor.on("cursorActivity", function(cm){
     if (editor.getLine(editor.getCursor().line).match(/Pad/)) {
 
         // Remove old selected
-        editor.removeLineClass(hl_line, "background");
+        editor.removeLineClass(hl_line, "background", "selected_pad");
 
         if (hl_line.text.match(/Pad/)) {
             objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
@@ -96,7 +96,7 @@ editor.on("cursorActivity", function(cm){
 editor.on("blur", function(cm){
 
     // Remove old selected
-    editor.removeLineClass(hl_line, "background");
+    editor.removeLineClass(hl_line, "background", "selected_pad");
 
     if (hl_line.text.match(/Pad/)) {
         objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
@@ -214,12 +214,12 @@ function Pad(pad_number, line_number) {
         parentThis.pad_line_ref.attr({y2: parentThis.y2*100});
 
         update_editor();
+
+        editor.removeLineClass(parentThis.line_number, "background", "error_pad");
     };
 
     var move_end = function() {
         this.dragging = false;
-
-        unhighlight_pad();
     };
 
     var change_cursor = function(e, mouse_x, mouse_y) {
@@ -285,65 +285,73 @@ function Pad(pad_number, line_number) {
         editor.replaceRange(pad_code, {line: parentThis.line_number, ch: 0}, {line: parentThis.line_number, ch: editor.getLine(parentThis.line_number).length});
     };
 
+    Pad.prototype.draw = function() {
+        var x1 = this.x1;
+        var y1 = this.y1;
+        var x2 = this.x2;
+        var y2 = this.y2;
+        var thickness = this.thickness;
+
+        var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
+        var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
+
+        //console.log(line_length, angle);
+
+        if (angle == 0) {
+            var x = x1 - thickness/2;
+            var y = y1 - thickness/2;
+            var width = line_length + thickness;
+            var height = thickness;
+        } else if (angle == -90) {
+            var x = x2 - thickness/2;
+            var y = y2 - thickness/2;
+            var width = thickness;
+            var height = line_length + thickness;
+        } else if (angle == 90) {
+            var x = x1 - thickness/2;
+            var y = y1 - thickness/2;
+            var width = thickness;
+            var height = line_length + thickness;
+        } else if (angle == 180) {
+            var x = x2 - thickness/2;
+            var y = y2 - thickness/2;
+            var width = line_length + thickness;
+            var height = thickness;
+        } else {
+            console.log(editor, parentThis.line_number);
+            editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+            editor.addLineClass(parentThis.line_number, "background", "error_pad");
+            console.log("Rotated pad is not supported.");
+            return;
+        }
+
+        //console.log(x,y,height,width);
+
+        if (height < 0 || width < 0) {
+            editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+            editor.addLineClass(parentThis.line_number, "background", "error_pad");
+            console.log("Not valid pad.");
+            return;
+        }
+
+        editor.removeLineClass(parentThis.line_number, "background", "error_pad");
+
+        this.pad.attr({x: x});
+        this.pad.attr({y: y});
+        this.pad.attr({height: height});
+        this.pad.attr({width: width});
+
+        this.pad_line_ref.attr({x1: x1});
+        this.pad_line_ref.attr({y1: y1});
+        this.pad_line_ref.attr({x2: x2});
+        this.pad_line_ref.attr({y2: y2});
+
+        console.log("Pad updated with attributes " + this.pad.attr());
+    };
+
 }
 
 
-Pad.prototype.draw = function() {
-    var x1 = this.x1;
-    var y1 = this.y1;
-    var x2 = this.x2;
-    var y2 = this.y2;
-    var thickness = this.thickness;
-
-    var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
-    var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
-
-    //console.log(line_length, angle);
-
-    if (angle == 0) {
-        var x = x1 - thickness/2;
-        var y = y1 - thickness/2;
-        var width = line_length + thickness;
-        var height = thickness;
-    } else if (angle == -90) {
-        var x = x2 - thickness/2;
-        var y = y2 - thickness/2;
-        var width = thickness;
-        var height = line_length + thickness;
-    } else if (angle == 90) {
-        var x = x1 - thickness/2;
-        var y = y1 - thickness/2;
-        var width = thickness;
-        var height = line_length + thickness;
-    } else if (angle == 180) {
-        var x = x2 - thickness/2;
-        var y = y2 - thickness/2;
-        var width = line_length + thickness;
-        var height = thickness;
-    } else {
-        console.log("Rotated pad is not supported.");
-        return;
-    }
-
-    //console.log(x,y,height,width);
-
-    if (height < 0 || width < 0) {
-        console.log("Not valid pad.");
-        return;
-    }
-
-    this.pad.attr({x: x});
-    this.pad.attr({y: y});
-    this.pad.attr({height: height});
-    this.pad.attr({width: width});
-
-    this.pad_line_ref.attr({x1: x1});
-    this.pad_line_ref.attr({y1: y1});
-    this.pad_line_ref.attr({x2: x2});
-    this.pad_line_ref.attr({y2: y2});
-
-    console.log("Pad updated with attributes " + this.pad.attr());
-};
 
 var paper = Snap("#svg");
 
