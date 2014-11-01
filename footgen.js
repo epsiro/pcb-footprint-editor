@@ -91,7 +91,8 @@ function Pad(pad_number, line_number) {
     this.thickness = 0;
 
     this.pad = paper.rect(100, -100, 60, 60).attr({
-        fill: "#8c96a0"
+        fill: "#8c96a0",
+        strokeWidth: 2
     });
 
     this.pad_line_ref = paper.line(0, 0, 0, 0).attr({
@@ -224,8 +225,23 @@ function Pad(pad_number, line_number) {
         }
     };
 
+    var highlight_pad = function(e) {
+        parentThis.pad.attr({
+            stroke: "#445"
+        });
+        editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+    };
+
+    var unhighlight_pad = function(e) {
+        parentThis.pad.attr({
+            stroke: "none"
+        });
+        editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+    };
+
     this.pad.mousemove(change_cursor);
     this.pad.drag(move_pad, move_start, move_end);
+    this.pad.hover(highlight_pad, unhighlight_pad);
 
     this.pad_group = paper.group(this.pad, this.pad_line_ref);
     this.pad_group.attr({class: "pad"});

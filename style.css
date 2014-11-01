@@ -28,6 +28,10 @@ div#code {
     vertical-align: top;
 }
 
+.selected_pad {
+    background: #eee;
+}
+
 div#zoom_slider {
     position: fixed;
     top: 20px;
