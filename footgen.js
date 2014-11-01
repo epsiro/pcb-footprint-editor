@@ -74,7 +74,12 @@ editor.on("change", function(cm, change){
     }
 });
 
+var hl_line = editor.getLine(0);
 
+editor.on("cursorActivity", function(cm, change){
+    editor.removeLineClass(hl_line, "background");
+    hl_line = editor.addLineClass(editor.getCursor().line, "background", "selected_pad");
+});
 
 function Pad(pad_number, line_number) {
 
