@@ -159,6 +159,36 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var pad_size = this.get_pad_size();
 
+    var anchor_size = 5;
+
+    this.anchor_n  = paper.circle(0, 0, anchor_size);
+    this.anchor_e  = paper.circle(0, 0, anchor_size);
+    this.anchor_s  = paper.circle(0, 0, anchor_size);
+    this.anchor_w  = paper.circle(0, 0, anchor_size);
+    this.anchor_ne = paper.circle(0, 0, anchor_size);
+    this.anchor_nw = paper.circle(0, 0, anchor_size);
+    this.anchor_se = paper.circle(0, 0, anchor_size);
+    this.anchor_sw = paper.circle(0, 0, anchor_size);
+
+
+    this.anchors = paper.group(
+        this.anchor_n,
+        this.anchor_e,
+        this.anchor_s,
+        this.anchor_w,
+        this.anchor_ne,
+        this.anchor_nw,
+        this.anchor_se,
+        this.anchor_sw
+        ).attr({
+        fill: "none",
+        stroke: "#445",
+        strokeWidth: 2,
+        visibility: "hidden"
+    });
+
+    this.update_anchors();
+
     this.pad = paper.rect(0, 0, 0, 0).attr({
         fill: "#8c96a0",
         strokeWidth: 2
@@ -287,6 +317,10 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         parentThis.pad.attr({
             stroke: "#445"
         });
+
+        parentThis.anchors.attr({
+            visibility: "visible"
+        });
         editor.addLineClass(parentThis.line_number, "background", "selected_pad");
     };
 
@@ -294,6 +328,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         if (global_dragging != true) {
             parentThis.pad.attr({
                 stroke: "none"
+            });
+            parentThis.anchors.attr({
+                visibility: "hidden"
             });
             editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
         }
@@ -303,7 +340,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.pad.drag(move_pad, move_start, move_end);
     this.pad.hover(highlight_pad, unhighlight_pad);
 
-    this.pad_group = paper.group(this.pad, this.pad_line_ref);
+    this.pad_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
     this.pad_group.attr({class: "pad"});
 
 
@@ -406,6 +443,8 @@ Pad.prototype.draw = function() {
     this.pad_line_ref.attr({x2: this.x2*100});
     this.pad_line_ref.attr({y2: this.y2*100});
 
+    this.update_anchors();
+
     //update_editor();
     if (this.text_edited != true) {
         pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", this.x1, this.y1, this.x2, this.y2, this.thickness);
@@ -414,6 +453,23 @@ Pad.prototype.draw = function() {
 
     console.log("Pad updated with attributes " + this.pad.attr());
 };
+
+Pad.prototype.update_anchors = function() {
+
+    pad_size = this.get_pad_size();
+
+    this.anchor_n.attr({ cx:                 0, cy:  pad_size.height/2});
+    this.anchor_e.attr({ cx:  pad_size.width/2, cy:                  0});
+    this.anchor_s.attr({ cx:                 0, cy: -pad_size.height/2});
+    this.anchor_w.attr({ cx: -pad_size.width/2, cy:                  0});
+    this.anchor_ne.attr({cx:  pad_size.width/2, cy:  pad_size.height/2});
+    this.anchor_nw.attr({cx: -pad_size.width/2, cy:  pad_size.height/2});
+    this.anchor_se.attr({cx:  pad_size.width/2, cy: -pad_size.height/2});
+    this.anchor_sw.attr({cx: -pad_size.width/2, cy: -pad_size.height/2});
+
+    this.anchors.transform("translate(" + (pad_size.x + pad_size.width/2) + "," + (pad_size.y + pad_size.height/2) + ")");
+};
+
 
 
 
