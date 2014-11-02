@@ -68,11 +68,11 @@ function parse_pad_line(line) {
 
     //console.log(pad_line);
 
-    var x1 = pad_line[0].slice(0, -2)*100;
-    var y1 = pad_line[1].slice(0, -2)*100;
-    var x2 = pad_line[2].slice(0, -2)*100;
-    var y2 = pad_line[3].slice(0, -2)*100;
-    var thickness = pad_line[4].slice(0, -2)*100;
+    var x1 = pad_line[0].slice(0, -2);
+    var y1 = pad_line[1].slice(0, -2);
+    var x2 = pad_line[2].slice(0, -2);
+    var y2 = pad_line[3].slice(0, -2);
+    var thickness = pad_line[4].slice(0, -2);
 
     return {x1:x1, y1:y1, x2:x2, y2:y2, thickness:thickness}
 
@@ -142,7 +142,7 @@ editor.on("blur", function(cm){
     }
 });
 
-function Pad(pad_number, line_number) {
+function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.pad_number = pad_number;
     this.line_number = line_number;
@@ -150,13 +150,13 @@ function Pad(pad_number, line_number) {
 
     var parentThis = this;
 
-    this.x1 = 0;
-    this.y1 = 0;
-    this.x2 = 0;
-    this.y2 = 0;
-    this.thickness = 0.6;
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.thickness = thickness;
 
-    this.pad = paper.rect(-30, -30, 60, 60).attr({
+    this.pad = paper.rect(0, 0, 0, 0).attr({
         fill: "#8c96a0",
         strokeWidth: 2
     });
@@ -165,6 +165,8 @@ function Pad(pad_number, line_number) {
         stroke: "red",
         strokeWidth: 2
     });
+
+    this.draw();
 
     pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", this.x1, this.y1, this.x2, this.y2, this.thickness);
     editor.replaceRange(pad_code, {line: this.line_number, ch: 0});
@@ -323,72 +325,72 @@ function Pad(pad_number, line_number) {
         pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", parentThis.x1, parentThis.y1, parentThis.x2, parentThis.y2, parentThis.thickness);
         editor.replaceRange(pad_code, {line: parentThis.line_number, ch: 0}, {line: parentThis.line_number, ch: editor.getLine(parentThis.line_number).length});
     };
-
-    Pad.prototype.draw = function() {
-        var x1 = this.x1;
-        var y1 = this.y1;
-        var x2 = this.x2;
-        var y2 = this.y2;
-        var thickness = this.thickness;
-
-        var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
-        var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
-
-        //console.log(line_length, angle);
-
-        if (angle == 0) {
-            var x = x1 - thickness/2;
-            var y = y1 - thickness/2;
-            var width = line_length + thickness;
-            var height = thickness;
-        } else if (angle == -90) {
-            var x = x2 - thickness/2;
-            var y = y2 - thickness/2;
-            var width = thickness;
-            var height = line_length + thickness;
-        } else if (angle == 90) {
-            var x = x1 - thickness/2;
-            var y = y1 - thickness/2;
-            var width = thickness;
-            var height = line_length + thickness;
-        } else if (angle == 180) {
-            var x = x2 - thickness/2;
-            var y = y2 - thickness/2;
-            var width = line_length + thickness;
-            var height = thickness;
-        } else {
-            //console.log(editor, parentThis.line_number);
-            editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
-            editor.addLineClass(parentThis.line_number, "background", "error_pad");
-            console.log("Rotated pad is not supported.");
-            return;
-        }
-
-        //console.log(x,y,height,width);
-
-        if (height < 0 || width < 0) {
-            editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
-            editor.addLineClass(parentThis.line_number, "background", "error_pad");
-            console.log("Not valid pad.");
-            return;
-        }
-
-        editor.removeLineClass(parentThis.line_number, "background", "error_pad");
-
-        this.pad.attr({x: x});
-        this.pad.attr({y: y});
-        this.pad.attr({height: height});
-        this.pad.attr({width: width});
-
-        this.pad_line_ref.attr({x1: x1});
-        this.pad_line_ref.attr({y1: y1});
-        this.pad_line_ref.attr({x2: x2});
-        this.pad_line_ref.attr({y2: y2});
-
-        console.log("Pad updated with attributes " + this.pad.attr());
-    };
-
 }
+
+Pad.prototype.draw = function() {
+    var x1 = this.x1*100;
+    var y1 = this.y1*100;
+    var x2 = this.x2*100;
+    var y2 = this.y2*100;
+    var thickness = this.thickness*100;
+
+    var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
+    var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
+
+    //console.log(line_length, angle);
+
+    if (angle == 0) {
+        var x = x1 - thickness/2;
+        var y = y1 - thickness/2;
+        var width = line_length + thickness;
+        var height = thickness;
+    } else if (angle == -90) {
+        var x = x2 - thickness/2;
+        var y = y2 - thickness/2;
+        var width = thickness;
+        var height = line_length + thickness;
+    } else if (angle == 90) {
+        var x = x1 - thickness/2;
+        var y = y1 - thickness/2;
+        var width = thickness;
+        var height = line_length + thickness;
+    } else if (angle == 180) {
+        var x = x2 - thickness/2;
+        var y = y2 - thickness/2;
+        var width = line_length + thickness;
+        var height = thickness;
+    } else {
+        //console.log(editor, parentThis.line_number);
+        editor.removeLineClass(this.line_number, "background", "selected_pad");
+        editor.addLineClass(this.line_number, "background", "error_pad");
+        console.log("Rotated pad is not supported.");
+        return;
+    }
+
+    //console.log(x,y,height,width);
+
+    if (height < 0 || width < 0) {
+        editor.removeLineClass(this.line_number, "background", "selected_pad");
+        editor.addLineClass(this.line_number, "background", "error_pad");
+        console.log("Not valid pad.");
+        return;
+    }
+
+    editor.removeLineClass(this.line_number, "background", "error_pad");
+
+    this.pad.attr({x: x});
+    this.pad.attr({y: y});
+    this.pad.attr({height: height});
+    this.pad.attr({width: width});
+
+    this.pad_line_ref.attr({x1: x1});
+    this.pad_line_ref.attr({y1: y1});
+    this.pad_line_ref.attr({x2: x2});
+    this.pad_line_ref.attr({y2: y2});
+
+    console.log("Pad updated with attributes " + this.pad.attr());
+};
+
 
 
 
@@ -468,6 +470,7 @@ var drag_workspace = function(dx, dy, posx, posy) {
 }
 
 paper.drag(drag_workspace, begin_drag_workspace, null);
+paper.drag(drag_workspace, begin_drag_workspace, null);
 
 
 var center = paper.circle(0, 0, 10).attr({
@@ -480,14 +483,33 @@ var zoom_group = paper.group(grid_small, grid_big, center);
 zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 
 
-var add_pad = function() {
-    pad_instance = new Pad(objects.length, objects.length);
+var add_pad = function(e) {
+
+    if (e.type == "dblclick") {
+        var x1 =-(300 - e.clientX)/100;
+        var y1 = (300 - e.clientY)/100;
+
+        x1 = Math.round(x1 * 10) / 10;
+        y1 = Math.round(y1 * 10) / 10;
+
+    } else {
+        var x1 = 0;
+        var y1 = 0;
+    }
+
+    var x2 = x1;
+    var y2 = y1;
+
+    var thickness = 0.6;
+
+    pad_instance = new Pad(objects.length, objects.length, x1, y1, x2, y2, thickness);
     zoom_group.add(pad_instance.pad_group);
     objects.push(pad_instance);
     //console.log(objects);
 }
 
 $(document).bind('keydown', 'p', add_pad);
+$( "#svg" ).dblclick(add_pad);
 
 var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
 var element_end = ')';
