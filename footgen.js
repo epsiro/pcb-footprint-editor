@@ -113,6 +113,7 @@ editor.on("change", function(cm, change){
 });
 
 var hl_line = editor.addLineClass(0, "background", "selected_pad");
+editor.removeLineClass(0, "background", "selected_pad");
 
 editor.on("cursorActivity", function(cm){
 
