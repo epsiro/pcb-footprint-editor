@@ -106,7 +106,9 @@ editor.on("change", function(cm, change){
                 objects[change.to.line].x2 = values.x2;
                 objects[change.to.line].y2 = values.y2;
                 objects[change.to.line].thickness = values.thickness;
+                objects[change.to.line].text_edited = true;
                 objects[change.to.line].draw();
+                objects[change.to.line].text_edited = false;
             }
         }
     }
@@ -147,7 +149,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.pad_number = pad_number;
     this.line_number = line_number;
 
-
     var parentThis = this;
 
     this.x1 = x1;
@@ -155,6 +156,8 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.x2 = x2;
     this.y2 = y2;
     this.thickness = thickness;
+
+    var pad_size = this.get_pad_size();
 
     this.pad = paper.rect(0, 0, 0, 0).attr({
         fill: "#8c96a0",
@@ -166,10 +169,10 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         strokeWidth: 2
     });
 
-    this.draw();
-
     pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", this.x1, this.y1, this.x2, this.y2, this.thickness);
     editor.replaceRange(pad_code, {line: this.line_number, ch: 0});
+
+    this.draw();
 
     var move_start = function() {
 
@@ -192,71 +195,54 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         switch (this.attr('cursor')) {
 
             case 'sw-resize':
-                this.attr({
+                var pad_size = {
                     x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
                     y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
                     width:  this.ow - Snap.snapTo(grid, dx/zoom_level, 30),
                     height: this.oh + Snap.snapTo(grid, dy/zoom_level, 30)
-                });
+                }
                 break;
 
             case 'se-resize':
-                this.attr({
+                var pad_size = {
+                    x:      this.ox,
                     y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
                     width:  this.ow + Snap.snapTo(grid, dx/zoom_level, 30),
                     height: this.oh + Snap.snapTo(grid, dy/zoom_level, 30)
-                });
+                }
                 break;
 
             case 'ne-resize':
-                this.attr({
+                var pad_size = {
+                    x:      this.ox,
+                    y:      this.oy,
                     width:  this.ow + Snap.snapTo(grid, dx/zoom_level, 30),
                     height: this.oh - Snap.snapTo(grid, dy/zoom_level, 30)
-                });
+                }
                 break;
 
             case 'nw-resize':
-                this.attr({
+                var pad_size = {
                     x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
+                    y:      this.oy,
                     width:  this.ow - Snap.snapTo(grid, dx/zoom_level, 30),
                     height: this.oh - Snap.snapTo(grid, dy/zoom_level, 30)
-                });
+                }
                 break;
 
             default :
-                this.attr({
+                var pad_size = {
                     x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30)
-                });
+                    y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
+                    width:  this.ow,
+                    height: this.oh
+                }
                 break;
         }
 
-        if (parseInt(this.attr('width'), 10) < parseInt(this.attr('height'), 10)) {
-            parentThis.thickness = (parseInt(this.attr('width'),10)/100);
+        parentThis.set_pad_size(pad_size);
 
-            parentThis.x1 = parseInt(this.attr('x'),10)/100 + parentThis.thickness/2;
-            parentThis.y1 = parseInt(this.attr('y'),10)/100 + parentThis.thickness/2;
-            parentThis.x2 = parentThis.x1;
-            parentThis.y2 = parentThis.y1 + parseInt(this.attr('height'),10)/100 - parentThis.thickness;
-
-        } else {
-            /* Laying down */
-            parentThis.thickness = (parseInt(this.attr('height'),10)/100);
-
-            parentThis.x1 = parseInt(this.attr('x'),10)/100 + parentThis.thickness/2;
-            parentThis.y1 = parseInt(this.attr('y'),10)/100 + parentThis.thickness/2;
-            parentThis.x2 = parentThis.x1 + parseInt(this.attr('width'),10)/100 - parentThis.thickness;
-            parentThis.y2 = parentThis.y1;
-        }
-
-        parentThis.pad_line_ref.attr({x1: parentThis.x1*100});
-        parentThis.pad_line_ref.attr({y1: parentThis.y1*100});
-        parentThis.pad_line_ref.attr({x2: parentThis.x2*100});
-        parentThis.pad_line_ref.attr({y2: parentThis.y2*100});
-
-        update_editor();
-
-        editor.removeLineClass(parentThis.line_number, "background", "error_pad");
+        parentThis.draw();
     };
 
     var move_end = function() {
@@ -321,13 +307,32 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.pad_group.attr({class: "pad"});
 
 
-    function update_editor() {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", parentThis.x1, parentThis.y1, parentThis.x2, parentThis.y2, parentThis.thickness);
-        editor.replaceRange(pad_code, {line: parentThis.line_number, ch: 0}, {line: parentThis.line_number, ch: editor.getLine(parentThis.line_number).length});
-    };
 }
 
-Pad.prototype.draw = function() {
+Pad.prototype.set_pad_size = function(pad_size) {
+
+        if (pad_size.width < pad_size.height) {
+            /* portrait */
+            this.thickness = pad_size.width/100;
+
+            this.x1 = pad_size.x/100 + this.thickness/2;
+            this.y1 = pad_size.y/100 + this.thickness/2;
+            this.x2 = this.x1;
+            this.y2 = this.y1 + pad_size.height/100 - this.thickness;
+
+        } else {
+            /* landscape */
+            this.thickness = pad_size.height/100;
+
+            this.x1 = pad_size.x/100 + this.thickness/2;
+            this.y1 = pad_size.y/100 + this.thickness/2;
+            this.x2 = this.x1 + pad_size.width/100 - this.thickness;
+            this.y2 = this.y1;
+        }
+}
+
+Pad.prototype.get_pad_size = function() {
+
     var x1 = this.x1*100;
     var y1 = this.y1*100;
     var x2 = this.x2*100;
@@ -360,6 +365,20 @@ Pad.prototype.draw = function() {
         var width = line_length + thickness;
         var height = thickness;
     } else {
+        return null;
+    }
+
+    //console.log(x,y,height,width);
+
+    return {x:x, y:y, width:width, height:height}
+}
+
+Pad.prototype.draw = function() {
+
+    pad_size = this.get_pad_size();
+
+    if (pad_size == null) {
+
         //console.log(editor, parentThis.line_number);
         editor.removeLineClass(this.line_number, "background", "selected_pad");
         editor.addLineClass(this.line_number, "background", "error_pad");
@@ -367,9 +386,8 @@ Pad.prototype.draw = function() {
         return;
     }
 
-    //console.log(x,y,height,width);
 
-    if (height < 0 || width < 0) {
+    if (pad_size.height < 0 || pad_size.width < 0) {
         editor.removeLineClass(this.line_number, "background", "selected_pad");
         editor.addLineClass(this.line_number, "background", "error_pad");
         console.log("Not valid pad.");
@@ -378,15 +396,21 @@ Pad.prototype.draw = function() {
 
     editor.removeLineClass(this.line_number, "background", "error_pad");
 
-    this.pad.attr({x: x});
-    this.pad.attr({y: y});
-    this.pad.attr({height: height});
-    this.pad.attr({width: width});
+    this.pad.attr({x: pad_size.x});
+    this.pad.attr({y: pad_size.y});
+    this.pad.attr({height: pad_size.height});
+    this.pad.attr({width: pad_size.width});
 
-    this.pad_line_ref.attr({x1: x1});
-    this.pad_line_ref.attr({y1: y1});
-    this.pad_line_ref.attr({x2: x2});
-    this.pad_line_ref.attr({y2: y2});
+    this.pad_line_ref.attr({x1: this.x1*100});
+    this.pad_line_ref.attr({y1: this.y1*100});
+    this.pad_line_ref.attr({x2: this.x2*100});
+    this.pad_line_ref.attr({y2: this.y2*100});
+
+    //update_editor();
+    if (this.text_edited != true) {
+        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", this.x1, this.y1, this.x2, this.y2, this.thickness);
+        editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
+    }
 
     console.log("Pad updated with attributes " + this.pad.attr());
 };
