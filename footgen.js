@@ -161,6 +161,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var anchor_size = 5;
 
+    this.anchor_c  = paper.circle(0, 0, anchor_size);
     this.anchor_n  = paper.circle(0, 0, anchor_size);
     this.anchor_e  = paper.circle(0, 0, anchor_size);
     this.anchor_s  = paper.circle(0, 0, anchor_size);
@@ -172,6 +173,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
 
     this.anchors = paper.group(
+        this.anchor_c,
         this.anchor_n,
         this.anchor_e,
         this.anchor_s,
@@ -449,6 +451,7 @@ Pad.prototype.update_anchors = function() {
 
     pad_size = this.get_pad_size();
 
+    this.anchor_c.attr({ cx:                 0, cy:                  0});
     this.anchor_n.attr({ cx:                 0, cy:  pad_size.height/2});
     this.anchor_e.attr({ cx:  pad_size.width/2, cy:                  0});
     this.anchor_s.attr({ cx:                 0, cy: -pad_size.height/2});
