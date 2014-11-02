@@ -567,32 +567,41 @@ Pad.prototype.update_anchors = function() {
 Pad.prototype.update_distance_marker = function() {
 
     if (global_first_endpoint_object == this) {
-        console.log('here');
 
         var pad_size = this.get_pad_size();
-        distance_x.attr({
+        distance_x_line.attr({
             x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
             y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2),
             y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
-        distance_y.attr({
+        distance_y_line.attr({
             y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
 
-        //var text = paper.text(0,0,'distance_x').attr({ 'textpath': distance_x });
+        var distance_x_value = Math.round(distance_x_line.attr("x2") - distance_x_line.attr("x1"));
+        var distance_y_value = Math.round(distance_y_line.attr("y2") - distance_y_line.attr("y1"));
+
+        distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
+        distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
     }
 
     if (global_second_endpoint_object == this) {
 
         var pad_size = this.get_pad_size();
-        distance_x.attr({
+        distance_x_line.attr({
             x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2)
         });
-        distance_y.attr({
+        distance_y_line.attr({
             x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
             x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
             y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
+
+        var distance_x_value = Math.round(distance_x_line.attr("x2") - distance_x_line.attr("x1"));
+        var distance_y_value = Math.round(distance_y_line.attr("y2") - distance_y_line.attr("y1"));
+
+        distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
+        distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
     }
 
 };
@@ -679,8 +688,15 @@ var drag_workspace = function(dx, dy, posx, posy) {
 paper.drag(drag_workspace, begin_drag_workspace, null);
 paper.drag(drag_workspace, begin_drag_workspace, null);
 
-var distance_x = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
-var distance_y = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var distance_x_line = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var distance_x_text = paper.text(0, 0, "");
+var distance_x = paper.group(distance_x_line, distance_x_text);
+distance_x_text.transform("scale(1,-1)");
+
+var distance_y_line = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var distance_y_text = paper.text(0, 0, "");
+var distance_y = paper.group(distance_y_line, distance_y_text);
+distance_y_text.transform("scale(1,-1)");
 
 var center = paper.circle(0, 0, 10).attr({
     fill: "none",
