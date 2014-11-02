@@ -161,16 +161,15 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var anchor_size = 5;
 
-    this.anchor_c  = paper.circle(0, 0, anchor_size);
-    this.anchor_n  = paper.circle(0, 0, anchor_size);
-    this.anchor_e  = paper.circle(0, 0, anchor_size);
-    this.anchor_s  = paper.circle(0, 0, anchor_size);
-    this.anchor_w  = paper.circle(0, 0, anchor_size);
-    this.anchor_ne = paper.circle(0, 0, anchor_size);
-    this.anchor_nw = paper.circle(0, 0, anchor_size);
-    this.anchor_se = paper.circle(0, 0, anchor_size);
-    this.anchor_sw = paper.circle(0, 0, anchor_size);
-
+    this.anchor_c  = paper.circle(0, 0, anchor_size).addClass("anchor_c");
+    this.anchor_n  = paper.circle(0, 0, anchor_size).addClass("anchor_n");
+    this.anchor_e  = paper.circle(0, 0, anchor_size).addClass("anchor_e");
+    this.anchor_s  = paper.circle(0, 0, anchor_size).addClass("anchor_s");
+    this.anchor_w  = paper.circle(0, 0, anchor_size).addClass("anchor_w");
+    this.anchor_ne = paper.circle(0, 0, anchor_size).addClass("anchor_ne");
+    this.anchor_nw = paper.circle(0, 0, anchor_size).addClass("anchor_nw");
+    this.anchor_se = paper.circle(0, 0, anchor_size).addClass("anchor_se");
+    this.anchor_sw = paper.circle(0, 0, anchor_size).addClass("anchor_sw");
 
     this.anchors = paper.group(
         this.anchor_c,
@@ -183,7 +182,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         this.anchor_se,
         this.anchor_sw
         ).attr({
-        fill: "none",
+        fill: "white",
         stroke: "#445",
         strokeWidth: 2,
         visibility: "hidden"
@@ -206,68 +205,105 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.draw();
 
-    var move_start = function() {
+    var drag_anchor_start = function() {
 
-        /* Save some values we start with */
-        this.ox = parseInt(this.attr('x'), 10);
-        this.oy = parseInt(this.attr('y'), 10);
-        this.ow = parseInt(this.attr('width'), 10);
-        this.oh = parseInt(this.attr('height'), 10);
+        this.pad_size_original = parentThis.get_pad_size();
 
         global_dragging = true;
 
         highlight_pad();
     };
 
-    var move_pad = function(dx, dy, posx, posy) {
+    var drag_anchor = function(dx, dy, posx, posy, e) {
 
         var grid = 10;
 
         /* Inspect cursor to determine which resize/move process to use */
-        switch (this.attr('cursor')) {
+        switch (this.node.classList[0]) {
 
-            case 'sw-resize':
+            case 'anchor_n':
                 var pad_size = {
-                    x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
-                    width:  this.ow - Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.oh + Snap.snapTo(grid, dy/zoom_level, 30)
+                    x:      this.pad_size_original.x,
+                    y:      this.pad_size_original.y,
+                    width:  this.pad_size_original.width,
+                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
                 }
                 break;
 
-            case 'se-resize':
+            case 'anchor_e':
                 var pad_size = {
-                    x:      this.ox,
-                    y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
-                    width:  this.ow + Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.oh + Snap.snapTo(grid, dy/zoom_level, 30)
+                    x:      this.pad_size_original.x,
+                    y:      this.pad_size_original.y,
+                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height
                 }
                 break;
 
-            case 'ne-resize':
+            case 'anchor_s':
                 var pad_size = {
-                    x:      this.ox,
-                    y:      this.oy,
-                    width:  this.ow + Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.oh - Snap.snapTo(grid, dy/zoom_level, 30)
+                    x:      this.pad_size_original.x,
+                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    width:  this.pad_size_original.width,
+                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
                 }
                 break;
 
-            case 'nw-resize':
+            case 'anchor_w':
                 var pad_size = {
-                    x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.oy,
-                    width:  this.ow - Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.oh - Snap.snapTo(grid, dy/zoom_level, 30)
+                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    y:      this.pad_size_original.y,
+                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height
+                }
+                break;
+
+            case 'anchor_sw':
+                this.attr('cursor', 'sw-resize');
+                var pad_size = {
+                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
+                }
+                break;
+
+            case 'anchor_se':
+                this.attr('cursor', 'sw-resize');
+                var pad_size = {
+                    x:      this.pad_size_original.x,
+                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
+                }
+                break;
+
+            case 'anchor_ne':
+                this.attr('cursor', 'ne-resize');
+                var pad_size = {
+                    x:      this.pad_size_original.x,
+                    y:      this.pad_size_original.y,
+                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
+                }
+                break;
+
+            case 'anchor_nw':
+                this.attr('cursor', 'nw-resize');
+                var pad_size = {
+                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    y:      this.pad_size_original.y,
+                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
+                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
                 }
                 break;
 
             default :
+                this.attr('cursor', 'move');
                 var pad_size = {
-                    x:      this.ox + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.oy - Snap.snapTo(grid, dy/zoom_level, 30),
-                    width:  this.ow,
-                    height: this.oh
+                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    width:  this.pad_size_original.width,
+                    height: this.pad_size_original.height
                 }
                 break;
         }
@@ -277,42 +313,8 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         parentThis.draw();
     };
 
-    var move_end = function() {
+    var drag_anchor_end = function() {
         global_dragging = false;
-    };
-
-    var change_cursor = function(e, mouse_x, mouse_y) {
-
-        /* Don't change cursor during a drag operation */
-        if (global_dragging === true) {
-            return;
-        }
-
-        /* X,Y Coordinates relative to shape's orgin */
-        var relative_x =  mouse_x - $('#svg').offset().left - this.attr('x')*zoom_level - origin_x;
-        var relative_y = -mouse_y - $('#svg').offset().top  - this.attr('y')*zoom_level + origin_y;
-
-        var shape_width = this.attr('width')*zoom_level;
-        var shape_height = this.attr('height')*zoom_level;
-
-        var resize_border = 10;
-
-        /* Change cursor */
-        if (       relative_x <               resize_border && relative_y <                resize_border) {
-            this.attr('cursor', 'sw-resize');
-
-        } else if (relative_x > shape_width - resize_border && relative_y <                resize_border) {
-            this.attr('cursor', 'se-resize');
-
-        } else if (relative_x > shape_width - resize_border && relative_y > shape_height - resize_border) {
-            this.attr('cursor', 'ne-resize');
-
-        } else if (relative_x <               resize_border && relative_y > shape_height - resize_border) {
-            this.attr('cursor', 'nw-resize');
-
-        } else {
-            this.attr('cursor', 'move');
-        }
     };
 
     var highlight_pad = function(e) {
@@ -338,11 +340,19 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         }
     };
 
-    this.pad.mousemove(change_cursor);
-    this.pad.drag(move_pad, move_start, move_end);
-    this.pad.hover(highlight_pad, unhighlight_pad);
+    this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_n.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_e.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_s.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_w.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_ne.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_nw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_se.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.anchor_sw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.pad_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
+    this.pad_group.hover(highlight_pad, unhighlight_pad);
     this.pad_group.attr({class: "pad"});
 
 
