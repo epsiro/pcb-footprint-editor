@@ -8,6 +8,8 @@ var origin_y = 300;
 var global_dragging = false;
 var global_first_endpoint = false;
 var global_second_endpoint = false;
+var global_first_endpoint_object = null;
+var global_second_endpoint_object = null;
 
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
@@ -210,13 +212,17 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var click_anchor = function() {
 
+        var pad_size = parentThis.get_pad_size();
+
         if (this.attr("endpoint") != "true" && parentThis.endpoint != true) {
 
             if (global_first_endpoint != true) {
 
                 parentThis.endpoint = true;
                 parentThis.endpoint_nr = 1;
+                parentThis.endpoint_anchor = this;
                 global_first_endpoint = true;
+                global_first_endpoint_object = parentThis;
 
                 this.attr({
                     visibility: "visible",
@@ -224,44 +230,58 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                     stroke: "red"
                 });
 
-            } else {
+                parentThis.update_distance_marker();
 
-                if (global_second_endpoint != true) {
+            } else if (global_second_endpoint != true) {
 
-                    parentThis.endpoint = true;
-                    parentThis.endpoint_nr = 2;
-                    global_second_endpoint = true;
+                parentThis.endpoint = true;
+                parentThis.endpoint_nr = 2;
+                parentThis.endpoint_anchor = this;
+                global_second_endpoint = true;
+                global_second_endpoint_object = parentThis;
 
-                    this.attr({
-                        visibility: "visible",
-                        endpoint: "true",
-                        stroke: "blue"
-                    });
+                this.attr({
+                    visibility: "visible",
+                    endpoint: "true",
+                    stroke: "blue"
+                });
 
-                    // ask for distance
-                }
+                parentThis.update_distance_marker();
+
             }
-
 
         } else if (this.attr("endpoint") == "true") {
 
             if (parentThis.endpoint_nr == 1) {
                 parentThis.endpoint_nr = 0;
                 global_first_endpoint = false;
+                global_first_endpoint_object = null;
             }
 
             if (parentThis.endpoint_nr == 2) {
                 parentThis.endpoint_nr = 0;
                 global_second_endpoint = false;
+                global_second_endpoint_object = null;
             }
 
+            parentThis.endpoint_anchor = null;
             parentThis.endpoint = false;
+
             this.attr({
                 visibility: "",
                 endpoint: "false",
                 stroke: "#445"
             });
         }
+
+        if (global_first_endpoint == true && global_second_endpoint == true) {
+            distance_x.attr({ visibility: "visible" });
+            distance_y.attr({ visibility: "visible" });
+        } else {
+            distance_x.attr({ visibility: "hidden" });
+            distance_y.attr({ visibility: "hidden" });
+        }
+
     }
 
     var drag_anchor_start = function() {
@@ -516,6 +536,7 @@ Pad.prototype.draw = function() {
     this.pad_line_ref.attr({y2: this.y2*100});
 
     this.update_anchors();
+    this.update_distance_marker();
 
     //update_editor();
     if (this.text_edited != true) {
@@ -541,6 +562,39 @@ Pad.prototype.update_anchors = function() {
     this.anchor_sw.attr({cx: -pad_size.width/2, cy: -pad_size.height/2});
 
     this.anchors.transform("translate(" + (pad_size.x + pad_size.width/2) + "," + (pad_size.y + pad_size.height/2) + ")");
+};
+
+Pad.prototype.update_distance_marker = function() {
+
+    if (global_first_endpoint_object == this) {
+        console.log('here');
+
+        var pad_size = this.get_pad_size();
+        distance_x.attr({
+            x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2),
+            y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+        });
+        distance_y.attr({
+            y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+        });
+
+        //var text = paper.text(0,0,'distance_x').attr({ 'textpath': distance_x });
+    }
+
+    if (global_second_endpoint_object == this) {
+
+        var pad_size = this.get_pad_size();
+        distance_x.attr({
+            x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2)
+        });
+        distance_y.attr({
+            x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+        });
+    }
+
 };
 
 
@@ -625,6 +679,8 @@ var drag_workspace = function(dx, dy, posx, posy) {
 paper.drag(drag_workspace, begin_drag_workspace, null);
 paper.drag(drag_workspace, begin_drag_workspace, null);
 
+var distance_x = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var distance_y = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
 
 var center = paper.circle(0, 0, 10).attr({
     fill: "none",
@@ -632,7 +688,7 @@ var center = paper.circle(0, 0, 10).attr({
     strokeWidth: 2
 });
 
-var zoom_group = paper.group(grid_small, grid_big, center);
+var zoom_group = paper.group(grid_small, grid_big, center, distance_x, distance_y);
 zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 
 
