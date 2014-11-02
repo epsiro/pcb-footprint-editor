@@ -6,6 +6,8 @@ var origin_x = 300;
 var origin_y = 300;
 
 var global_dragging = false;
+var global_first_endpoint = false;
+var global_second_endpoint = false;
 
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
@@ -126,6 +128,7 @@ editor.on("cursorActivity", function(cm){
 
         if (hl_line.text.match(/Pad/)) {
             objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
+            objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
         }
 
         // Show new selected
@@ -205,6 +208,62 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.draw();
 
+    var click_anchor = function() {
+
+        if (this.attr("endpoint") != "true" && parentThis.endpoint != true) {
+
+            if (global_first_endpoint != true) {
+
+                parentThis.endpoint = true;
+                parentThis.endpoint_nr = 1;
+                global_first_endpoint = true;
+
+                this.attr({
+                    visibility: "visible",
+                    endpoint: "true",
+                    stroke: "red"
+                });
+
+            } else {
+
+                if (global_second_endpoint != true) {
+
+                    parentThis.endpoint = true;
+                    parentThis.endpoint_nr = 2;
+                    global_second_endpoint = true;
+
+                    this.attr({
+                        visibility: "visible",
+                        endpoint: "true",
+                        stroke: "blue"
+                    });
+
+                    // ask for distance
+                }
+            }
+
+
+        } else if (this.attr("endpoint") == "true") {
+
+            if (parentThis.endpoint_nr == 1) {
+                parentThis.endpoint_nr = 0;
+                global_first_endpoint = false;
+            }
+
+            if (parentThis.endpoint_nr == 2) {
+                parentThis.endpoint_nr = 0;
+                global_second_endpoint = false;
+            }
+
+            parentThis.endpoint = false;
+            this.attr({
+                visibility: "",
+                endpoint: "false",
+                stroke: "#445"
+            });
+        }
+    }
+
     var drag_anchor_start = function() {
 
         this.pad_size_original = parentThis.get_pad_size();
@@ -258,7 +317,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 break;
 
             case 'anchor_sw':
-                this.attr('cursor', 'sw-resize');
+                //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
                     y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
@@ -268,7 +327,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 break;
 
             case 'anchor_se':
-                this.attr('cursor', 'sw-resize');
+                //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
@@ -278,7 +337,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 break;
 
             case 'anchor_ne':
-                this.attr('cursor', 'ne-resize');
+                //this.attr('cursor', 'ne-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
@@ -288,7 +347,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 break;
 
             case 'anchor_nw':
-                this.attr('cursor', 'nw-resize');
+                //this.attr('cursor', 'nw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
                     y:      this.pad_size_original.y,
@@ -298,7 +357,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 break;
 
             default :
-                this.attr('cursor', 'move');
+                //this.attr('cursor', 'move');
                 var pad_size = {
                     x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
                     y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
@@ -341,7 +400,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     };
 
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
-    this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_n.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_e.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_s.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
@@ -350,6 +408,17 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.anchor_nw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_se.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_sw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+
+    this.anchor_c.click(click_anchor);
+    this.anchor_n.click(click_anchor);
+    this.anchor_e.click(click_anchor);
+    this.anchor_s.click(click_anchor);
+    this.anchor_w.click(click_anchor);
+    this.anchor_ne.click(click_anchor);
+    this.anchor_nw.click(click_anchor);
+    this.anchor_se.click(click_anchor);
+    this.anchor_sw.click(click_anchor);
 
     this.pad_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
     this.pad_group.hover(highlight_pad, unhighlight_pad);
