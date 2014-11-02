@@ -150,9 +150,9 @@ function Pad(pad_number, line_number) {
     this.y1 = 0;
     this.x2 = 0;
     this.y2 = 0;
-    this.thickness = 0;
+    this.thickness = 0.6;
 
-    this.pad = paper.rect(100, -100, 60, 60).attr({
+    this.pad = paper.rect(-30, -30, 60, 60).attr({
         fill: "#8c96a0",
         strokeWidth: 2
     });
