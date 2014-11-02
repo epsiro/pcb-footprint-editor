@@ -53,19 +53,6 @@ function load_file_as_text() {
     file_reader.readAsText(file_to_load, "UTF-8");
 }
 
-$( "#zoom_slider" ).slider({
-    orientation: "vertical",
-    range: "min",
-    min: 0.25,
-    max: 2,
-    step: 0.25,
-    value: 1,
-    slide: function( event, ui ) {
-        zoom_level = ui.value;
-        zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
-    }
-});
-
 function parse_pad_line(line) {
     if ( ! line.match(/Pad/)) {
         throw new UserException("InvalidFormat");
@@ -402,6 +389,25 @@ function Pad(pad_number, line_number) {
 
 
 var paper = Snap("#svg");
+
+paper.node.addEventListener("mousewheel", mouse_wheel_handler, false);
+
+function mouse_wheel_handler (ev) {
+    ev.preventDefault();
+
+    if (ev.wheelDelta > 0) {
+        if (zoom_level < 3) {
+            zoom_level += 0.25;
+        }
+    } else {
+        if (zoom_level > 0.25) {
+            zoom_level -= 0.25;
+        }
+    }
+
+    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
+
+}
 
 var grid_pattern_small = paper.path("M 10 0 L 0 0 0 10").attr({
     fill: "none",
