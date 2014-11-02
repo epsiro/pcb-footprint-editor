@@ -486,8 +486,8 @@ zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoo
 var add_pad = function(e) {
 
     if (e.type == "dblclick") {
-        var x1 =-(300 - e.clientX)/100;
-        var y1 = (300 - e.clientY)/100;
+        var x1 =  (e.clientX - origin_x)/zoom_level /100;
+        var y1 = -(e.clientY - origin_y)/zoom_level /100;
 
         x1 = Math.round(x1 * 10) / 10;
         y1 = Math.round(y1 * 10) / 10;
