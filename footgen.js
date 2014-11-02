@@ -5,6 +5,8 @@ var zoom_level = 1;
 var origin_x = 300;
 var origin_y = 300;
 
+var global_dragging = false;
+
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
 
@@ -85,10 +87,8 @@ editor.on("change", function(cm, change){
 
     /* Only update pad if it has been changed by the code and not by the
      * graphical interface */
-    for (var i = 2; i < objects.length; i++) {
-        if(objects[i].pad.dragging == true) {
-            return;
-        }
+    if (global_dragging == true) {
+        return;
     }
 
     if (change.to.line == change.from.line) {
@@ -177,7 +177,7 @@ function Pad(pad_number, line_number) {
         this.ow = parseInt(this.attr('width'), 10);
         this.oh = parseInt(this.attr('height'), 10);
 
-        this.dragging = true;
+        global_dragging = true;
 
         highlight_pad();
     };
@@ -258,13 +258,13 @@ function Pad(pad_number, line_number) {
     };
 
     var move_end = function() {
-        this.dragging = false;
+        global_dragging = false;
     };
 
     var change_cursor = function(e, mouse_x, mouse_y) {
 
         /* Don't change cursor during a drag operation */
-        if (this.dragging === true) {
+        if (global_dragging === true) {
             return;
         }
 
@@ -303,7 +303,7 @@ function Pad(pad_number, line_number) {
     };
 
     var unhighlight_pad = function(e) {
-        if (this.dragging != true) {
+        if (global_dragging != true) {
             parentThis.pad.attr({
                 stroke: "none"
             });
@@ -357,7 +357,7 @@ function Pad(pad_number, line_number) {
             var width = line_length + thickness;
             var height = thickness;
         } else {
-            console.log(editor, parentThis.line_number);
+            //console.log(editor, parentThis.line_number);
             editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
             editor.addLineClass(parentThis.line_number, "background", "error_pad");
             console.log("Rotated pad is not supported.");
@@ -409,6 +409,16 @@ function mouse_wheel_handler (ev) {
         }
     }
 
+
+    //origin_x = 300 - 100*zoom_level;
+    //origin_y = 300 - 100*zoom_level;
+
+    //grid_coord_x =  (ev.clientX - 300)/zoom_level + -1*(origin_x - 300)/zoom_level;
+    //grid_coord_y = -(ev.clientY - 300)/zoom_level - -1*(origin_y - 300)/zoom_level;
+
+    //origin_x = 300 + (grid_coord_x)*zoom_level;
+    //origin_y = 300 + (grid_coord_y)*zoom_level;
+
     zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 
 }
@@ -437,6 +447,28 @@ var grid_small = paper.rect(-1500, -1500, 3000, 3000, 0, 0).attr({
 var grid_big = paper.rect(-1500, -1500, 3000, 3000, 0, 0).attr({
     fill: grid_pattern_big
 });
+
+var begin_drag_workspace = function() {
+    if (global_dragging == true) {
+        return;
+    }
+
+    this.origin_x = origin_x;
+    this.origin_y = origin_y;
+};
+
+var drag_workspace = function(dx, dy, posx, posy) {
+    if (global_dragging == true) {
+        return;
+    }
+
+    origin_x = this.origin_x + dx;
+    origin_y = this.origin_y + dy;
+    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
+}
+
+paper.drag(drag_workspace, begin_drag_workspace, null);
+
 
 var center = paper.circle(0, 0, 10).attr({
     fill: "none",
