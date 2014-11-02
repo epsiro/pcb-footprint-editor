@@ -376,36 +376,27 @@ Pad.prototype.get_pad_size = function() {
     var y2 = this.y2*100;
     var thickness = this.thickness*100;
 
-    var line_length = Math.sqrt( Math.pow(x2-x1,2) + Math.pow(y2-y1,2) );
-    var angle = Math.atan2( (y2 - y1), (x2 - x1) ) * (180/Math.PI);
+    if (x1 == x2) {
+        /* portrait */
+        var line_length = y2 - y1;
 
-    //console.log(line_length, angle);
-
-    if (angle == 0) {
-        var x = x1 - thickness/2;
-        var y = y1 - thickness/2;
-        var width = line_length + thickness;
-        var height = thickness;
-    } else if (angle == -90) {
-        var x = x2 - thickness/2;
-        var y = y2 - thickness/2;
-        var width = thickness;
-        var height = line_length + thickness;
-    } else if (angle == 90) {
         var x = x1 - thickness/2;
         var y = y1 - thickness/2;
         var width = thickness;
         var height = line_length + thickness;
-    } else if (angle == 180) {
-        var x = x2 - thickness/2;
-        var y = y2 - thickness/2;
+
+    } else if (y1 == y2) {
+        /* landscape */
+        var line_length = x2 - x1;
+
+        var x = x1 - thickness/2;
+        var y = y1 - thickness/2;
         var width = line_length + thickness;
         var height = thickness;
+
     } else {
         return null;
     }
-
-    //console.log(x,y,height,width);
 
     return {x:x, y:y, width:width, height:height}
 }
