@@ -65,6 +65,7 @@ div#code {
 div#controls {
     padding: 0.5em;
     border-bottom: 1px solid black;
+    white-space: normal;
 }
 
 .selected_pad {

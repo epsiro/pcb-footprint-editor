@@ -8,6 +8,10 @@ var origin_y = 300;
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
 
+$('#vim_mode_cb').click(function () {
+    editor.setOption("vimMode", this.checked);
+});
+
 function save_text_as_file() {
 
     var text_to_write = editor.getValue();
@@ -74,8 +78,7 @@ function parse_pad_line(line) {
 
 var editor = CodeMirror.fromTextArea(document.getElementById("footprint_code"), {
   lineNumbers: false,
-  mode: "text/html",
-  vimMode: true
+  mode: "text/html"
 });
 
 editor.on("change", function(cm, change){
