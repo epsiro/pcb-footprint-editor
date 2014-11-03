@@ -688,15 +688,32 @@ var drag_workspace = function(dx, dy, posx, posy) {
 paper.drag(drag_workspace, begin_drag_workspace, null);
 paper.drag(drag_workspace, begin_drag_workspace, null);
 
-var distance_x_line = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var arrow_start = paper.path("M0,3 L-10,0 L0,-3").attr({stroke: "#aaa", fill: "none"});
+var arrow_end = paper.path("M0,3 L10,0 L0,-3").attr({stroke: "#aaa", fill: "none"});
+var marker_start = arrow_start.marker(-10,-6, 20,12, -10,0);
+var marker_end = arrow_end.marker(-10,-6, 20,12, 10,0);
+
+var distance_x_line = paper.line(0, 0, 0, 0).attr({
+    stroke: "#aaa",
+    strokeWidth: 2,
+    markerStart: marker_start,
+    markerEnd: marker_end
+});
 var distance_x_text = paper.text(0, 0, "");
 var distance_x = paper.group(distance_x_line, distance_x_text);
 distance_x_text.transform("scale(1,-1)");
+distance_x.attr({ visibility: "hidden" });
 
-var distance_y_line = paper.line(0, 0, 0, 0).attr({stroke: "green", strokeWidth: 2});
+var distance_y_line = paper.line(0, 0, 0, 0).attr({
+    stroke: "#aaa",
+    strokeWidth: 2,
+    markerStart: marker_start,
+    markerEnd: marker_end
+});
 var distance_y_text = paper.text(0, 0, "");
 var distance_y = paper.group(distance_y_line, distance_y_text);
 distance_y_text.transform("scale(1,-1)");
+distance_y.attr({ visibility: "hidden" });
 
 var center = paper.circle(0, 0, 10).attr({
     fill: "none",
