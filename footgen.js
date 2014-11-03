@@ -11,6 +11,8 @@ var global_second_endpoint = false;
 var global_first_endpoint_object = null;
 var global_second_endpoint_object = null;
 
+var anchor_size = 5;
+
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
 
@@ -149,6 +151,59 @@ editor.on("blur", function(cm){
     }
 });
 
+function ElementLine(x1, y1, x2, y2, thickness) {
+
+
+    this.x1 = x1*100;
+    this.y1 = y1*100;
+    this.x2 = x2*100;
+    this.y2 = y2*100;
+    this.thickness = thickness*100;
+
+    this.line = paper.line(0, 0, 0, 0).attr({
+        stroke: "black",
+        strokeWidth: this.thickness
+    });
+
+    this.anchor_c  = paper.circle(0, 0, anchor_size).addClass("anchor_c");
+    this.anchor_e1 = paper.circle(0, 0, anchor_size).addClass("anchor_e1");
+    this.anchor_e2 = paper.circle(0, 0, anchor_size).addClass("anchor_e2");
+
+    this.anchors = paper.group(
+        this.anchor_c,
+        this.anchor_e1,
+        this.anchor_e2
+    ).attr({
+        fill: "red",
+        stroke: "#445",
+        strokeWidth: 2
+    });
+        //visibility: "hidden"
+
+    this.update_anchors();
+
+    this.elementline_group = paper.group(this.line, this.anchors);
+    //this.pad_group.hover(highlight_pad, unhighlight_pad);
+    this.elementline_group.attr({class: "elementline"});
+
+    this.draw();
+
+}
+
+ElementLine.prototype.update_anchors = function() {
+
+    this.anchor_c.attr( { cx: (this.x2-this.x1)/2, cy: (this.y2-this.y1)/2});
+    this.anchor_e1.attr({ cx:             this.x1, cy:             this.y1});
+    this.anchor_e2.attr({ cx:             this.x2, cy:             this.y2});
+};
+
+ElementLine.prototype.draw = function() {
+    this.line.attr({x1: this.x1, y1: this.y1, x2: this.x2, y2: this.y2});
+}
+
+
+
+
 function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.pad_number = pad_number;
@@ -163,8 +218,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.thickness = thickness;
 
     var pad_size = this.get_pad_size();
-
-    var anchor_size = 5;
 
     this.anchor_c  = paper.circle(0, 0, anchor_size).addClass("anchor_c");
     this.anchor_n  = paper.circle(0, 0, anchor_size).addClass("anchor_n");
@@ -186,7 +239,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         this.anchor_nw,
         this.anchor_se,
         this.anchor_sw
-        ).attr({
+    ).attr({
         fill: "white",
         stroke: "#445",
         strokeWidth: 2,
@@ -745,7 +798,9 @@ var add_pad = function(e) {
     var thickness = 0.6;
 
     pad_instance = new Pad(objects.length, objects.length, x1, y1, x2, y2, thickness);
+    //elementline_instance = new ElementLine(0, 0, x2, y2, 0.5);
     zoom_group.add(pad_instance.pad_group);
+    //zoom_group.add(elementline_instance.elementline_group);
     objects.push(pad_instance);
     //console.log(objects);
 }
