@@ -20,6 +20,22 @@ $('#vim_mode_cb').click(function () {
     editor.setOption("vimMode", this.checked);
 });
 
+function nm_to_view(number) {
+    return number*100000000
+}
+
+function view_to_nm(number) {
+    return number/100000000
+}
+
+function nm_to_mm(number) {
+    return number*1000000
+}
+
+function mm_to_nm(number) {
+    return number/1000000
+}
+
 function save_text_as_file() {
 
     var text_to_write = editor.getValue();
@@ -107,11 +123,11 @@ editor.on("change", function(cm, change){
             if (objects.length >= change.to.line + 1 &&
                 objects[change.to.line].line_number == change.to.line) {
 
-                objects[change.to.line].x1 = values.x1;
-                objects[change.to.line].y1 = values.y1;
-                objects[change.to.line].x2 = values.x2;
-                objects[change.to.line].y2 = values.y2;
-                objects[change.to.line].thickness = values.thickness;
+                objects[change.to.line].x1 = mm_to_nm(values.x1);
+                objects[change.to.line].y1 = mm_to_nm(values.y1);
+                objects[change.to.line].x2 = mm_to_nm(values.x2);
+                objects[change.to.line].y2 = mm_to_nm(values.y2);
+                objects[change.to.line].thickness = mm_to_nm(values.thickness);
                 objects[change.to.line].text_edited = true;
                 objects[change.to.line].draw();
                 objects[change.to.line].text_edited = false;
@@ -146,18 +162,18 @@ editor.on("blur", function(cm){
     editor.removeLineClass(hl_line, "background", "selected_pad");
 
     if (hl_line.text.match(/Pad/)) {
-        objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "8c96a0" });
+        objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "#8c96a0" });
     }
 });
 
 function ElementLine(x1, y1, x2, y2, thickness) {
 
 
-    this.x1 = x1*100;
-    this.y1 = y1*100;
-    this.x2 = x2*100;
-    this.y2 = y2*100;
-    this.thickness = thickness*100;
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.thickness = thickness;
 
     this.line = paper.line(0, 0, 0, 0).attr({
         stroke: "black",
@@ -191,13 +207,13 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
 ElementLine.prototype.update_anchors = function() {
 
-    this.anchor_c.attr( { cx: (this.x2-this.x1)/2, cy: (this.y2-this.y1)/2});
-    this.anchor_e1.attr({ cx:             this.x1, cy:             this.y1});
-    this.anchor_e2.attr({ cx:             this.x2, cy:             this.y2});
+    this.anchor_c.attr( { cx: nm_to_view((this.x2-this.x1)/2), cy:nm_to_view((this.y2-this.y1)/2)});
+    this.anchor_e1.attr({ cx:             nm_to_view(this.x1), cy:            nm_to_view(this.y1)});
+    this.anchor_e2.attr({ cx:             nm_to_view(this.x2), cy:            nm_to_view(this.y2)});
 };
 
 ElementLine.prototype.draw = function() {
-    this.line.attr({x1: this.x1, y1: this.y1, x2: this.x2, y2: this.y2});
+    this.line.attr({x1: nm_to_view(this.x1), y1: nm_to_view(this.y1), x2: nm_to_view(this.x2), y2: nm_to_view(this.y2)});
 }
 
 
@@ -210,6 +226,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var parentThis = this;
 
+    /* all units in nm */
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -247,9 +264,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.update_anchors();
 
-    this.pad = paper.line(this.x1*100, this.y1*100, this.x2*100, this.y2*100).attr({
+    this.pad = paper.line(nm_to_view(this.x1), nm_to_view(this.y1), nm_to_view(this.x2), nm_to_view(this.y2)).attr({
         stroke: "#8c96a0",
-        strokeWidth: this.thickness*100,
+        strokeWidth: nm_to_view(this.thickness),
         strokeLinecap: "square"
     });
 
@@ -258,7 +275,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         strokeWidth: 2
     });
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", this.x1, this.y1, this.x2, this.y2, this.thickness);
+    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", nm_to_mm(this.x1), nm_to_mm(this.y1), nm_to_mm(this.x2), nm_to_mm(this.y2), nm_to_mm(this.thickness));
     editor.replaceRange(pad_code, {line: this.line_number, ch: 0});
 
     this.draw();
@@ -504,31 +521,31 @@ Pad.prototype.set_pad_size = function(pad_size) {
 
         if (pad_size.width < pad_size.height) {
             /* portrait */
-            this.thickness = pad_size.width/100;
+            this.thickness = view_to_nm(pad_size.width);
 
-            this.x1 = pad_size.x/100 + this.thickness/2;
-            this.y1 = pad_size.y/100 + this.thickness/2;
+            this.x1 = view_to_nm(pad_size.x) + this.thickness/2;
+            this.y1 = view_to_nm(pad_size.y) + this.thickness/2;
             this.x2 = this.x1;
-            this.y2 = this.y1 + pad_size.height/100 - this.thickness;
+            this.y2 = this.y1 + view_to_nm(pad_size.height) - this.thickness;
 
         } else {
             /* landscape */
-            this.thickness = pad_size.height/100;
+            this.thickness = view_to_nm(pad_size.height);
 
-            this.x1 = pad_size.x/100 + this.thickness/2;
-            this.y1 = pad_size.y/100 + this.thickness/2;
-            this.x2 = this.x1 + pad_size.width/100 - this.thickness;
+            this.x1 = view_to_nm(pad_size.x) + this.thickness/2;
+            this.y1 = view_to_nm(pad_size.y) + this.thickness/2;
+            this.x2 = this.x1 + view_to_nm(pad_size.width) - this.thickness;
             this.y2 = this.y1;
         }
 }
 
 Pad.prototype.get_pad_size = function() {
 
-    var x1 = this.x1*100;
-    var y1 = this.y1*100;
-    var x2 = this.x2*100;
-    var y2 = this.y2*100;
-    var thickness = this.thickness*100;
+    var x1 = this.x1;
+    var y1 = this.y1;
+    var x2 = this.x2;
+    var y2 = this.y2;
+    var thickness = this.thickness;
 
     if (x1 == x2) {
         /* portrait */
@@ -552,7 +569,7 @@ Pad.prototype.get_pad_size = function() {
         return null;
     }
 
-    return {x:x, y:y, width:width, height:height}
+    return {x:nm_to_view(x), y:nm_to_view(y), width:nm_to_view(width), height:nm_to_view(height)}
 }
 
 Pad.prototype.draw = function() {
@@ -578,19 +595,19 @@ Pad.prototype.draw = function() {
 
     editor.removeLineClass(this.line_number, "background", "error_pad");
 
-    this.pad.attr({x1: this.x1*100, y1: this.y1*100, x2: this.x2*100, y2: this.y2*100, strokeWidth: this.thickness*100 });
+    this.pad.attr({x1: nm_to_view(this.x1), y1: nm_to_view(this.y1), x2: nm_to_view(this.x2), y2: nm_to_view(this.y2), strokeWidth: nm_to_view(this.thickness) });
 
-    this.pad_line_ref.attr({x1: this.x1*100});
-    this.pad_line_ref.attr({y1: this.y1*100});
-    this.pad_line_ref.attr({x2: this.x2*100});
-    this.pad_line_ref.attr({y2: this.y2*100});
+    this.pad_line_ref.attr({x1: nm_to_view(this.x1)});
+    this.pad_line_ref.attr({y1: nm_to_view(this.y1)});
+    this.pad_line_ref.attr({x2: nm_to_view(this.x2)});
+    this.pad_line_ref.attr({y2: nm_to_view(this.y2)});
 
     this.update_anchors();
     this.update_distance_marker();
 
     //update_editor();
     if (this.text_edited != true) {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", this.x1, this.y1, this.x2, this.y2, this.thickness);
+        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", nm_to_mm(this.x1), nm_to_mm(this.y1), nm_to_mm(this.x2), nm_to_mm(this.y2), nm_to_mm(this.thickness));
         editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
     }
 
@@ -778,11 +795,11 @@ zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoo
 var add_pad = function(e) {
 
     if (e.type == "dblclick") {
-        var x1 =  (e.clientX - origin_x)/zoom_level /100;
-        var y1 = -(e.clientY - origin_y)/zoom_level /100;
+        var x1 = view_to_nm( (e.clientX - origin_x)/zoom_level );
+        var y1 = view_to_nm(-(e.clientY - origin_y)/zoom_level );
 
-        x1 = Math.round(x1 * 10) / 10;
-        y1 = Math.round(y1 * 10) / 10;
+        //x1 = Math.round(x1 * 10) / 10;
+        //y1 = Math.round(y1 * 10) / 10;
 
     } else {
         var x1 = 0;
@@ -792,7 +809,7 @@ var add_pad = function(e) {
     var x2 = x1;
     var y2 = y1;
 
-    var thickness = 0.6;
+    var thickness = mm_to_nm(0.6);
 
     pad_instance = new Pad(objects.length, objects.length, x1, y1, x2, y2, thickness);
     //elementline_instance = new ElementLine(0, 0, x2, y2, 0.5);
