@@ -131,13 +131,12 @@ editor.on("cursorActivity", function(cm){
         editor.removeLineClass(hl_line, "background", "selected_pad");
 
         if (hl_line.text.match(/Pad/)) {
-            objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
-            objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
+            objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "#8c96a0" });
         }
 
         // Show new selected
         hl_line = editor.addLineClass(editor.getCursor().line, "background", "selected_pad");
-        objects[editor.getCursor().line].pad.attr({ stroke: "#445" });
+        objects[editor.getCursor().line].pad.attr({ stroke: "#acb6c0" });
     }
 });
 
@@ -147,7 +146,7 @@ editor.on("blur", function(cm){
     editor.removeLineClass(hl_line, "background", "selected_pad");
 
     if (hl_line.text.match(/Pad/)) {
-        objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "none" });
+        objects[editor.getLineNumber(hl_line)].pad.attr({ stroke: "8c96a0" });
     }
 });
 
@@ -248,9 +247,10 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.update_anchors();
 
-    this.pad = paper.rect(0, 0, 0, 0).attr({
-        fill: "#8c96a0",
-        strokeWidth: 2
+    this.pad = paper.line(this.x1*100, this.y1*100, this.x2*100, this.y2*100).attr({
+        stroke: "#8c96a0",
+        strokeWidth: this.thickness*100,
+        strokeLinecap: "square"
     });
 
     this.pad_line_ref = paper.line(0, 0, 0, 0).attr({
@@ -451,7 +451,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     var highlight_pad = function(e) {
         parentThis.pad.attr({
-            stroke: "#445"
+            stroke: "#acb6c0"
         });
 
         parentThis.anchors.attr({
@@ -463,7 +463,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     var unhighlight_pad = function(e) {
         if (global_dragging != true) {
             parentThis.pad.attr({
-                stroke: "none"
+                stroke: "#8c96a0"
             });
             parentThis.anchors.attr({
                 visibility: "hidden"
@@ -578,10 +578,7 @@ Pad.prototype.draw = function() {
 
     editor.removeLineClass(this.line_number, "background", "error_pad");
 
-    this.pad.attr({x: pad_size.x});
-    this.pad.attr({y: pad_size.y});
-    this.pad.attr({height: pad_size.height});
-    this.pad.attr({width: pad_size.width});
+    this.pad.attr({x1: this.x1*100, y1: this.y1*100, x2: this.x2*100, y2: this.y2*100, strokeWidth: this.thickness*100 });
 
     this.pad_line_ref.attr({x1: this.x1*100});
     this.pad_line_ref.attr({y1: this.y1*100});
