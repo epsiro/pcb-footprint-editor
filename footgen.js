@@ -105,7 +105,8 @@ function parse_pad_line(line) {
 var editor = CodeMirror.fromTextArea(document.getElementById("footprint_code"), {
   lineNumbers: false,
   undoDepth: 10000,
-  mode: "text/html"
+  mode: "text/html",
+  vimMode: true
 });
 
 function add_new_object(line) {
