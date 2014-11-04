@@ -300,9 +300,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         strokeWidth: 2
     });
 
-
-    this.update_editor();
-
     var click_anchor = function() {
 
         var pad_size = parentThis.get_pad_size();
