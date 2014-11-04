@@ -86,7 +86,7 @@ function parse_pad_line(line) {
         throw new UserException("InvalidFormat");
     }
 
-    pad_line = line.substring(line.indexOf('[') + 1).split(' ');
+    pad_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
 
     //console.log(pad_line);
 
