@@ -106,9 +106,35 @@ var editor = CodeMirror.fromTextArea(document.getElementById("footprint_code"), 
   mode: "text/html"
 });
 
+function add_new_object(line) {
+
+    var changed_line = editor.getLine(line);
+
+    if (changed_line.match(/Pad/)) {
+        values = parse_pad_line(changed_line);
+        pad_instance = new Pad(line, line,
+                mm_to_nm(values.x1),
+                mm_to_nm(values.y1),
+                mm_to_nm(values.x2),
+                mm_to_nm(values.y2),
+                mm_to_nm(values.thickness)
+                );
+
+        console.log("Pad added: ", pad_instance);
+        pad_instance.draw();
+        zoom_group.add(pad_instance.pad_group);
+        objects.push(pad_instance);
+    }
+}
+
 editor.on("change", function(cm, change){
 
-    if (change.to.line == change.from.line) {
+    if (change.removed[0] === "") {
+        var line = change.to.line;
+        add_new_object(line);
+
+    } else if (change.to.line == change.from.line) {
+        var line = change.to.line;
         var changed_line = editor.getLine(change.to.line);
 
         if (changed_line.match(/Pad/)) {
@@ -123,10 +149,14 @@ editor.on("change", function(cm, change){
                 objects[change.to.line].x2 = mm_to_nm(values.x2);
                 objects[change.to.line].y2 = mm_to_nm(values.y2);
                 objects[change.to.line].thickness = mm_to_nm(values.thickness);
-                objects[change.to.line].text_edited = true;
                 objects[change.to.line].draw();
-                objects[change.to.line].text_edited = false;
             }
+        }
+    } else {
+
+        for (line = change.from.line; line < change.text.length; line++) {
+
+            add_new_object(line);
         }
     }
 });
@@ -270,8 +300,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         strokeWidth: 2
     });
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", nm_to_mm(this.x1), nm_to_mm(this.y1), nm_to_mm(this.x2), nm_to_mm(this.y2), nm_to_mm(this.thickness));
-    editor.replaceRange(pad_code, {line: this.line_number, ch: 0});
 
     this.update_editor();
 
@@ -792,6 +820,18 @@ var center = paper.circle(0, 0, 10).attr({
 var zoom_group = paper.group(grid_small, grid_big, center, distance_x, distance_y);
 zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 
+function get_last_line() {
+
+    var last_line;
+
+    editor.eachLine(function(line){
+        if (line.text === ")") {
+            last_line = editor.getLineNumber(line);
+        }
+    });
+
+    return last_line;
+}
 
 var add_pad = function(e) {
 
@@ -812,13 +852,16 @@ var add_pad = function(e) {
 
     var thickness = mm_to_nm(0.6);
 
-    pad_instance = new Pad(objects.length, objects.length, x1, y1, x2, y2, thickness);
-    //elementline_instance = new ElementLine(0, 0, x2, y2, 0.5);
-    zoom_group.add(pad_instance.pad_group);
-    //zoom_group.add(elementline_instance.elementline_group);
-    objects.push(pad_instance);
-    //console.log(objects);
+    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n",
+            nm_to_mm(x1),
+            nm_to_mm(y1),
+            nm_to_mm(x2),
+            nm_to_mm(y2),
+            nm_to_mm(thickness));
+
+    editor.replaceRange(pad_code, {line: get_last_line(), ch: 0});
 }
+
 
 $(document).bind('keydown', 'p', add_pad);
 $( "#svg" ).dblclick(add_pad);
