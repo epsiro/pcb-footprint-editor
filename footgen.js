@@ -13,6 +13,8 @@ var global_second_endpoint_object = null;
 
 var anchor_size = 5;
 
+// https://api.github.com/repos/Lindem-Data-Acquisition-AS/gedalib/git/trees/4a7f27695351fa8a9d97f7b2edc189b4340885d0
+
 $( "#load_file" ).on("click", load_file_as_text);
 $( "#save_file" ).on("click", save_text_as_file);
 
@@ -902,6 +904,7 @@ $( "#svg" ).dblclick(add_pad);
 var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
 var element_end = ')';
 editor.setValue(element_header + element_end);
+editor.clearHistory();
 
 objects.push("placeholder");
 objects.push("placeholder");
