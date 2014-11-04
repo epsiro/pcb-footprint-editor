@@ -127,11 +127,32 @@ function add_new_object(line) {
     }
 }
 
+function remove_object(line) {
+
+    var changed_line = editor.getLine(line);
+
+    console.log(objects);
+    console.log(line);
+    pad_instance = objects[line];
+    console.log("Pad removed: ", pad_instance);
+    //pad_instance.kill();
+    pad_instance.pad_group.remove();
+    objects.splice(line,1);
+}
+
 editor.on("change", function(cm, change){
 
+    console.log(change);
+
+    /* Line added */
     if (change.removed[0] === "") {
         var line = change.to.line;
         add_new_object(line);
+
+    /* Line removed */
+    } else if (change.text[0] === "") {
+        var line = change.from.line;
+        remove_object(line);
 
     } else if (change.to.line == change.from.line) {
         var line = change.to.line;
@@ -699,7 +720,22 @@ Pad.prototype.update_distance_marker = function() {
 
 };
 
-
+Pad.prototype.kill = function() {
+    //zoom_group.remove();
+    //this.pad
+    //this.pad_line_ref
+    //this.anchor_c
+    //this.anchor_n
+    //this.anchor_e
+    //this.anchor_s
+    //this.anchor_w
+    //this.anchor_ne
+    //this.anchor_nw
+    //this.anchor_se
+    //this.anchor_sw
+    //this.anchors
+    //this.pad_group
+}
 
 
 
