@@ -102,16 +102,11 @@ function parse_pad_line(line) {
 
 var editor = CodeMirror.fromTextArea(document.getElementById("footprint_code"), {
   lineNumbers: false,
+  undoDepth: 10000,
   mode: "text/html"
 });
 
 editor.on("change", function(cm, change){
-
-    /* Only update pad if it has been changed by the code and not by the
-     * graphical interface */
-    if (global_dragging == true) {
-        return;
-    }
 
     if (change.to.line == change.from.line) {
         var changed_line = editor.getLine(change.to.line);
@@ -278,7 +273,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n", nm_to_mm(this.x1), nm_to_mm(this.y1), nm_to_mm(this.x2), nm_to_mm(this.y2), nm_to_mm(this.thickness));
     editor.replaceRange(pad_code, {line: this.line_number, ch: 0});
 
-    this.draw();
+    this.update_editor();
 
     var click_anchor = function() {
 
@@ -459,7 +454,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
         parentThis.set_pad_size(pad_size);
 
-        parentThis.draw();
+        parentThis.update_editor();
     };
 
     var drag_anchor_end = function() {
@@ -605,14 +600,20 @@ Pad.prototype.draw = function() {
     this.update_anchors();
     this.update_distance_marker();
 
-    //update_editor();
-    if (this.text_edited != true) {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]", nm_to_mm(this.x1), nm_to_mm(this.y1), nm_to_mm(this.x2), nm_to_mm(this.y2), nm_to_mm(this.thickness));
-        editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
-    }
-
     console.log("Pad updated with attributes " + this.pad.attr());
 };
+
+
+Pad.prototype.update_editor = function() {
+        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]",
+                nm_to_mm(this.x1),
+                nm_to_mm(this.y1),
+                nm_to_mm(this.x2),
+                nm_to_mm(this.y2),
+                nm_to_mm(this.thickness));
+        editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
+}
+
 
 Pad.prototype.update_anchors = function() {
 
