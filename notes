@@ -1,0 +1,16 @@
+github API
+----------------
+https://api.github.com/repos/Lindem-Data-Acquisition-AS/gedalib/git/trees/4a7f27695351fa8a9d97f7b2edc189b4340885d0
+
+
+Zoom
+----------------
+
+origin_x = 300 - 100*zoom_level;
+origin_y = 300 - 100*zoom_level;
+
+grid_coord_x =  (ev.clientX - 300)/zoom_level + -1*(origin_x - 300)/zoom_level;
+grid_coord_y = -(ev.clientY - 300)/zoom_level - -1*(origin_y - 300)/zoom_level;
+
+origin_x = 300 + (grid_coord_x)*zoom_level;
+origin_y = 300 + (grid_coord_y)*zoom_level;
