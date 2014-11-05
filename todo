@@ -1,4 +1,5 @@
 - area for status message
-- edit multiple pads by text input
-- load file
-- save file
+v edit multiple pads by text input
+v load file
+v save file
+- fix hover while dragging bug
