@@ -33,11 +33,21 @@ editor.on("change", function(cm, change){
 
             values = parse_pad_line(changed_line);
 
-            objects[change.to.line].x1 = mm_to_nm(values.x1);
-            objects[change.to.line].y1 = mm_to_nm(values.y1);
-            objects[change.to.line].x2 = mm_to_nm(values.x2);
-            objects[change.to.line].y2 = mm_to_nm(values.y2);
-            objects[change.to.line].thickness = mm_to_nm(values.thickness);
+            objects[change.to.line].x1 = values.x1;
+            objects[change.to.line].y1 = values.y1;
+            objects[change.to.line].x2 = values.x2;
+            objects[change.to.line].y2 = values.y2;
+            objects[change.to.line].thickness = values.thickness;
+            objects[change.to.line].draw();
+        } else if (changed_line.match(/ElementLine/)) {
+
+            values = parse_elementline(changed_line);
+
+            objects[change.to.line].x1 = values.x1;
+            objects[change.to.line].y1 = values.y1;
+            objects[change.to.line].x2 = values.x2;
+            objects[change.to.line].y2 = values.y2;
+            objects[change.to.line].thickness = values.thickness;
             objects[change.to.line].draw();
         }
     } else {
@@ -95,9 +105,6 @@ function get_last_line() {
 $('#vim_mode_cb').click(function () {
     editor.setOption("vimMode", this.checked);
 });
-
-$(document).bind('keydown', 'p', add_pad);
-$( "#svg" ).dblclick(add_pad);
 
 var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
 var element_end = ')';

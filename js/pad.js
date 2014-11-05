@@ -284,9 +284,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.anchor_se.click(click_anchor);
     this.anchor_sw.click(click_anchor);
 
-    this.pad_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
-    this.pad_group.hover(highlight_pad, unhighlight_pad);
-    this.pad_group.attr({class: "pad"});
+    this.graphical_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
+    this.graphical_group.hover(highlight_pad, unhighlight_pad);
+    this.graphical_group.attr({class: "pad"});
 
 }
 
@@ -452,7 +452,7 @@ Pad.prototype.update_distance_marker = function() {
 
 };
 
-var add_pad = function(e) {
+function add_pad(e) {
 
     if (e.type == "dblclick") {
         var x1 = view_to_nm( (e.clientX - origin_x)/zoom_level );
@@ -496,6 +496,13 @@ function parse_pad_line(line) {
     var y2 = pad_line[3].slice(0, -2);
     var thickness = pad_line[4].slice(0, -2);
 
-    return {x1:x1, y1:y1, x2:x2, y2:y2, thickness:thickness}
+    return {
+        x1:mm_to_nm(x1),
+        y1:mm_to_nm(y1),
+        x2:mm_to_nm(x2),
+        y2:mm_to_nm(y2),
+        thickness:mm_to_nm(thickness)
+    }
 
 }
+
