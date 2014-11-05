@@ -11,7 +11,13 @@ editor.on("change", function(cm, change){
 
     /* Line added */
     if (change.removed[0] === "") {
-        var line = change.to.line;
+
+        if (change.text[0] === "") {
+            var line = change.to.line+1;
+        } else {
+            var line = change.to.line;
+        }
+
         add_new_object(line);
 
     /* Line removed */
@@ -27,16 +33,12 @@ editor.on("change", function(cm, change){
 
             values = parse_pad_line(changed_line);
 
-            if (objects.length >= change.to.line + 1 &&
-                objects[change.to.line].line_number == change.to.line) {
-
-                objects[change.to.line].x1 = mm_to_nm(values.x1);
-                objects[change.to.line].y1 = mm_to_nm(values.y1);
-                objects[change.to.line].x2 = mm_to_nm(values.x2);
-                objects[change.to.line].y2 = mm_to_nm(values.y2);
-                objects[change.to.line].thickness = mm_to_nm(values.thickness);
-                objects[change.to.line].draw();
-            }
+            objects[change.to.line].x1 = mm_to_nm(values.x1);
+            objects[change.to.line].y1 = mm_to_nm(values.y1);
+            objects[change.to.line].x2 = mm_to_nm(values.x2);
+            objects[change.to.line].y2 = mm_to_nm(values.y2);
+            objects[change.to.line].thickness = mm_to_nm(values.thickness);
+            objects[change.to.line].draw();
         }
     } else {
 

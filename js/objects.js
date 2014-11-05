@@ -12,10 +12,12 @@ function add_new_object(line) {
                 mm_to_nm(values.thickness)
                 );
 
-        console.log("Pad added: ", pad_instance);
+        console.log("Pad added in objects[%d]: %s", line, pad_instance);
         pad_instance.draw();
         zoom_group.add(pad_instance.pad_group);
-        objects.push(pad_instance);
+
+        objects.splice(line, 0, pad_instance);
+        objects.forEach(update_line_number);
     }
 }
 
@@ -27,7 +29,13 @@ function remove_object(line) {
     pad_instance = objects[line];
     console.log("Pad removed: ", pad_instance);
     pad_instance.pad_group.remove();
+
     objects.splice(line,1);
+    objects.forEach(update_line_number);
+}
+
+function update_line_number(element, index, array) {
+    element.line_number = objects.indexOf(element);
 }
 
 var objects = new Array();
