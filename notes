@@ -14,3 +14,14 @@ grid_coord_y = -(ev.clientY - 300)/zoom_level - -1*(origin_y - 300)/zoom_level;
 
 origin_x = 300 + (grid_coord_x)*zoom_level;
 origin_y = 300 + (grid_coord_y)*zoom_level;
+
+
+grunt and uglifyjs install
+----------------
+
+sudo apt-get install npm
+sudo npm install uglify-js -g
+sudo update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
+sudo npm install -g grunt-cli
+npm install
+grunt
