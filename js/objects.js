@@ -12,7 +12,8 @@ function add_new_object(line) {
                 values.thickness
                 );
 
-        console.log("Pad added in objects[%d]: %s", line, pad_instance);
+        console.log("Pad added in objects[%d]: ", line);
+        console.log(pad_instance);
         pad_instance.draw();
         zoom_group.add(pad_instance.graphical_group);
 

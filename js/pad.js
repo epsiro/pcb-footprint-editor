@@ -149,7 +149,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
                     width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -157,7 +157,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
+                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     height: this.pad_size_original.height
                 }
                 break;
@@ -165,17 +165,17 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
             case 'anchor_s':
                 var pad_size = {
                     x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
             case 'anchor_w':
                 var pad_size = {
-                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
+                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     height: this.pad_size_original.height
                 }
                 break;
@@ -183,10 +183,10 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
             case 'anchor_sw':
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
-                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
-                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
+                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -194,9 +194,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
-                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.pad_size_original.height + Snap.snapTo(grid, dy/zoom_level, 30)
+                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -205,26 +205,26 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  + Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
+                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
             case 'anchor_nw':
                 //this.attr('cursor', 'nw-resize');
                 var pad_size = {
-                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
+                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  - Snap.snapTo(grid, dx/zoom_level, 30),
-                    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
+                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
             default :
                 //this.attr('cursor', 'move');
                 var pad_size = {
-                    x:      this.pad_size_original.x      + Snap.snapTo(grid, dx/zoom_level, 30),
-                    y:      this.pad_size_original.y      - Snap.snapTo(grid, dy/zoom_level, 30),
+                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width,
                     height: this.pad_size_original.height
                 }
@@ -294,20 +294,20 @@ Pad.prototype.set_pad_size = function(pad_size) {
 
         if (pad_size.width < pad_size.height) {
             /* portrait */
-            this.thickness = view_to_nm(pad_size.width);
+            this.thickness = pad_size.width;
 
-            this.x1 = view_to_nm(pad_size.x) + this.thickness/2;
-            this.y1 = view_to_nm(pad_size.y) + this.thickness/2;
+            this.x1 = pad_size.x + this.thickness/2;
+            this.y1 = pad_size.y + this.thickness/2;
             this.x2 = this.x1;
-            this.y2 = this.y1 + view_to_nm(pad_size.height) - this.thickness;
+            this.y2 = this.y1 + pad_size.height - this.thickness;
 
         } else {
             /* landscape */
-            this.thickness = view_to_nm(pad_size.height);
+            this.thickness = pad_size.height;
 
-            this.x1 = view_to_nm(pad_size.x) + this.thickness/2;
-            this.y1 = view_to_nm(pad_size.y) + this.thickness/2;
-            this.x2 = this.x1 + view_to_nm(pad_size.width) - this.thickness;
+            this.x1 = pad_size.x + this.thickness/2;
+            this.y1 = pad_size.y + this.thickness/2;
+            this.x2 = this.x1 + pad_size.width - this.thickness;
             this.y2 = this.y1;
         }
 }
@@ -342,12 +342,14 @@ Pad.prototype.get_pad_size = function() {
         return null;
     }
 
-    return {x:nm_to_view(x), y:nm_to_view(y), width:nm_to_view(width), height:nm_to_view(height)}
+    return {x:x, y:y, width:width, height:height}
 }
 
 Pad.prototype.draw = function() {
 
     pad_size = this.get_pad_size();
+
+    console.log(pad_size);
 
     if (pad_size == null) {
 
@@ -397,17 +399,17 @@ Pad.prototype.update_anchors = function() {
 
     pad_size = this.get_pad_size();
 
-    this.anchor_c.attr({ cx:                 0, cy:                  0});
-    this.anchor_n.attr({ cx:                 0, cy:  pad_size.height/2});
-    this.anchor_e.attr({ cx:  pad_size.width/2, cy:                  0});
-    this.anchor_s.attr({ cx:                 0, cy: -pad_size.height/2});
-    this.anchor_w.attr({ cx: -pad_size.width/2, cy:                  0});
-    this.anchor_ne.attr({cx:  pad_size.width/2, cy:  pad_size.height/2});
-    this.anchor_nw.attr({cx: -pad_size.width/2, cy:  pad_size.height/2});
-    this.anchor_se.attr({cx:  pad_size.width/2, cy: -pad_size.height/2});
-    this.anchor_sw.attr({cx: -pad_size.width/2, cy: -pad_size.height/2});
+    this.anchor_c.attr({ cx: nm_to_view(                0), cy: nm_to_view(                 0)});
+    this.anchor_n.attr({ cx: nm_to_view(                0), cy: nm_to_view( pad_size.height/2)});
+    this.anchor_e.attr({ cx: nm_to_view( pad_size.width/2), cy: nm_to_view(                 0)});
+    this.anchor_s.attr({ cx: nm_to_view(                0), cy: nm_to_view(-pad_size.height/2)});
+    this.anchor_w.attr({ cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(                 0)});
+    this.anchor_ne.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view( pad_size.height/2)});
+    this.anchor_nw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view( pad_size.height/2)});
+    this.anchor_se.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view(-pad_size.height/2)});
+    this.anchor_sw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(-pad_size.height/2)});
 
-    this.anchors.transform("translate(" + (pad_size.x + pad_size.width/2) + "," + (pad_size.y + pad_size.height/2) + ")");
+    this.anchors.transform("translate(" + nm_to_view(pad_size.x + pad_size.width/2) + "," + nm_to_view(pad_size.y + pad_size.height/2) + ")");
 };
 
 Pad.prototype.update_distance_marker = function() {

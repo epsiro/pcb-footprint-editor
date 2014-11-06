@@ -42,7 +42,6 @@ function ElementLine(x1, y1, x2, y2, thickness) {
         this.original_thickness = parentThis.thickness;
 
         //console.log(this.inal_x1);
-        //console.log(this.original_x1);
 
         global_dragging = true;
 
@@ -160,25 +159,38 @@ function parse_elementline(line) {
         throw new UserException("InvalidFormat");
     }
 
-    pad_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
 
-    console.log(pad_line);
+    //console.log(code_line);
 
-    // expects units in mm
-    var x1 = pad_line[0].slice(0, -2);
-    var y1 = pad_line[1].slice(0, -2);
-    var x2 = pad_line[2].slice(0, -2);
-    var y2 = pad_line[3].slice(0, -2);
-    var thickness = pad_line[4].slice(0, -3);
+    var x1 = parse_length(code_line[0]);
+    var y1 = parse_length(code_line[1]);
+    var x2 = parse_length(code_line[2]);
+    var y2 = parse_length(code_line[3]);
+    var thickness = parse_length(code_line[4]);
 
     return {
-        x1:mm_to_nm(x1),
-        y1:mm_to_nm(y1),
-        x2:mm_to_nm(x2),
-        y2:mm_to_nm(y2),
-        thickness:mm_to_nm(thickness)
+        x1:x1,
+        y1:y1,
+        x2:x2,
+        y2:y2,
+        thickness:thickness
     }
 
+}
+
+function parse_length(s) {
+
+    var pos_mm = s.indexOf("mm");
+    if (pos_mm > -1) {
+        return mm_to_nm(s.slice(0, pos_mm).trim());
+
+    }
+
+    var pos_mil = s.indexOf("mil");
+    if (pos_mil > -1) {
+        return mil_to_nm(s.slice(0, pos_mil).trim());
+    }
 }
 
 function add_elementline(e) {
