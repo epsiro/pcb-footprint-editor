@@ -349,8 +349,6 @@ Pad.prototype.draw = function() {
 
     pad_size = this.get_pad_size();
 
-    console.log(pad_size);
-
     if (pad_size == null) {
 
         //console.log(editor, parentThis.line_number);

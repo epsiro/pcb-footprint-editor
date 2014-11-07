@@ -72,7 +72,6 @@ function ElementLine(x1, y1, x2, y2, thickness) {
             case 'anchor_e2':
                 parentThis.x2 = this.original_x2 + view_to_nm(dx/zoom_level);
                 parentThis.y2 = this.original_y2 - view_to_nm(dy/zoom_level);
-                console.log(this.original_x1);
                 break;
         }
 
@@ -113,9 +112,6 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     this.graphical_group = paper.group(this.line, this.anchors);
     this.graphical_group.hover(highlight_elementline, unhighlight_elementline);
     this.graphical_group.attr({class: "elementline"});
-
-    console.log(this);
-
 
 }
 
