@@ -1,6 +1,3 @@
-$( "#load_file" ).on("click", load_file_as_text);
-$( "#save_file" ).on("click", save_text_as_file);
-
 function save_text_as_file() {
 
     var text_to_write = editor.getValue();
