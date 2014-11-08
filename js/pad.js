@@ -418,12 +418,12 @@ Pad.prototype.update_distance_marker = function() {
 
         var pad_size = this.get_pad_size();
         distance_x_line.attr({
-            x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
-            y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2),
-            y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+            x1: nm_to_view(parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            y1: nm_to_view(parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2),
+            y2: nm_to_view(parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
         distance_y_line.attr({
-            y1: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+            y1: nm_to_view(parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
 
         var distance_x_value = Math.round(distance_x_line.attr("x2") - distance_x_line.attr("x1"));
@@ -437,12 +437,12 @@ Pad.prototype.update_distance_marker = function() {
 
         var pad_size = this.get_pad_size();
         distance_x_line.attr({
-            x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2)
+            x2: nm_to_view(parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2)
         });
         distance_y_line.attr({
-            x1: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
-            x2: (parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
-            y2: (parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
+            x1: nm_to_view(parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            x2: nm_to_view(parseInt(this.endpoint_anchor.attr("cx"),10) + pad_size.x + pad_size.width/2),
+            y2: nm_to_view(parseInt(this.endpoint_anchor.attr("cy"),10) + pad_size.y + pad_size.height/2)
         });
 
         var distance_x_value = Math.round(distance_x_line.attr("x2") - distance_x_line.attr("x1"));
