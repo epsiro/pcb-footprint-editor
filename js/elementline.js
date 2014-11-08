@@ -33,7 +33,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
     this.update_anchors();
 
-    var drag_anchor_start = function() {
+    var drag_anchor_start = function(e) {
 
         this.original_x1 = parentThis.x1;
         this.original_y1 = parentThis.y1;
@@ -112,6 +112,13 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     this.graphical_group = paper.group(this.line, this.anchors);
     this.graphical_group.hover(highlight_elementline, unhighlight_elementline);
     this.graphical_group.attr({class: "elementline"});
+
+    /* Start drag event on anchor*/
+    highlight_elementline();
+    var e = new Event("mousedown" );
+    e.clientX = origin_x + nm_to_view(this.x1);
+    e.clientY = origin_y - nm_to_view(this.y1);
+    this.anchor_e2.node.dispatchEvent(e);
 
 }
 
@@ -197,7 +204,7 @@ function add_elementline(e) {
     //x1 = Math.round(x1 * 10) / 10;
     //y1 = Math.round(y1 * 10) / 10;
 
-    var x2 = x1+mm_to_nm(0.2);
+    var x2 = x1;
     var y2 = y1;
 
     var thickness = mm_to_nm(0.2);
