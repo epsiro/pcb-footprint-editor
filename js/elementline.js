@@ -56,12 +56,10 @@ function ElementLine(x1, y1, x2, y2, thickness) {
         switch (this.node.classList[0]) {
 
             case 'anchor_c':
-                //var pad_size = {
-                //    x:      this.pad_size_original.x,
-                //    y:      this.pad_size_original.y,
-                //    width:  this.pad_size_original.width,
-                //    height: this.pad_size_original.height - Snap.snapTo(grid, dy/zoom_level, 30)
-                //}
+                parentThis.x1 = this.original_x1 + view_to_nm(dx/zoom_level);
+                parentThis.y1 = this.original_y1 - view_to_nm(dy/zoom_level);
+                parentThis.x2 = this.original_x2 + view_to_nm(dx/zoom_level);
+                parentThis.y2 = this.original_y2 - view_to_nm(dy/zoom_level);
                 break;
 
             case 'anchor_e1':
