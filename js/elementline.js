@@ -81,14 +81,16 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     };
 
     var highlight_elementline = function(e) {
-        parentThis.line.attr({
-            stroke: "#222"
-        });
+        if (global_dragging != true) {
+            parentThis.line.attr({
+                stroke: "#222"
+            });
 
-        parentThis.anchors.attr({
-            visibility: "visible"
-        });
-        editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+            parentThis.anchors.attr({
+                visibility: "visible"
+            });
+            editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+        }
     };
 
     var unhighlight_elementline = function(e) {

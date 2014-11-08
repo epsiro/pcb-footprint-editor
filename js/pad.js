@@ -241,14 +241,16 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     };
 
     var highlight_pad = function(e) {
-        parentThis.pad.attr({
-            stroke: "#acb6c0"
-        });
+        if (global_dragging != true) {
+            parentThis.pad.attr({
+                stroke: "#acb6c0"
+            });
 
-        parentThis.anchors.attr({
-            visibility: "visible"
-        });
-        editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+            parentThis.anchors.attr({
+                visibility: "visible"
+            });
+            editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+        }
     };
 
     var unhighlight_pad = function(e) {
