@@ -78,6 +78,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
     var drag_anchor_end = function() {
         global_dragging = false;
+        unhighlight_elementline();
     };
 
     var highlight_elementline = function(e) {
