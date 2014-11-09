@@ -56,20 +56,20 @@ function ElementLine(x1, y1, x2, y2, thickness) {
         switch (this.node.classList[0]) {
 
             case 'anchor_c':
-                parentThis.x1 = this.original_x1 + view_to_nm(dx/zoom_level);
-                parentThis.y1 = this.original_y1 - view_to_nm(dy/zoom_level);
-                parentThis.x2 = this.original_x2 + view_to_nm(dx/zoom_level);
-                parentThis.y2 = this.original_y2 - view_to_nm(dy/zoom_level);
+                parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y1 = this.original_y1 - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+                parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y2 = this.original_y2 - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
 
             case 'anchor_e1':
-                parentThis.x1 = this.original_x1 + view_to_nm(dx/zoom_level);
-                parentThis.y1 = this.original_y1 - view_to_nm(dy/zoom_level);
+                parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y1 = this.original_y1 - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
 
             case 'anchor_e2':
-                parentThis.x2 = this.original_x2 + view_to_nm(dx/zoom_level);
-                parentThis.y2 = this.original_y2 - view_to_nm(dy/zoom_level);
+                parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y2 = this.original_y2 - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
         }
 
@@ -202,8 +202,8 @@ function add_elementline(e) {
     var x1 = view_to_nm( (e.clientX - origin_x)/zoom_level );
     var y1 = view_to_nm(-(e.clientY - origin_y)/zoom_level );
 
-    //x1 = Math.round(x1 * 10) / 10;
-    //y1 = Math.round(y1 * 10) / 10;
+    x1 = Math.round(x1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
+    y1 = Math.round(y1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
 
     var x2 = x1;
     var y2 = y1;
