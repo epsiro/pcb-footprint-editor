@@ -110,6 +110,15 @@ function new_component() {
 
     editor.setValue(element_header + element_end);
     editor.clearHistory();
+
+    distance_x.attr({ visibility: "hidden" });
+    distance_y.attr({ visibility: "hidden" });
+
+    global_dragging = false;
+    global_first_endpoint = false;
+    global_second_endpoint = false;
+    global_first_endpoint_object = null;
+    global_second_endpoint_object = null;
 }
 
 new_component();
