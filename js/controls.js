@@ -1,4 +1,5 @@
 $('.status_tooltip').tooltip();
+$('a').tooltip();
 $('button').tooltip();
 
 $('#controls_mode button').on("click", function() {
