@@ -9,52 +9,50 @@ editor.on("change", function(cm, change){
 
     //console.log(change);
 
-    /* Line added */
-    if (change.removed[0] === "") {
+    /* Line(s) have been added */
+    if (change.text.length > change.removed.length) {
 
-        if (change.text[0] === "") {
-            var line = change.to.line+1;
-        } else {
-            var line = change.to.line;
+        for (var line_nr = change.from.line;
+                line_nr < (change.from.line + change.text.length); line_nr++) {
+
+            var line = change.text[line_nr - change.from.line];
+            if (line != "") {
+                if (add_object(line, line_nr) == 0) {
+                    //console.log("added " + line_nr + " " + line);
+                }
+            }
         }
 
-        add_new_object(line);
+    /* Line(s) have been removed */
+    } else if (change.text.length < change.removed.length) {
 
-    /* Line removed */
-    } else if (change.text[0] === "") {
-        var line = change.from.line;
-        remove_object(line);
+        var tmp_line_nr = change.from.line;
 
-    } else if (change.to.line == change.from.line) {
-        var line = change.to.line;
-        var changed_line = editor.getLine(change.to.line);
+        for (var line_nr = change.from.line;
+                line_nr < (change.from.line + change.removed.length); line_nr++) {
 
-        if (changed_line.match(/Pad/)) {
-
-            values = parse_pad_line(changed_line);
-
-            objects[change.to.line].x1 = values.x1;
-            objects[change.to.line].y1 = values.y1;
-            objects[change.to.line].x2 = values.x2;
-            objects[change.to.line].y2 = values.y2;
-            objects[change.to.line].thickness = values.thickness;
-            objects[change.to.line].draw();
-        } else if (changed_line.match(/ElementLine/)) {
-
-            values = parse_elementline(changed_line);
-
-            objects[change.to.line].x1 = values.x1;
-            objects[change.to.line].y1 = values.y1;
-            objects[change.to.line].x2 = values.x2;
-            objects[change.to.line].y2 = values.y2;
-            objects[change.to.line].thickness = values.thickness;
-            objects[change.to.line].draw();
+            var line = change.removed[line_nr - change.from.line];
+            if (line != "") {
+                if (remove_object(line, tmp_line_nr) == 0) {
+                    //console.log("removed " + line_nr + " " + tmp_line_nr + " " + line);
+                    tmp_line_nr--;
+                }
+            }
+            tmp_line_nr++;
         }
+
+    /* Line(s) have been edited */
     } else {
 
-        for (line = change.from.line; line < change.text.length; line++) {
+        for (var line_nr = change.from.line;
+                line_nr < (change.from.line + change.text.length); line_nr++) {
 
-            add_new_object(line);
+            var line = editor.getLine(line_nr);
+            if (line != "") {
+                if (edit_object(line, line_nr) == 0) {
+                    //console.log("edited " + line_nr + " " + line);
+                }
+            }
         }
     }
 });
