@@ -117,8 +117,8 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     /* Start drag event on anchor*/
     highlight_elementline();
     var e = new Event("mousedown" );
-    e.clientX = origin_x + nm_to_view(this.x1);
-    e.clientY = origin_y - nm_to_view(this.y1);
+    e.clientX = $('#svg').offset().left + origin_x + nm_to_view(this.x1);
+    e.clientY = $('#svg').offset().top  + origin_y - nm_to_view(this.y1);
     this.anchor_e2.node.dispatchEvent(e);
 
 }
@@ -198,9 +198,8 @@ function parse_length(s) {
 }
 
 function add_elementline(e) {
-
-    var x1 = view_to_nm( (e.clientX - origin_x)/zoom_level );
-    var y1 = view_to_nm(-(e.clientY - origin_y)/zoom_level );
+    var x1 = view_to_nm($('#svg').offset().left +  (e.clientX - origin_x)/zoom_level );
+    var y1 = view_to_nm($('#svg').offset().top  + -(e.clientY - origin_y)/zoom_level );
 
     x1 = Math.round(x1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
     y1 = Math.round(y1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
