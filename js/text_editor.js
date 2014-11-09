@@ -113,6 +113,7 @@ function new_component() {
 
     distance_x.attr({ visibility: "hidden" });
     distance_y.attr({ visibility: "hidden" });
+    $("#status_xy_distance").parent().hide();
 
     global_dragging = false;
     global_first_endpoint = false;

@@ -121,9 +121,11 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
         if (global_first_endpoint == true && global_second_endpoint == true) {
             distance_x.attr({ visibility: "visible" });
             distance_y.attr({ visibility: "visible" });
+            $("#status_xy_distance").parent().show();
         } else {
             distance_x.attr({ visibility: "hidden" });
             distance_y.attr({ visibility: "hidden" });
+            $("#status_xy_distance").parent().hide();
         }
 
     }
@@ -431,6 +433,7 @@ Pad.prototype.update_distance_marker = function() {
 
         distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
         distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
+        $("#status_xy_distance").text(distance_x_value/100 + "mm, " + distance_y_value/100 + "mm");
     }
 
     if (global_second_endpoint_object == this) {
@@ -450,6 +453,7 @@ Pad.prototype.update_distance_marker = function() {
 
         distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
         distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
+        $("#status_xy_distance").text(distance_x_value/100 + "mm, " + distance_y_value/100 + "mm");
     }
 
 };

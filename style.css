@@ -68,6 +68,15 @@ div#controls {
     white-space: normal;
 }
 
+div#status {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: white;
+    padding: 0.5em;
+    border: 1px solid black;
+}
+
 .selected_pad {
     background: #eee;
 }
