@@ -460,8 +460,8 @@ function add_pad(e) {
         var x1 = view_to_nm( (e.clientX - origin_x)/zoom_level );
         var y1 = view_to_nm(-(e.clientY - origin_y)/zoom_level );
 
-        //x1 = Math.round(x1 * 10) / 10;
-        //y1 = Math.round(y1 * 10) / 10;
+        x1 = Math.round(x1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
+        y1 = Math.round(y1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
 
     } else {
         var x1 = 0;
