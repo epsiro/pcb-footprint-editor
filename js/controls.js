@@ -11,13 +11,9 @@ $('#controls_mode button').on("click", function() {
     }
 });
 
-$( "#load_file" ).on("click", load_file_as_text);
-$( "#save_file" ).on("click", save_text_as_file);
+$("#controls_undo").on("click", function() { editor.undo(); });
+$("#controls_redo").on("click", function() { editor.redo(); });
 
-$('#controls_undo').on("click", function() {
-    editor.undo();
-});
-
-$('#controls_redo').on("click", function() {
-    editor.redo();
-});
+$("#controls_new_component").on("click", new_component);
+$("#load_file").on("click", load_file_as_text);
+$("#save_file").on("click", save_text_as_file);

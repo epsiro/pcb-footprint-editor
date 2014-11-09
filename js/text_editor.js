@@ -106,8 +106,12 @@ $('#vim_mode_cb').click(function () {
     editor.setOption("vimMode", this.checked);
 });
 
-var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
-var element_end = ')';
+function new_component() {
+    var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
+    var element_end = ')';
 
-editor.setValue(element_header + element_end);
-editor.clearHistory();
+    editor.setValue(element_header + element_end);
+    editor.clearHistory();
+}
+
+new_component();
