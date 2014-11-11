@@ -33,7 +33,30 @@ function add_object(changed_line, line_nr) {
                 values.thickness
                 );
 
-        console.log("ElementLine added in objects[%d]: %s", line_nr);
+        console.log("ElementLine added in objects[%d]: ", line_nr);
+        object_instance.draw();
+        zoom_group.add(object_instance.graphical_group);
+
+        objects.splice(line_nr, 0, object_instance);
+        objects.forEach(update_line_number);
+
+        return 0;
+    }
+
+    if (changed_line.match(/Pin/)) {
+        //console.log(changed_line);
+        values = parse_pin(changed_line);
+        //console.log(values);
+        object_instance = new Pin(
+                values.cx,
+                values.cy,
+                values.pad_diameter,
+                values.clearance,
+                values.mask,
+                values.hole_diameter
+                );
+
+        console.log("Pin added in objects[%d]: ", line_nr);
         object_instance.draw();
         zoom_group.add(object_instance.graphical_group);
 
@@ -98,6 +121,21 @@ function edit_object(changed_line, line_nr) {
         return 0;
     }
 
+    if (changed_line.match(/Pin/)) {
+
+        values = parse_pin(changed_line);
+
+        objects[line_nr].cx = values.cx;
+        objects[line_nr].cy = values.cy;
+        objects[line_nr].pad_diameter = values.pad_diameter;
+        objects[line_nr].clearance = values.clearance;
+        objects[line_nr].mask = values.mask;
+        objects[line_nr].hole_diameter = values.hole_diameter;
+        objects[line_nr].draw();
+
+        return 0;
+    }
+
     return 1;
 }
 
@@ -108,8 +146,10 @@ function update_line_number(element, index, array) {
 function dblclick_handler(e) {
     if (tool_state == "pad") {
         add_pad(e);
-    } else if (tool_state == "elementline") {
+} else if (tool_state == "elementline") {
         add_elementline(e);
+    } else if (tool_state == "pin") {
+        add_pin(e);
     }
 }
 

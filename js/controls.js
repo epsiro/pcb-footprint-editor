@@ -10,6 +10,8 @@ $('#controls_mode button').on("click", function() {
         tool_state = "pad";
     } else if ($(this).attr("id") == "controls_new_elementline") {
         tool_state = "elementline";
+    } else if ($(this).attr("id") == "controls_new_pin") {
+        tool_state = "pin";
     }
 });
 

@@ -21,3 +21,18 @@ function nm_to_mil(number) {
 function mil_to_nm(number) {
     return number*25400
 }
+
+function parse_length(s) {
+
+    var pos_mm = s.indexOf("mm");
+    if (pos_mm > -1) {
+        return mm_to_nm(s.slice(0, pos_mm).trim());
+
+    }
+
+    var pos_mil = s.indexOf("mil");
+    if (pos_mil > -1) {
+        return mil_to_nm(s.slice(0, pos_mil).trim());
+    }
+}
+

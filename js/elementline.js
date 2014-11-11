@@ -183,20 +183,6 @@ function parse_elementline(line) {
 
 }
 
-function parse_length(s) {
-
-    var pos_mm = s.indexOf("mm");
-    if (pos_mm > -1) {
-        return mm_to_nm(s.slice(0, pos_mm).trim());
-
-    }
-
-    var pos_mil = s.indexOf("mil");
-    if (pos_mil > -1) {
-        return mil_to_nm(s.slice(0, pos_mil).trim());
-    }
-}
-
 function add_elementline(e) {
     var x1 = view_to_nm($('#svg').offset().left +  (e.clientX - origin_x)/zoom_level );
     var y1 = view_to_nm($('#svg').offset().top  + -(e.clientY - origin_y)/zoom_level );
