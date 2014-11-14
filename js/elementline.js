@@ -115,11 +115,13 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     this.graphical_group.attr({class: "elementline"});
 
     /* Start drag event on anchor*/
-    highlight_elementline();
-    var e = new Event("mousedown" );
-    e.clientX = $('#svg').offset().left + origin_x + nm_to_view(this.x1);
-    e.clientY = $('#svg').offset().top  + origin_y - nm_to_view(this.y1);
-    this.anchor_e2.node.dispatchEvent(e);
+    if (file_loaded != true) {
+        highlight_elementline();
+        var e = new Event("mousedown" );
+        e.clientX = $('#svg').offset().left + origin_x + nm_to_view(this.x1);
+        e.clientY = $('#svg').offset().top  + origin_y - nm_to_view(this.y1);
+        this.anchor_e2.node.dispatchEvent(e);
+    }
 
 }
 

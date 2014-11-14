@@ -144,6 +144,9 @@ function update_line_number(element, index, array) {
 }
 
 function dblclick_handler(e) {
+
+    file_loaded = false;
+
     if (tool_state == "pad") {
         add_pad(e);
 } else if (tool_state == "elementline") {
