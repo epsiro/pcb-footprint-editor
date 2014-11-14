@@ -326,18 +326,26 @@ Pad.prototype.get_pad_size = function() {
 
     if (x1 == x2) {
         /* portrait */
-        var line_length = y2 - y1;
+        var line_length = Math.abs(y2 - y1);
 
         var x = x1 - thickness/2;
-        var y = y1 - thickness/2;
+        if (y2 - y1 < 0) {
+            var y = y1 - thickness/2 - line_length;
+        } else {
+            var y = y1 - thickness/2;
+        }
         var width = thickness;
         var height = line_length + thickness;
 
     } else if (y1 == y2) {
         /* landscape */
-        var line_length = x2 - x1;
+        var line_length = Math.abs(x2 - x1);
 
-        var x = x1 - thickness/2;
+        if (x2 - x1 < 0) {
+            var x = x1 - thickness/2 - line_length;
+        } else {
+            var x = x1 - thickness/2;
+        }
         var y = y1 - thickness/2;
         var width = line_length + thickness;
         var height = thickness;
