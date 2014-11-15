@@ -89,16 +89,17 @@ div#status {
     background: #f99 !important;
 }
 
+ul#gedalib li a {
+    color: black;
+}
+
+/*
 div#zoom_slider {
     position: fixed;
     top: 20px;
     left: calc(50% - 30px );
     height: calc(100% - 40px);
     font-size: 14px;
-}
-
-ul#gedalib li a {
-    color: black;
 }
 
 .popup {
@@ -124,3 +125,4 @@ ul#gedalib li a {
 .ui-slider .ui-slider-range {
     background: #ccc;
 }
+*/
