@@ -156,6 +156,7 @@ function dblclick_handler(e) {
     }
 }
 
+file_loaded = false;
 var tool_state = "pad";
 
 $(document).bind('keydown', 'p', add_pad);

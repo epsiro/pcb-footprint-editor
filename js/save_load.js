@@ -1,5 +1,3 @@
-file_loaded = false;
-
 function save_text_as_file() {
 
     var text_to_write = editor.getValue();
@@ -35,12 +33,12 @@ function destroy_clicked_element(event) {
 
 function load_file_as_text() {
 
-    file_loaded = true;
-
     var file_to_load = document.getElementById("file_to_load").files[0];
 
     var file_reader = new FileReader();
     file_reader.onload = function(event) {
+        file_loaded = true;
+        new_component();
         editor.setValue(event.target.result);
     };
 
