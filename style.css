@@ -53,13 +53,17 @@ div#graphical_editor {
     font-size: 14px;
 }
 
+div#lib,
 div#code {
     display: inline-block;
-    width: 50%;
     height: 100vh;
     vertical-align: top;
     font-size: 14px;
     border-left: 1px solid black;
+}
+
+div#code {
+    width: 50%;
 }
 
 div#controls {

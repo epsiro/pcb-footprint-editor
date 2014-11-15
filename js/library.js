@@ -1,6 +1,21 @@
+var hidden = true;
+$("div#lib").hide();
+
 function list_folders_from_lib() {
 
-    $(".popup").toggle();
+    if (hidden != true) {
+        hidden = true;
+        $("div#lib").hide();
+        $("div#lib").css("width", "0%");
+        $("div#graphical_editor").css("width", "50%");
+        $("div#code").css("width", "50%");
+    } else {
+        hidden = false;
+        $("div#lib").show();
+        $("div#lib").css("width", "20%");
+        $("div#graphical_editor").css("width", "40%");
+        $("div#code").css("width", "40%");
+    }
 
     var gebalib_url = "https://api.github.com/repos/Lindem-Data-Acquisition-AS/gedalib/git/trees/4a7f27695351fa8a9d97f7b2edc189b4340885d0";
 
