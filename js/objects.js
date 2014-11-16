@@ -52,13 +52,14 @@ function add_object(changed_line, line_nr) {
                 values.cy,
                 values.pad_diameter,
                 values.clearance,
-                values.mask,
+                values.mask_diameter,
                 values.hole_diameter
                 );
 
         console.log("Pin added in objects[%d]: ", line_nr);
         object_instance.draw();
         zoom_group.add(object_instance.graphical_group);
+        soldermask_group.add(object_instance.mask);
 
         objects.splice(line_nr, 0, object_instance);
         objects.forEach(update_line_number);
@@ -83,6 +84,9 @@ function remove_object(changed_line, line_nr) {
     }
 
     object_instance.graphical_group.remove();
+    if (object_instance.mask != undefined) {
+        object_instance.mask.remove();
+    }
     objects.splice(line_nr,1);
     console.log("Object removed: ", object_instance);
     objects.forEach(update_line_number);
@@ -129,7 +133,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].cy = values.cy;
         objects[line_nr].pad_diameter = values.pad_diameter;
         objects[line_nr].clearance = values.clearance;
-        objects[line_nr].mask = values.mask;
+        objects[line_nr].mask_diameter = values.mask_diameter;
         objects[line_nr].hole_diameter = values.hole_diameter;
         objects[line_nr].draw();
 

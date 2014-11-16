@@ -11,6 +11,14 @@ button {
     padding: 2px 4px;
 }
 
+button.big_icon {
+    padding: 3px 4px;
+}
+
+button.big_icon span {
+    font-size: 10pt;
+}
+
 #file_to_load:hover::before,
 button:hover {
     background: #eee;

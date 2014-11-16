@@ -15,6 +15,17 @@ $('#controls_mode button').on("click", function() {
     }
 });
 
+$("#controls_soldermask").on("click", function() {
+
+    if ($(this).hasClass('active') ) {
+        $(this).removeClass('active');
+        solderstop.attr({ fill: "none" });
+    } else {
+        $(this).addClass('active');
+        solderstop.attr({ fill: "green" });
+    }
+});
+
 $("#controls_undo").on("click", function() { editor.undo(); });
 $("#controls_redo").on("click", function() { editor.redo(); });
 
