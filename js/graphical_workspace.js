@@ -23,15 +23,15 @@ var grid_pattern_big = paper.path("M 100 0 L 0 0 0 100").attr({
     strokeWidth: 1
 }).pattern(0, 0, 100, 100);
 
-var bg = paper.rect(-1500, -1500, 3000, 3000, 0, 0).attr({
+var bg = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
     fill: "#fefefe"
 });
 
-var grid_small = paper.rect(-1500, -1500, 3000, 3000, 0, 0).attr({
+var grid_small = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
     fill: grid_pattern_small
 });
 
-var grid_big = paper.rect(-1500, -1500, 3000, 3000, 0, 0).attr({
+var grid_big = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
     fill: grid_pattern_big
 });
 
