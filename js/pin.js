@@ -1,4 +1,4 @@
-function Pin(cx, cy, hole_diameter, pad_diameter) {
+function Pin(cx, cy, pad_diameter, clearance, mask, hole_diameter) {
 
     this.line_number = 0;
 
@@ -8,14 +8,14 @@ function Pin(cx, cy, hole_diameter, pad_diameter) {
     this.cy = cy;
     this.hole_diameter = hole_diameter;
     this.pad_diameter = pad_diameter;
-    this.mask = 0;
-    this.clearance = 0;
+    this.mask = mask;
+    this.clearance = clearance;
 
-    this.pad = paper.circle(0, 0, 20).attr({
+    this.pad = paper.circle(0, 0, 0).attr({
         fill: "#8c96a0"
     });
 
-    this.hole = paper.circle(0, 0, 5).attr({
+    this.hole = paper.circle(0, 0, 0).attr({
         fill: "white"
     });
 
@@ -155,12 +155,14 @@ Pin.prototype.update_anchors = function() {
 Pin.prototype.draw = function() {
     this.pad.attr({
         cx: nm_to_view(this.cx),
-        cy: nm_to_view(this.cy)
+        cy: nm_to_view(this.cy),
+        r: nm_to_view(this.pad_diameter/2)
     });
 
     this.hole.attr({
         cx: nm_to_view(this.cx),
-        cy: nm_to_view(this.cy)
+        cy: nm_to_view(this.cy),
+        r: nm_to_view(this.hole_diameter/2)
     });
 
     this.update_anchors();
