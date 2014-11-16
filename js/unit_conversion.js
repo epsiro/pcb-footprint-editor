@@ -32,7 +32,7 @@ function hundredth_mil_to_nm(number) {
 
 function parse_length(s) {
 
-    console.log(s);
+    //console.log(s);
 
     var pos_mm = s.indexOf("mm");
     if (pos_mm > -1) {

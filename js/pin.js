@@ -56,31 +56,27 @@ function Pin(cx, cy, pad_diameter, clearance, mask, hole_diameter) {
 
         var grid = 10;
 
-//       console.log(this);
-//       console.log(Snap);
-//       console.log(view_to_nm);
-//
-//       parentThis.cx = this.original_cx + view_to_nm(Snap.snapto(grid, dx/zoom_level, 30));
-//       parentThis.cy = this.original_cy - view_to_nm(Snap.snapto(grid, dy/zoom_level, 30));
-
-        parentThis.cx = this.original_cx + view_to_nm(dx);
-        parentThis.cy = this.original_cy - view_to_nm(dy);
-
-        //console.log(parentThis.cx);
-
-        /* inspect cursor to determine which resize/move process to use */
-        switch (this.node.class) {
+       //console.log($(this.node).hasClass("anchor_c"));
+        switch (this.node.classList[0]) {
 
             case 'anchor_c':
+               parentThis.cx = this.original_cx + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+               parentThis.cy = this.original_cy - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
 
-     //       case 'anchor_h':
-     //           parentThis.hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-     //           break;
+            case 'anchor_h':
+                var new_hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+                if ( new_hole_diameter > 0 && new_hole_diameter < parentThis.pad_diameter) {
+                    parentThis.hole_diameter = new_hole_diameter;
+                }
+                break;
 
-     //       case 'anchor_p':
-     //           parentThis.pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-     //           break;
+            case 'anchor_p':
+                var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+                if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
+                    parentThis.pad_diameter = new_pad_diameter;
+                }
+                break;
         }
 
         parentThis.update_editor();
@@ -203,7 +199,7 @@ function add_pin(e) {
     cy = Math.round(cy / mm_to_nm(0.1)) * mm_to_nm(0.1);
 
     var hole_diameter = mm_to_nm(0.2);
-    var pad_diameter = mm_to_nm(0.2);
+    var pad_diameter = mm_to_nm(1.0);
     var clearance = mm_to_nm(0.1);
     var mask = mm_to_nm(0.1);
 
