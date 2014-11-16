@@ -23,16 +23,14 @@ function mil_to_nm(number) {
 }
 
 function nm_to_hundredth_mil(number) {
-    return number/2540000
+    return number/254
 }
 
 function hundredth_mil_to_nm(number) {
-    return number*2540000
+    return number*254
 }
 
 function parse_length(s) {
-
-    //console.log(s);
 
     var pos_mm = s.indexOf("mm");
     if (pos_mm > -1) {
@@ -45,12 +43,10 @@ function parse_length(s) {
         return mil_to_nm(s.slice(0, pos_mil).trim());
     }
 
-    var bracket = "round";
+    var bracket = "square";
 
     if ($.isNumeric(s)) {
         if (bracket == "round") {
-            console.log("numeric");
-            console.log(mil_to_nm(s.trim()));
             return mil_to_nm(s.trim());
         } else if (bracket == "square") {
             return hundredth_mil_to_nm(s.trim());
