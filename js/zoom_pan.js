@@ -12,10 +12,12 @@ function mouse_wheel_handler (ev) {
     }
 
     if (zoom_level < 0.75) {
+        anchor_size = 10;
         grid_small.attr({ fill: grid_pattern_mm });
         grid_big.attr({ fill: grid_pattern_cm });
         grid_pattern_mm.attr({ strokeWidth: 2 });
     } else {
+        anchor_size = 5;
         grid_small.attr({ fill: grid_pattern_tenth_mm });
         grid_big.attr({ fill: grid_pattern_mm });
         grid_pattern_mm.attr({ strokeWidth: 1 });

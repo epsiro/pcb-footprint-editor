@@ -143,9 +143,9 @@ ElementLine.prototype.update_editor = function() {
 
 ElementLine.prototype.update_anchors = function() {
 
-    this.anchor_c.attr( { cx: nm_to_view(this.x1 + (this.x2-this.x1)/2), cy:nm_to_view(this.y1 + (this.y2-this.y1)/2)});
-    this.anchor_e1.attr({ cx:                       nm_to_view(this.x1), cy:                      nm_to_view(this.y1)});
-    this.anchor_e2.attr({ cx:                       nm_to_view(this.x2), cy:                      nm_to_view(this.y2)});
+    this.anchor_c.attr( { cx: nm_to_view(this.x1 + (this.x2-this.x1)/2), cy:nm_to_view(this.y1 + (this.y2-this.y1)/2), r: anchor_size});
+    this.anchor_e1.attr({ cx:                       nm_to_view(this.x1), cy:                      nm_to_view(this.y1), r: anchor_size});
+    this.anchor_e2.attr({ cx:                       nm_to_view(this.x2), cy:                      nm_to_view(this.y2), r: anchor_size});
 };
 
 ElementLine.prototype.draw = function() {

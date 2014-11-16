@@ -148,9 +148,9 @@ Pin.prototype.update_editor = function() {
 
 Pin.prototype.update_anchors = function() {
 
-    this.anchor_c.attr({ cx: nm_to_view(this.cx),                        cy: nm_to_view(this.cy)});
-    this.anchor_h.attr({ cx: nm_to_view(this.cx + this.hole_diameter/2), cy: nm_to_view(this.cy)});
-    this.anchor_p.attr({ cx: nm_to_view(this.cx + this.pad_diameter/2),  cy: nm_to_view(this.cy)});
+    this.anchor_c.attr({ cx: nm_to_view(this.cx),                        cy: nm_to_view(this.cy), r: anchor_size});
+    this.anchor_h.attr({ cx: nm_to_view(this.cx + this.hole_diameter/2), cy: nm_to_view(this.cy), r: anchor_size});
+    this.anchor_p.attr({ cx: nm_to_view(this.cx + this.pad_diameter/2),  cy: nm_to_view(this.cy), r: anchor_size});
 };
 
 Pin.prototype.draw = function() {

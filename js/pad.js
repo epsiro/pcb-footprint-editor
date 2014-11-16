@@ -432,15 +432,15 @@ Pad.prototype.update_anchors = function() {
 
     pad_size = this.get_pad_size();
 
-    this.anchor_c.attr({ cx: nm_to_view(                0), cy: nm_to_view(                 0)});
-    this.anchor_n.attr({ cx: nm_to_view(                0), cy: nm_to_view( pad_size.height/2)});
-    this.anchor_e.attr({ cx: nm_to_view( pad_size.width/2), cy: nm_to_view(                 0)});
-    this.anchor_s.attr({ cx: nm_to_view(                0), cy: nm_to_view(-pad_size.height/2)});
-    this.anchor_w.attr({ cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(                 0)});
-    this.anchor_ne.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view( pad_size.height/2)});
-    this.anchor_nw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view( pad_size.height/2)});
-    this.anchor_se.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view(-pad_size.height/2)});
-    this.anchor_sw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(-pad_size.height/2)});
+    this.anchor_c.attr({ cx: nm_to_view(                0), cy: nm_to_view(                 0), r: anchor_size});
+    this.anchor_n.attr({ cx: nm_to_view(                0), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_e.attr({ cx: nm_to_view( pad_size.width/2), cy: nm_to_view(                 0), r: anchor_size});
+    this.anchor_s.attr({ cx: nm_to_view(                0), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
+    this.anchor_w.attr({ cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(                 0), r: anchor_size});
+    this.anchor_ne.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_nw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_se.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
+    this.anchor_sw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
 
     this.anchors.transform("translate(" + nm_to_view(pad_size.x + pad_size.width/2) + "," + nm_to_view(pad_size.y + pad_size.height/2) + ")");
 };
