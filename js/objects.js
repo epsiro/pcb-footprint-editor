@@ -4,20 +4,22 @@ function add_object(changed_line, line_nr) {
 
     if (changed_line.match(/Pad/)) {
         values = parse_pad_line(changed_line);
-        pad_instance = new Pad(line_nr, line_nr,
+        object_instance = new Pad(line_nr, line_nr,
                 values.x1,
                 values.y1,
                 values.x2,
                 values.y2,
-                values.thickness
+                values.thickness,
+                values.mask_thickness
                 );
 
         console.log("Pad added in objects[%d]: ", line_nr);
-        //console.log(pad_instance);
-        pad_instance.draw();
-        zoom_group.add(pad_instance.graphical_group);
+        //console.log(object_instance);
+        object_instance.draw();
+        zoom_group.add(object_instance.graphical_group);
+        soldermask_group.add(object_instance.mask);
 
-        objects.splice(line_nr, 0, pad_instance);
+        objects.splice(line_nr, 0, object_instance);
         objects.forEach(update_line_number);
 
         return 0;

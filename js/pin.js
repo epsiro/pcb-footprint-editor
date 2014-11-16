@@ -15,16 +15,13 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
         fill: "#8c96a0"
     });
 
-    this.hole = paper.circle(0, 0, 0).attr({
-        fill: "white"
-    });
-
     this.mask = paper.circle(0, 0, 0).attr({
-        //stroke: "black",
-        //"stroke-dasharray": "5, 5",
-        //fill: "none"
         stroke: "none",
         fill: "black"
+    });
+
+    this.hole = paper.circle(0, 0, 0).attr({
+        fill: "white"
     });
 
     console.log(this);

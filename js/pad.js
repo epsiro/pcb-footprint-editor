@@ -1,4 +1,4 @@
-function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
+function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness) {
 
     this.pad_number = pad_number;
     this.line_number = line_number;
@@ -11,6 +11,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.x2 = x2;
     this.y2 = y2;
     this.thickness = thickness;
+    this.mask_thickness = mask_thickness;
 
     var pad_size = this.get_pad_size();
 
@@ -43,9 +44,15 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
 
     this.update_anchors();
 
-    this.pad = paper.line(nm_to_view(this.x1), nm_to_view(this.y1), nm_to_view(this.x2), nm_to_view(this.y2)).attr({
+    this.pad = paper.line(0, 0, 0, 0).attr({
         stroke: "#8c96a0",
-        strokeWidth: nm_to_view(this.thickness),
+        strokeWidth: 0,
+        strokeLinecap: "square"
+    });
+
+    this.mask = paper.line(0, 0, 0, 0).attr({
+        stroke: "black",
+        strokeWidth: 0,
         strokeLinecap: "square"
     });
 
@@ -288,13 +295,15 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness) {
     this.anchor_se.click(click_anchor);
     this.anchor_sw.click(click_anchor);
 
-    this.graphical_group = paper.group(this.pad, this.pad_line_ref, this.anchors);
+    this.graphical_group = paper.group(this.pad, this.mask, this.pad_line_ref, this.anchors);
     this.graphical_group.hover(highlight_pad, unhighlight_pad);
     this.graphical_group.attr({class: "pad"});
 
 }
 
 Pad.prototype.set_pad_size = function(pad_size) {
+
+        var mask_margin = this.mask_thickness - this.thickness;
 
         if (pad_size.width < pad_size.height) {
             /* portrait */
@@ -314,6 +323,8 @@ Pad.prototype.set_pad_size = function(pad_size) {
             this.x2 = this.x1 + pad_size.width - this.thickness;
             this.y2 = this.y1;
         }
+
+        this.mask_thickness = this.thickness + mask_margin;
 }
 
 Pad.prototype.get_pad_size = function() {
@@ -380,7 +391,23 @@ Pad.prototype.draw = function() {
 
     editor.removeLineClass(this.line_number, "background", "error_pad");
 
-    this.pad.attr({x1: nm_to_view(this.x1), y1: nm_to_view(this.y1), x2: nm_to_view(this.x2), y2: nm_to_view(this.y2), strokeWidth: nm_to_view(this.thickness) });
+    this.pad.attr({
+        x1: nm_to_view(this.x1),
+        y1: nm_to_view(this.y1),
+        x2: nm_to_view(this.x2),
+        y2: nm_to_view(this.y2),
+        strokeWidth: nm_to_view(this.thickness)
+    });
+
+    this.mask.attr({
+        x1: nm_to_view(this.x1),
+        y1: nm_to_view(this.y1),
+        x2: nm_to_view(this.x2),
+        y2: nm_to_view(this.y2),
+        strokeWidth: nm_to_view(this.mask_thickness)
+    });
+
+    console.log(this.mask);
 
     this.pad_line_ref.attr({x1: nm_to_view(this.x1)});
     this.pad_line_ref.attr({y1: nm_to_view(this.y1)});
@@ -484,13 +511,15 @@ function add_pad(e) {
     var y2 = y1;
 
     var thickness = mm_to_nm(0.6);
+    var mask_thickness = mm_to_nm(0.8);
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]\n",
+    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm %.2fmm \"\" \"1\" \"square\"]\n",
             nm_to_mm(x1),
             nm_to_mm(y1),
             nm_to_mm(x2),
             nm_to_mm(y2),
-            nm_to_mm(thickness));
+            nm_to_mm(thickness),
+            nm_to_mm(mask_thickness));
 
     editor.replaceRange(pad_code, {line: get_last_line(), ch: 0});
 }
@@ -502,18 +531,22 @@ function parse_pad_line(line) {
 
     code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
 
-    var x1            = parse_length(code_line[0]);
-    var y1            = parse_length(code_line[1]);
-    var x2            = parse_length(code_line[2]);
-    var y2            = parse_length(code_line[3]);
-    var thickness     = parse_length(code_line[4]);
+    var x1             = parse_length(code_line[0]);
+    var y1             = parse_length(code_line[1]);
+    var x2             = parse_length(code_line[2]);
+    var y2             = parse_length(code_line[3]);
+    var thickness      = parse_length(code_line[4]);
+    var clearance      = parse_length(code_line[5]);
+    var mask_thickness = parse_length(code_line[6]);
 
     return {
         x1:x1,
         y1:y1,
         x2:x2,
         y2:y2,
-        thickness:thickness
+        thickness:thickness,
+        clearance:clearance,
+        mask_thickness:mask_thickness
     }
 
 }
