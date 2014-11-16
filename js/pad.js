@@ -11,7 +11,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
     this.x2 = x2;
     this.y2 = y2;
     this.thickness = thickness;
-    this.mask_thickness = mask_thickness;
+    this.mask_margin = mask_thickness - thickness;
 
     var pad_size = this.get_pad_size();
 
@@ -303,8 +303,6 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
 
 Pad.prototype.set_pad_size = function(pad_size) {
 
-        var mask_margin = this.mask_thickness - this.thickness;
-
         if (pad_size.width < pad_size.height) {
             /* portrait */
             this.thickness = pad_size.width;
@@ -323,8 +321,6 @@ Pad.prototype.set_pad_size = function(pad_size) {
             this.x2 = this.x1 + pad_size.width - this.thickness;
             this.y2 = this.y1;
         }
-
-        this.mask_thickness = this.thickness + mask_margin;
 }
 
 Pad.prototype.get_pad_size = function() {
@@ -404,7 +400,7 @@ Pad.prototype.draw = function() {
         y1: nm_to_view(this.y1),
         x2: nm_to_view(this.x2),
         y2: nm_to_view(this.y2),
-        strokeWidth: nm_to_view(this.mask_thickness)
+        strokeWidth: nm_to_view(this.thickness + this.mask_margin)
     });
 
     console.log(this.mask);

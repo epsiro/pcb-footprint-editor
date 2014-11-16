@@ -8,7 +8,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     this.cy = cy;
     this.hole_diameter = hole_diameter;
     this.pad_diameter = pad_diameter;
-    this.mask_diameter = mask_diameter;
+    this.mask_margin = mask_diameter - pad_diameter;
     this.clearance = clearance;
 
     this.pad = paper.circle(0, 0, 0).attr({
@@ -79,7 +79,6 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
             case 'anchor_p':
                 var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
                 if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
-                    parentThis.mask_diameter = new_pad_diameter + (parentThis.mask_diameter - parentThis.pad_diameter);
                     parentThis.pad_diameter = new_pad_diameter;
                 }
                 break;
@@ -136,7 +135,7 @@ Pin.prototype.update_editor = function() {
             nm_to_mm(this.cy),
             nm_to_mm(this.pad_diameter),
             nm_to_mm(this.clearance),
-            nm_to_mm(this.mask_diameter),
+            nm_to_mm(this.mask_margin + this.pad_diameter),
             nm_to_mm(this.hole_diameter)
             );
 
@@ -158,7 +157,7 @@ Pin.prototype.draw = function() {
     this.mask.attr({
         cx: nm_to_view(this.cx),
         cy: nm_to_view(this.cy),
-        r: nm_to_view(this.mask_diameter/2)
+        r: nm_to_view((this.mask_margin + this.pad_diameter)/2)
     });
 
     this.pad.attr({
