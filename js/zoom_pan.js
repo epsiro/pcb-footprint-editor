@@ -11,6 +11,16 @@ function mouse_wheel_handler (ev) {
         }
     }
 
+    if (zoom_level < 0.75) {
+        grid_small.attr({ fill: grid_pattern_mm });
+        grid_big.attr({ fill: grid_pattern_cm });
+        grid_pattern_mm.attr({ strokeWidth: 2 });
+    } else {
+        grid_small.attr({ fill: grid_pattern_tenth_mm });
+        grid_big.attr({ fill: grid_pattern_mm });
+        grid_pattern_mm.attr({ strokeWidth: 1 });
+    }
+
     zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 
 }
