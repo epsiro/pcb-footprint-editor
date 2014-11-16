@@ -3,25 +3,34 @@ function mouse_wheel_handler (ev) {
 
     if (ev.wheelDelta > 0) {
         if (zoom_level < 3) {
-            zoom_level += 0.25;
+            if (zoom_level >= 0.25) {
+                zoom_level += 0.25;
+            } else {
+                zoom_level += 0.05;
+            }
         }
     } else {
         if (zoom_level > 0.25) {
             zoom_level -= 0.25;
+        } else if (zoom_level > 0.15) {
+            zoom_level -= 0.05;
         }
     }
 
-    if (zoom_level < 0.75) {
+    if (zoom_level < 0.25) {
+        grid_small.attr({ fill: grid_pattern_mm });
+        grid_big.attr({ fill: grid_pattern_cm });
+    } else if (zoom_level < 0.5) {
         anchor_size = 10;
         grid_small.attr({ fill: grid_pattern_mm });
         grid_big.attr({ fill: grid_pattern_cm });
-        grid_pattern_mm.attr({ strokeWidth: 2 });
     } else {
         anchor_size = 5;
         grid_small.attr({ fill: grid_pattern_tenth_mm });
         grid_big.attr({ fill: grid_pattern_mm });
-        grid_pattern_mm.attr({ strokeWidth: 1 });
     }
+
+    console.log(zoom_level);
 
     zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
 

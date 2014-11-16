@@ -20,13 +20,13 @@ var grid_pattern_tenth_mm = paper.path("M 10 0 L 0 0 0 10").attr({
 var grid_pattern_mm = paper.path("M 100 0 L 0 0 0 100").attr({
     fill: "none",
     stroke: "gray",
-    strokeWidth: 1
+    strokeWidth: 2
 }).pattern(0, 0, 100, 100);
 
 var grid_pattern_cm = paper.path("M 1000 0 L 0 0 0 1000").attr({
     fill: "none",
     stroke: "gray",
-    strokeWidth: 3
+    strokeWidth: 5
 }).pattern(0, 0, 1000, 1000);
 
 var bg = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
