@@ -1,11 +1,36 @@
-v area for status message
-v edit multiple pads by text input
-v load file
-v save file
-v fix hover while dragging bug
-v zoom further out
+- object status window
+- copy keyboard shortcut
+- delete keyboard shortcut
+- elementline zoom level bug
+- gedalib pointing to head at dev
+- round pads
 - square pins
-v soldermask
+- save to offline storage
+- new pin/pad placement bug
+
+- change github repository
+- distance marker on elementline and pins
+- empty line bug
+- grid inch mode
+- move origin
+- move pad relative to point
+- recenter grid
+- save to github
+- select and move multiple objects
 - show/hide windows
-v fix n/s anchor
+- text input to distance marker
+
+v area for status message
+v copy pad
 v copy pad soldermask bug
+v edit multiple pads by text input
+v fix hover while dragging bug
+v fix n/s anchor
+v load file
+v pan with mouse drag
+v save file
+v show errors in text editor
+v soldermask
+v support other objects than pads
+v zoom further out
+v zoom on scroll
