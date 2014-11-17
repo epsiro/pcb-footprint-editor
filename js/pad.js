@@ -153,7 +153,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
-            case 'anchor_n':
+            case 'anchor_s':
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
@@ -171,7 +171,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 }
                 break;
 
-            case 'anchor_s':
+            case 'anchor_n':
                 var pad_size = {
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
@@ -189,7 +189,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 }
                 break;
 
-            case 'anchor_sw':
+            case 'anchor_nw':
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
@@ -199,7 +199,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 }
                 break;
 
-            case 'anchor_se':
+            case 'anchor_ne':
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
@@ -209,7 +209,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 }
                 break;
 
-            case 'anchor_ne':
+            case 'anchor_se':
                 //this.attr('cursor', 'ne-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
@@ -219,7 +219,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 }
                 break;
 
-            case 'anchor_nw':
+            case 'anchor_sw':
                 //this.attr('cursor', 'nw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
@@ -433,14 +433,14 @@ Pad.prototype.update_anchors = function() {
     pad_size = this.get_pad_size();
 
     this.anchor_c.attr({ cx: nm_to_view(                0), cy: nm_to_view(                 0), r: anchor_size});
-    this.anchor_n.attr({ cx: nm_to_view(                0), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_s.attr({ cx: nm_to_view(                0), cy: nm_to_view( pad_size.height/2), r: anchor_size});
     this.anchor_e.attr({ cx: nm_to_view( pad_size.width/2), cy: nm_to_view(                 0), r: anchor_size});
-    this.anchor_s.attr({ cx: nm_to_view(                0), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
+    this.anchor_n.attr({ cx: nm_to_view(                0), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
     this.anchor_w.attr({ cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(                 0), r: anchor_size});
-    this.anchor_ne.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
-    this.anchor_nw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
-    this.anchor_se.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
-    this.anchor_sw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
+    this.anchor_se.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_sw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view( pad_size.height/2), r: anchor_size});
+    this.anchor_ne.attr({cx: nm_to_view( pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
+    this.anchor_nw.attr({cx: nm_to_view(-pad_size.width/2), cy: nm_to_view(-pad_size.height/2), r: anchor_size});
 
     this.anchors.transform("translate(" + nm_to_view(pad_size.x + pad_size.width/2) + "," + nm_to_view(pad_size.y + pad_size.height/2) + ")");
 };
