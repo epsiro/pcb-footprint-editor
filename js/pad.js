@@ -418,12 +418,13 @@ Pad.prototype.draw = function() {
 
 
 Pad.prototype.update_editor = function() {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm 1.2mm \"\" \"1\" \"square\"]",
+        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm %.2fmm \"\" \"1\" \"square\"]",
                 nm_to_mm(this.x1),
                 nm_to_mm(this.y1),
                 nm_to_mm(this.x2),
                 nm_to_mm(this.y2),
-                nm_to_mm(this.thickness));
+                nm_to_mm(this.thickness),
+                nm_to_mm(this.thickness + this.mask_margin));
         editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
 }
 

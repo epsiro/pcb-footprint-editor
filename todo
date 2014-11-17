@@ -7,5 +7,5 @@ v zoom further out
 - square pins
 v soldermask
 - show/hide windows
-- fix n/s anchor
-- copy pad soldermask bug
+v fix n/s anchor
+v copy pad soldermask bug
