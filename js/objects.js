@@ -108,6 +108,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].x2 = values.x2;
         objects[line_nr].y2 = values.y2;
         objects[line_nr].thickness = values.thickness;
+        objects[line_nr].mask_margin = values.mask_thickness - values.thickness;
         objects[line_nr].draw();
 
         return 0;
@@ -135,7 +136,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].cy = values.cy;
         objects[line_nr].pad_diameter = values.pad_diameter;
         objects[line_nr].clearance = values.clearance;
-        objects[line_nr].mask_diameter = values.mask_diameter;
+        objects[line_nr].mask_margin = values.mask_diameter - values.pad_diameter;
         objects[line_nr].hole_diameter = values.hole_diameter;
         objects[line_nr].draw();
 
