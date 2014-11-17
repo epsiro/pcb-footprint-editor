@@ -63,7 +63,7 @@ var distance_x_line = paper.line(0, 0, 0, 0).attr({
 });
 var distance_x_text = paper.text(0, 0, "");
 var distance_x = paper.group(distance_x_line, distance_x_text);
-distance_x_text.transform("scale(1,-1)");
+//distance_x_text.transform("scale(1,-1)");
 distance_x.attr({ visibility: "hidden" });
 
 var distance_y_line = paper.line(0, 0, 0, 0).attr({
@@ -74,7 +74,7 @@ var distance_y_line = paper.line(0, 0, 0, 0).attr({
 });
 var distance_y_text = paper.text(0, 0, "");
 var distance_y = paper.group(distance_y_line, distance_y_text);
-distance_y_text.transform("scale(1,-1)");
+//distance_y_text.transform("scale(1,-1)");
 distance_y.attr({ visibility: "hidden" });
 
 var center = paper.circle(0, 0, 10).attr({

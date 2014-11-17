@@ -32,7 +32,7 @@ function mouse_wheel_handler (ev) {
 
     console.log(zoom_level);
 
-    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
+    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
 
 }
 
@@ -52,7 +52,7 @@ var drag_workspace = function(dx, dy, posx, posy) {
 
     origin_x = this.origin_x + dx;
     origin_y = this.origin_y + dy;
-    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
+    zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
 }
 
 paper.node.addEventListener("mousewheel", mouse_wheel_handler, false);
@@ -61,4 +61,4 @@ paper.drag(drag_workspace, begin_drag_workspace, null);
 var zoom_level = 1;
 
 var zoom_group = paper.group(grid_small, grid_big, center, distance_x, distance_y, solderstop);
-zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + -zoom_level + ")");
+zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
