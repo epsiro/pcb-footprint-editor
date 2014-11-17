@@ -18,6 +18,8 @@
 - select and move multiple objects
 - show/hide windows
 - text input to distance marker
+- rounded clearance around pads
+- support rotated pads
 
 v object clearance
 v object status window
