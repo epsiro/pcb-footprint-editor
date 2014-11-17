@@ -103,6 +103,8 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
             });
             editor.addLineClass(parentThis.line_number, "background", "selected_pad");
         }
+
+        $("#object_info").show().html(parentThis.get_info());
     };
 
     var unhighlight_pin = function(e) {
@@ -115,6 +117,8 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
             });
             editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
         }
+
+        $("#object_info").hide();
     };
 
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
@@ -172,7 +176,22 @@ Pin.prototype.draw = function() {
         r: nm_to_view(this.hole_diameter/2)
     });
 
+    $("#object_info").html(this.get_info());
+
     this.update_anchors();
+}
+
+Pin.prototype.get_info = function() {
+
+        pad_code = sprintf("<strong>Pin</strong><br />x: %.2fmm, y: %.2fmm<br />Pad diameter: %.2fmm<br />Hole diameter: %.2fmm<br />Mask margin: %.2fmm<br />Clearance: %.2fmm",
+                nm_to_mm(this.cx),
+                nm_to_mm(this.cy),
+                nm_to_mm(this.pad_diameter),
+                nm_to_mm(this.hole_diameter),
+                nm_to_mm(this.mask_margin),
+                nm_to_mm(this.clearance));
+
+        return pad_code;
 }
 
 function parse_pin(line) {

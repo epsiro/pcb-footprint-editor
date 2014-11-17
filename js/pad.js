@@ -128,11 +128,11 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
         if (global_first_endpoint == true && global_second_endpoint == true) {
             distance_x.attr({ visibility: "visible" });
             distance_y.attr({ visibility: "visible" });
-            $("#status_xy_distance").parent().show();
+            $("#status_xy_distance").show();
         } else {
             distance_x.attr({ visibility: "hidden" });
             distance_y.attr({ visibility: "hidden" });
-            $("#status_xy_distance").parent().hide();
+            $("#status_xy_distance").hide();
         }
 
     }
@@ -259,6 +259,8 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 visibility: "visible"
             });
             editor.addLineClass(parentThis.line_number, "background", "selected_pad");
+
+            $("#object_info").show().html(parentThis.get_info());
         }
     };
 
@@ -271,6 +273,8 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 visibility: "hidden"
             });
             editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
+
+            $("#object_info").hide();
         }
     };
 
@@ -413,7 +417,9 @@ Pad.prototype.draw = function() {
     this.update_anchors();
     this.update_distance_marker();
 
-    console.log("Pad updated with attributes " + this.pad.attr());
+    $("#object_info").html(this.get_info());
+
+    //console.log("Pad updated with attributes " + this.pad.attr());
 };
 
 
@@ -465,7 +471,7 @@ Pad.prototype.update_distance_marker = function() {
 
         distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
         distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
-        $("#status_xy_distance").text(distance_x_value/100 + "mm, " + distance_y_value/100 + "mm");
+        $("#status_xy_distance").text("(" + distance_x_value/100 + "mm, " + distance_y_value/100 + "mm)");
     }
 
     if (global_second_endpoint_object == this) {
@@ -485,10 +491,24 @@ Pad.prototype.update_distance_marker = function() {
 
         distance_x_text.attr({x: +distance_x_line.attr("x1") + distance_x_value/2, y: -distance_x_line.attr("y1") - 10, text: distance_x_value/100 + "mm"})
         distance_y_text.attr({x: +distance_y_line.attr("x1") + 10, y: -distance_y_line.attr("y1") - distance_y_value/2, text: distance_y_value/100 + "mm"})
-        $("#status_xy_distance").text(distance_x_value/100 + "mm, " + distance_y_value/100 + "mm");
+        $("#status_xy_distance").text("(" + distance_x_value/100 + "mm, " + distance_y_value/100 + "mm)");
     }
 
 };
+
+Pad.prototype.get_info = function() {
+
+        pad_size = this.get_pad_size();
+
+        pad_code = sprintf("<strong>Pad</strong><br />x: %.2fmm, y: %.2fmm<br /> Pad width: %.2fmm<br />Pad height: %.2fmm<br />Mask margin: %.2fmm",
+                nm_to_mm(pad_size.x + pad_size.width/2),
+                nm_to_mm(pad_size.y + pad_size.height/2),
+                nm_to_mm(pad_size.width),
+                nm_to_mm(pad_size.height),
+                nm_to_mm(this.mask_margin));
+
+        return pad_code;
+}
 
 function add_pad(e) {
 
