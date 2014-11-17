@@ -3,7 +3,8 @@ v edit multiple pads by text input
 v load file
 v save file
 v fix hover while dragging bug
-- zoom further out
+v zoom further out
 - square pins
-- soldermask
+v soldermask
 - show/hide windows
+- fix n/s anchor

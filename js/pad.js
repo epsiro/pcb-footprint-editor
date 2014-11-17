@@ -158,7 +158,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
                     width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -174,9 +174,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
             case 'anchor_s':
                 var pad_size = {
                     x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -193,9 +193,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -203,9 +203,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 //this.attr('cursor', 'sw-resize');
                 var pad_size = {
                     x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -215,7 +215,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                     x:      this.pad_size_original.x,
                     y:      this.pad_size_original.y,
                     width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -225,7 +225,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     y:      this.pad_size_original.y,
                     width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
                 }
                 break;
 
@@ -233,7 +233,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
                 //this.attr('cursor', 'move');
                 var pad_size = {
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y      - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width,
                     height: this.pad_size_original.height
                 }
@@ -492,8 +492,8 @@ Pad.prototype.update_distance_marker = function() {
 function add_pad(e) {
 
     if (e.type == "dblclick") {
-        var x1 = view_to_nm($('#svg').offset().left +  (e.clientX - origin_x)/zoom_level );
-        var y1 = view_to_nm($('#svg').offset().top  + -(e.clientY - origin_y)/zoom_level );
+        var x1 = view_to_nm($('#svg').offset().left + (e.clientX - origin_x)/zoom_level );
+        var y1 = view_to_nm($('#svg').offset().top  + (e.clientY - origin_y)/zoom_level );
 
         x1 = Math.round(x1 / mm_to_nm(0.1)) * mm_to_nm(0.1);
         y1 = Math.round(y1 / mm_to_nm(0.1)) * mm_to_nm(0.1);

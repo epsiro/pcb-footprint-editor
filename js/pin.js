@@ -66,7 +66,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
             case 'anchor_c':
                parentThis.cx = this.original_cx + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               parentThis.cy = this.original_cy - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+               parentThis.cy = this.original_cy + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
 
             case 'anchor_h':
@@ -203,8 +203,8 @@ function parse_pin(line) {
 }
 
 function add_pin(e) {
-    var cx = view_to_nm($('#svg').offset().left +  (e.clientX - origin_x)/zoom_level );
-    var cy = view_to_nm($('#svg').offset().top  + -(e.clientY - origin_y)/zoom_level );
+    var cx = view_to_nm($('#svg').offset().left + (e.clientX - origin_x)/zoom_level );
+    var cy = view_to_nm($('#svg').offset().top  + (e.clientY - origin_y)/zoom_level );
 
     cx = Math.round(cx / mm_to_nm(0.1)) * mm_to_nm(0.1);
     cy = Math.round(cy / mm_to_nm(0.1)) * mm_to_nm(0.1);
