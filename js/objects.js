@@ -10,6 +10,7 @@ function add_object(changed_line, line_nr) {
                 values.x2,
                 values.y2,
                 values.thickness,
+                values.clearance,
                 values.mask_thickness
                 );
 
@@ -18,6 +19,7 @@ function add_object(changed_line, line_nr) {
         object_instance.draw();
         zoom_group.add(object_instance.graphical_group);
         soldermask_group.add(object_instance.mask);
+        copperplanemask_group.add(object_instance.clearance);
 
         objects.splice(line_nr, 0, object_instance);
         objects.forEach(update_line_number);
@@ -62,6 +64,7 @@ function add_object(changed_line, line_nr) {
         object_instance.draw();
         zoom_group.add(object_instance.graphical_group);
         soldermask_group.add(object_instance.mask);
+        copperplanemask_group.add(object_instance.clearance);
 
         objects.splice(line_nr, 0, object_instance);
         objects.forEach(update_line_number);
@@ -89,6 +92,9 @@ function remove_object(changed_line, line_nr) {
     if (object_instance.mask != undefined) {
         object_instance.mask.remove();
     }
+    if (object_instance.clearance != undefined) {
+        object_instance.clearance.remove();
+    }
     objects.splice(line_nr,1);
     console.log("Object removed: ", object_instance);
     objects.forEach(update_line_number);
@@ -109,6 +115,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].y2 = values.y2;
         objects[line_nr].thickness = values.thickness;
         objects[line_nr].mask_margin = values.mask_thickness - values.thickness;
+        objects[line_nr].clearance_margin = values.clearance;
         objects[line_nr].draw();
 
         return 0;
@@ -135,7 +142,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].cx = values.cx;
         objects[line_nr].cy = values.cy;
         objects[line_nr].pad_diameter = values.pad_diameter;
-        objects[line_nr].clearance = values.clearance;
+        objects[line_nr].clearance_margin = values.clearance;
         objects[line_nr].mask_margin = values.mask_diameter - values.pad_diameter;
         objects[line_nr].hole_diameter = values.hole_diameter;
         objects[line_nr].draw();

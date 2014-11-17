@@ -50,6 +50,15 @@ var solderstop = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
   mask: soldermask_group
 });
 
+var copperplanemask_bg = paper.rect(-15000, -15000, 30000, 30000).attr({fill:'white'});
+var copperplanemask_group = paper.group(copperplanemask_bg);
+
+var copperplane = paper.rect(-15000, -15000, 30000, 30000, 0, 0).attr({
+  fill: "none",
+  "fill-opacity": 0.8,
+  mask: copperplanemask_group
+});
+
 var arrow_start = paper.path("M0,3 L-10,0 L0,-3").attr({stroke: "#aaa", fill: "none"});
 var arrow_end = paper.path("M0,3 L10,0 L0,-3").attr({stroke: "#aaa", fill: "none"});
 var marker_start = arrow_start.marker(-10,-6, 20,12, -10,0);

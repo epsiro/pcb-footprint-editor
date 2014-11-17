@@ -9,13 +9,18 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     this.hole_diameter = hole_diameter;
     this.pad_diameter = pad_diameter;
     this.mask_margin = mask_diameter - pad_diameter;
-    this.clearance = clearance;
+    this.clearance_margin = clearance;
 
     this.pad = paper.circle(0, 0, 0).attr({
         fill: "#8c96a0"
     });
 
     this.mask = paper.circle(0, 0, 0).attr({
+        stroke: "none",
+        fill: "black"
+    });
+
+    this.clearance = paper.circle(0, 0, 0).attr({
         stroke: "none",
         fill: "black"
     });
@@ -125,7 +130,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     this.anchor_h.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_p.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
-    this.graphical_group = paper.group(this.pad, this.mask, this.hole, this.anchors);
+    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.hole, this.anchors);
     this.graphical_group.hover(highlight_pin, unhighlight_pin);
     this.graphical_group.attr({class: "pin"});
 
@@ -138,7 +143,7 @@ Pin.prototype.update_editor = function() {
             nm_to_mm(this.cx),
             nm_to_mm(this.cy),
             nm_to_mm(this.pad_diameter),
-            nm_to_mm(this.clearance),
+            nm_to_mm(this.clearance_margin),
             nm_to_mm(this.mask_margin + this.pad_diameter),
             nm_to_mm(this.hole_diameter)
             );
@@ -162,6 +167,12 @@ Pin.prototype.draw = function() {
         cx: nm_to_view(this.cx),
         cy: nm_to_view(this.cy),
         r: nm_to_view((this.mask_margin + this.pad_diameter)/2)
+    });
+
+    this.clearance.attr({
+        cx: nm_to_view(this.cx),
+        cy: nm_to_view(this.cy),
+        r: nm_to_view((this.clearance_margin + this.pad_diameter)/2)
     });
 
     this.pad.attr({
@@ -189,7 +200,7 @@ Pin.prototype.get_info = function() {
                 nm_to_mm(this.pad_diameter),
                 nm_to_mm(this.hole_diameter),
                 nm_to_mm(this.mask_margin),
-                nm_to_mm(this.clearance));
+                nm_to_mm(this.clearance_margin));
 
         return pad_code;
 }
@@ -230,7 +241,7 @@ function add_pin(e) {
 
     var hole_diameter = mm_to_nm(0.4);
     var pad_diameter = mm_to_nm(1.0);
-    var clearance = mm_to_nm(0.1);
+    var clearance = mm_to_nm(1.0);
     var mask_diameter = mm_to_nm(1.2);
 
     code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"\" \"\"]\n",

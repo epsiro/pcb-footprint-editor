@@ -26,6 +26,17 @@ $("#controls_soldermask").on("click", function() {
     }
 });
 
+$("#controls_copperplane").on("click", function() {
+
+    if ($(this).hasClass('active') ) {
+        $(this).removeClass('active');
+        copperplane.attr({ fill: "none" });
+    } else {
+        $(this).addClass('active');
+        copperplane.attr({ fill: "#8c96a0" });
+    }
+});
+
 $("#controls_undo").on("click", function() { editor.undo(); });
 $("#controls_redo").on("click", function() { editor.redo(); });
 

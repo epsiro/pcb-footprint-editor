@@ -1,4 +1,3 @@
-- object status window
 - copy keyboard shortcut
 - delete keyboard shortcut
 - elementline zoom level bug
@@ -20,6 +19,8 @@
 - show/hide windows
 - text input to distance marker
 
+v object clearance
+v object status window
 v area for status message
 v copy pad
 v copy pad soldermask bug

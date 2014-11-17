@@ -1,4 +1,4 @@
-function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness) {
+function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness) {
 
     this.pad_number = pad_number;
     this.line_number = line_number;
@@ -12,6 +12,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
     this.y2 = y2;
     this.thickness = thickness;
     this.mask_margin = mask_thickness - thickness;
+    this.clearance_margin = clearance;
 
     var pad_size = this.get_pad_size();
 
@@ -51,6 +52,12 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
     });
 
     this.mask = paper.line(0, 0, 0, 0).attr({
+        stroke: "black",
+        strokeWidth: 0,
+        strokeLinecap: "square"
+    });
+
+    this.clearance = paper.line(0, 0, 0, 0).attr({
         stroke: "black",
         strokeWidth: 0,
         strokeLinecap: "square"
@@ -299,7 +306,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, mask_thickness)
     this.anchor_se.click(click_anchor);
     this.anchor_sw.click(click_anchor);
 
-    this.graphical_group = paper.group(this.pad, this.mask, this.pad_line_ref, this.anchors);
+    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.pad_line_ref, this.anchors);
     this.graphical_group.hover(highlight_pad, unhighlight_pad);
     this.graphical_group.attr({class: "pad"});
 
@@ -407,7 +414,15 @@ Pad.prototype.draw = function() {
         strokeWidth: nm_to_view(this.thickness + this.mask_margin)
     });
 
-    console.log(this.mask);
+    this.clearance.attr({
+        x1: nm_to_view(this.x1),
+        y1: nm_to_view(this.y1),
+        x2: nm_to_view(this.x2),
+        y2: nm_to_view(this.y2),
+        strokeWidth: nm_to_view(this.thickness + this.clearance_margin)
+    });
+
+    //console.log(this.mask);
 
     this.pad_line_ref.attr({x1: nm_to_view(this.x1)});
     this.pad_line_ref.attr({y1: nm_to_view(this.y1)});
@@ -424,12 +439,13 @@ Pad.prototype.draw = function() {
 
 
 Pad.prototype.update_editor = function() {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm %.2fmm \"\" \"1\" \"square\"]",
+        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"1\" \"square\"]",
                 nm_to_mm(this.x1),
                 nm_to_mm(this.y1),
                 nm_to_mm(this.x2),
                 nm_to_mm(this.y2),
                 nm_to_mm(this.thickness),
+                nm_to_mm(this.clearance_margin),
                 nm_to_mm(this.thickness + this.mask_margin));
         editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
 }
@@ -500,12 +516,13 @@ Pad.prototype.get_info = function() {
 
         pad_size = this.get_pad_size();
 
-        pad_code = sprintf("<strong>Pad</strong><br />x: %.2fmm, y: %.2fmm<br /> Pad width: %.2fmm<br />Pad height: %.2fmm<br />Mask margin: %.2fmm",
+        pad_code = sprintf("<strong>Pad</strong><br />x: %.2fmm, y: %.2fmm<br /> Pad width: %.2fmm<br />Pad height: %.2fmm<br />Mask margin: %.2fmm<br />Clearance margin: %.2fmm",
                 nm_to_mm(pad_size.x + pad_size.width/2),
                 nm_to_mm(pad_size.y + pad_size.height/2),
                 nm_to_mm(pad_size.width),
                 nm_to_mm(pad_size.height),
-                nm_to_mm(this.mask_margin));
+                nm_to_mm(this.mask_margin),
+                nm_to_mm(this.clearance_margin));
 
         return pad_code;
 }
@@ -529,13 +546,15 @@ function add_pad(e) {
 
     var thickness = mm_to_nm(0.6);
     var mask_thickness = mm_to_nm(0.8);
+    var clearance = mm_to_nm(1.0);
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm 0.6mm %.2fmm \"\" \"1\" \"square\"]\n",
+    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"1\" \"square\"]\n",
             nm_to_mm(x1),
             nm_to_mm(y1),
             nm_to_mm(x2),
             nm_to_mm(y2),
             nm_to_mm(thickness),
+            nm_to_mm(clearance),
             nm_to_mm(mask_thickness));
 
     editor.replaceRange(pad_code, {line: get_last_line(), ch: 0});
