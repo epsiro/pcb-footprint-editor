@@ -233,8 +233,8 @@ function parse_pin(line) {
 }
 
 function add_pin(e) {
-    var cx = view_to_nm($('#svg').offset().left + (e.clientX - origin_x)/zoom_level );
-    var cy = view_to_nm($('#svg').offset().top  + (e.clientY - origin_y)/zoom_level );
+    var cx = view_to_nm((e.clientX - origin_x - $('#svg').offset().left)/zoom_level);
+    var cy = view_to_nm((e.clientY - origin_y - $('#svg').offset().top )/zoom_level);
 
     cx = Math.round(cx / mm_to_nm(0.1)) * mm_to_nm(0.1);
     cy = Math.round(cy / mm_to_nm(0.1)) * mm_to_nm(0.1);
