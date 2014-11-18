@@ -163,7 +163,7 @@ function dblclick_handler(e) {
 
     if (tool_state == "pad") {
         add_pad(e);
-} else if (tool_state == "elementline") {
+    } else if (tool_state == "elementline") {
         add_elementline(e);
     } else if (tool_state == "pin") {
         add_pin(e);

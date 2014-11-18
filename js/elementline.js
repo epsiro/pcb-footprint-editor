@@ -118,8 +118,8 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     if (file_loaded != true) {
         highlight_elementline();
         var e = new Event("mousedown" );
-        e.clientX = $('#svg').offset().left + origin_x + nm_to_view(this.x1);
-        e.clientY = $('#svg').offset().top  + origin_y + nm_to_view(this.y1);
+        e.clientX = (nm_to_view(this.x1) - $('#svg').offset().left)*zoom_level + origin_x;
+        e.clientY = (nm_to_view(this.y1) - $('#svg').offset().top )*zoom_level + origin_y;
         this.anchor_e2.node.dispatchEvent(e);
     }
 

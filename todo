@@ -1,6 +1,5 @@
 - copy keyboard shortcut
 - delete keyboard shortcut
-- elementline zoom level bug
 - gedalib pointing to head at dev
 - round pads
 - square pins
@@ -21,6 +20,7 @@
 - rounded clearance around pads
 - support rotated pads
 
+v elementline zoom level bug
 v object clearance
 v object status window
 v area for status message
