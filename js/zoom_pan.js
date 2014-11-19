@@ -60,5 +60,5 @@ paper.drag(drag_workspace, begin_drag_workspace, null);
 
 var zoom_level = 1;
 
-var zoom_group = paper.group(grid_small, grid_big, center, distance_x, distance_y, copperplane, solderstop, path_arc);
+var zoom_group = paper.group(grid_small, grid_big, center, distance_x, distance_y, copperplane, solderstop);
 zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
