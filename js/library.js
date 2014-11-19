@@ -1,7 +1,27 @@
 var hidden = true;
 $("div#lib").hide();
 
-function list_folders_from_lib() {
+function get_url_and_list_folders_from_lib() {
+
+    var gedalib_url = "https://api.github.com/repos/Lindem-Data-Acquisition-AS/gedalib/git/refs/heads/dev"
+
+    // FIXME Use $.when instead of nested ajax calls, and return the
+    // footprints_url. Let list_folders_from_lib call this function.
+    $.getJSON( gedalib_url, function( data ) {
+        $.getJSON( data.object.url, function( data ) {
+            $.getJSON( data.tree.url, function( data ) {
+                $.each( data.tree, function( key, val ) {
+                    if (val.path == "footprints") {
+                        var footprints_url = val.url;
+                        list_folders_from_lib(footprints_url);
+                    }
+                });
+            });
+        });
+    });
+}
+
+function list_folders_from_lib(footprints_url) {
 
     if (hidden != true) {
         hidden = true;
@@ -17,9 +37,7 @@ function list_folders_from_lib() {
         $("div#code").css("width", "40%");
     }
 
-    var gebalib_url = "https://api.github.com/repos/Lindem-Data-Acquisition-AS/gedalib/git/trees/4a7f27695351fa8a9d97f7b2edc189b4340885d0";
-
-    $.getJSON( gebalib_url, function( data ) {
+    $.getJSON( footprints_url, function( data ) {
         var items = [];
         $.each( data.tree, function( key, val ) {
             items.push( "<li role='presentation'><i class='fa-li fa fa-folder'></i><a role='menuitem' href='#' class='folder' data-url='" + val.url + "'>" + val.path + "</a></li>" );

@@ -1,6 +1,5 @@
 - copy keyboard shortcut
 - delete keyboard shortcut
-- gedalib pointing to head at dev
 - round pads
 - square pins
 - save to offline storage
@@ -20,6 +19,7 @@
 - rounded clearance around pads
 - support rotated pads
 
+v gedalib pointing to head at dev
 v new pin/pad placement bug
 v elementline zoom level bug
 v object clearance
