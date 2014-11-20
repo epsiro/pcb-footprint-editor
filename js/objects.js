@@ -47,6 +47,28 @@ function add_object(changed_line, line_nr) {
         return 0;
     }
 
+    if (changed_line.match(/ElementArc/)) {
+        values = parse_elementarc(changed_line);
+        object_instance = new ElementArc(
+                values.rx,
+                values.ry,
+                values.width,
+                values.height,
+                values.start_angle,
+                values.delta_angle,
+                values.thickness
+                );
+
+        console.log("ElementArc added in objects[%d]: ", line_nr);
+        object_instance.draw();
+        zoom_group.add(object_instance.graphical_group);
+
+        objects.splice(line_nr, 0, object_instance);
+        objects.forEach(update_line_number);
+
+        return 0;
+    }
+
     if (changed_line.match(/Pin/)) {
         //console.log(changed_line);
         values = parse_pin(changed_line);
@@ -135,6 +157,22 @@ function edit_object(changed_line, line_nr) {
         return 0;
     }
 
+    if (changed_line.match(/ElementArc/)) {
+
+        values = parse_elementarc(changed_line);
+
+        objects[line_nr].rx = values.rx;
+        objects[line_nr].ry = values.ry;
+        objects[line_nr].width = values.width;
+        objects[line_nr].height = values.height;
+        objects[line_nr].start_angle = values.start_angle;
+        objects[line_nr].delta_angle = values.delta_angle;
+        objects[line_nr].thickness = values.thickness;
+        objects[line_nr].draw();
+
+        return 0;
+    }
+
     if (changed_line.match(/Pin/)) {
 
         values = parse_pin(changed_line);
@@ -156,26 +194,6 @@ function edit_object(changed_line, line_nr) {
 function update_line_number(element, index, array) {
     element.line_number = objects.indexOf(element);
 }
-
-function dblclick_handler(e) {
-
-    file_loaded = false;
-
-    if (tool_state == "pad") {
-        add_pad(e);
-    } else if (tool_state == "elementline") {
-        add_elementline(e);
-    } else if (tool_state == "pin") {
-        add_pin(e);
-    }
-}
-
-file_loaded = false;
-var tool_state = "pad";
-
-$(document).bind('keydown', 'p', add_pad);
-$( "#svg" ).dblclick(dblclick_handler);
-
 
 var objects = new Array();
 

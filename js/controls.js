@@ -10,6 +10,8 @@ $('#controls_mode button').on("click", function() {
         tool_state = "pad";
     } else if ($(this).attr("id") == "controls_new_elementline") {
         tool_state = "elementline";
+    } else if ($(this).attr("id") == "controls_new_elementarc") {
+        tool_state = "elementarc";
     } else if ($(this).attr("id") == "controls_new_pin") {
         tool_state = "pin";
     }
@@ -50,3 +52,24 @@ $("#status_xy_distance").hide();
 $("#controls_load_component_from_lib").on("click", get_url_and_list_folders_from_lib);
 $("ul#gedalib").on("click", "a.folder", list_components_in_folder);
 $("ul#gedalib").on("click", "a.file", load_component_from_folder);
+
+function dblclick_handler(e) {
+
+    file_loaded = false;
+
+    if (tool_state == "pad") {
+        add_pad(e);
+    } else if (tool_state == "elementline") {
+        add_elementline(e);
+    } else if (tool_state == "elementarc") {
+        add_elementarc(e);
+    } else if (tool_state == "pin") {
+        add_pin(e);
+    }
+}
+
+file_loaded = false;
+var tool_state = "pad";
+
+$(document).bind('keydown', 'p', add_pad);
+$( "#svg" ).dblclick(dblclick_handler);
