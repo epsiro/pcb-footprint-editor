@@ -261,7 +261,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     var highlight_pad = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = true;
+            //parentThis.selected = true;
 
             parentThis.pad.attr({
                 stroke: "#acb6c0"
@@ -279,7 +279,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     var unhighlight_pad = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = false;
+            //parentThis.selected = false;
 
             parentThis.pad.attr({
                 stroke: "#8c96a0"
@@ -533,6 +533,16 @@ Pad.prototype.get_info = function() {
                 nm_to_mm(this.clearance_margin));
 
         return pad_code;
+}
+
+Pad.prototype.select = function() {
+    this.selected = true;
+    this.graphical_group.attr({ opacity: 0.7 });
+}
+
+Pad.prototype.unselect = function() {
+    this.selected = false;
+    this.graphical_group.attr({ opacity: 1 });
 }
 
 function add_pad(e) {

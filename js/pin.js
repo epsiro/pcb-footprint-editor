@@ -102,7 +102,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     var highlight_pin = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = true;
+            //parentThis.selected = true;
 
             parentThis.pad.attr({
                 fill: "#acb6c0"
@@ -120,7 +120,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     var unhighlight_pin = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = false;
+            //parentThis.selected = false;
 
             parentThis.pad.attr({
                 fill: "#8c96a0"
@@ -211,6 +211,16 @@ Pin.prototype.get_info = function() {
                 nm_to_mm(this.clearance_margin));
 
         return pad_code;
+}
+
+Pin.prototype.select = function() {
+    this.selected = true;
+    this.graphical_group.attr({ opacity: 0.7 });
+}
+
+Pin.prototype.unselect = function() {
+    this.selected = false;
+    this.graphical_group.attr({ opacity: 1 });
 }
 
 function parse_pin(line) {

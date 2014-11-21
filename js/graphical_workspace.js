@@ -91,3 +91,11 @@ var center = paper.circle(0, 0, 10).attr({
     stroke: "gray",
     strokeWidth: 2
 });
+
+var selection_box = paper.rect(0, 0, 0, 0).attr({
+    stroke: "black",
+    strokeWidth: "1",
+    fill: "none",
+    visibility: "hidden"
+});
+

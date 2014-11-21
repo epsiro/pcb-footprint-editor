@@ -83,6 +83,12 @@ function keyboard_delete_object(e) {
 file_loaded = false;
 var tool_state = "pad";
 
+$("#controls_delete_object").on("click", keyboard_delete_object);
+$(document).keydown( function(e) {
+    if(e.keyCode == 46) {
+        keyboard_delete_object();
+    }
+});
+
 $(document).bind('keydown', 'p', add_pad);
-$(document).bind('keydown', 'd', keyboard_delete_object);
 $( "#svg" ).dblclick(dblclick_handler);

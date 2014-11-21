@@ -86,7 +86,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     var highlight_elementline = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = true;
+            //parentThis.selected = true;
 
             parentThis.line.attr({
                 stroke: "#222"
@@ -102,7 +102,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     var unhighlight_elementline = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = false;
+            //parentThis.selected = false;
 
             parentThis.line.attr({
                 stroke: "black"
@@ -166,6 +166,16 @@ ElementLine.prototype.draw = function() {
     });
 
     this.update_anchors();
+}
+
+ElementLine.prototype.select = function() {
+    this.selected = true;
+    this.graphical_group.attr({ opacity: 0.7 });
+}
+
+ElementLine.prototype.unselect = function() {
+    this.selected = false;
+    this.graphical_group.attr({ opacity: 1 });
 }
 
 function parse_elementline(line) {

@@ -113,7 +113,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
     var highlight_elementarc = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = true;
+            //parentThis.selected = true;
 
             parentThis.arc.attr({
                 stroke: "#222"
@@ -129,7 +129,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
     var unhighlight_elementarc = function(e) {
         if (global_dragging != true) {
 
-            parentThis.selected = false;
+            //parentThis.selected = false;
 
             parentThis.arc.attr({
                 stroke: "black"
@@ -202,6 +202,16 @@ ElementArc.prototype.draw = function() {
     });
 
     this.update_anchors();
+}
+
+ElementArc.prototype.select = function() {
+    this.selected = true;
+    this.graphical_group.attr({ opacity: 0.7 });
+}
+
+ElementArc.prototype.unselect = function() {
+    this.selected = false;
+    this.graphical_group.attr({ opacity: 1 });
 }
 
 function parse_elementarc(line) {
