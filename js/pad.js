@@ -5,6 +5,8 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
     var parentThis = this;
 
+    this.selected = false;
+
     /* all units in nm */
     this.x1 = x1;
     this.y1 = y1;
@@ -258,6 +260,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
     var highlight_pad = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = true;
+
             parentThis.pad.attr({
                 stroke: "#acb6c0"
             });
@@ -273,6 +278,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
     var unhighlight_pad = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = false;
+
             parentThis.pad.attr({
                 stroke: "#8c96a0"
             });

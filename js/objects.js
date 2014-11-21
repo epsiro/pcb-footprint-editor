@@ -97,7 +97,7 @@ function add_object(changed_line, line_nr) {
     return 1;
 }
 
-function remove_object(changed_line, line_nr) {
+function remove_object(line_nr) {
 
     //console.log(objects);
     object_instance = objects[line_nr];

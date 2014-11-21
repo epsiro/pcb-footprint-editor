@@ -4,6 +4,8 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
     var parentThis = this;
 
+    this.selected = false;
+
     this.cx = cx;
     this.cy = cy;
     this.hole_diameter = hole_diameter;
@@ -99,6 +101,9 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
     var highlight_pin = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = true;
+
             parentThis.pad.attr({
                 fill: "#acb6c0"
             });
@@ -114,6 +119,9 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
     var unhighlight_pin = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = false;
+
             parentThis.pad.attr({
                 fill: "#8c96a0"
             });

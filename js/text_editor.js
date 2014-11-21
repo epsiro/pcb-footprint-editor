@@ -33,7 +33,7 @@ editor.on("change", function(cm, change){
 
             var line = change.removed[line_nr - change.from.line];
             if (line != "") {
-                if (remove_object(line, tmp_line_nr) == 0) {
+                if (remove_object(tmp_line_nr) == 0) {
                     //console.log("removed " + line_nr + " " + tmp_line_nr + " " + line);
                     tmp_line_nr--;
                 }

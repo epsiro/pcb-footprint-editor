@@ -68,8 +68,21 @@ function dblclick_handler(e) {
     }
 }
 
+function keyboard_delete_object(e) {
+
+    for (var i = 0; i < objects.length; i++) {
+        var object = objects[i];
+
+        if (object.selected == true) {
+            editor.replaceRange("", {line: object.line_number, ch: 0}, {line: object.line_number + 1, ch: 0});
+            i = 0;
+        }
+    }
+}
+
 file_loaded = false;
 var tool_state = "pad";
 
 $(document).bind('keydown', 'p', add_pad);
+$(document).bind('keydown', 'd', keyboard_delete_object);
 $( "#svg" ).dblclick(dblclick_handler);

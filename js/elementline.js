@@ -4,6 +4,8 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
     var parentThis = this;
 
+    this.selected = false;
+
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -83,6 +85,9 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
     var highlight_elementline = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = true;
+
             parentThis.line.attr({
                 stroke: "#222"
             });
@@ -96,6 +101,9 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
     var unhighlight_elementline = function(e) {
         if (global_dragging != true) {
+
+            parentThis.selected = false;
+
             parentThis.line.attr({
                 stroke: "black"
             });
