@@ -80,8 +80,29 @@ function keyboard_delete_object(e) {
     }
 }
 
+function lock_object(e) {
+
+    objects.forEach( function (object, index, array) {
+        if (object.selected === true) {
+            object.lock();
+        }
+    });
+}
+
+function unlock_all_objects(e) {
+
+    objects.forEach( function (object, index, array) {
+        if (typeof object == "object") {
+            object.unlock();
+        }
+    });
+}
+
 file_loaded = false;
 var tool_state = "pad";
+
+$("#controls_lock_object").on("click", lock_object);
+$("#controls_unlock_all_objects").on("click", unlock_all_objects);
 
 $("#controls_delete_object").on("click", keyboard_delete_object);
 $(document).keydown( function(e) {

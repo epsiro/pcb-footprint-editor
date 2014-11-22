@@ -5,6 +5,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     var parentThis = this;
 
     this.selected = false;
+    this.locked = false;
 
     this.cx = cx;
     this.cy = cy;
@@ -100,7 +101,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     };
 
     var highlight_pin = function(e) {
-        if (global_dragging != true) {
+        if (global_dragging != true && parentThis.locked === false) {
 
             //parentThis.selected = true;
 
@@ -214,13 +215,23 @@ Pin.prototype.get_info = function() {
 }
 
 Pin.prototype.select = function() {
-    this.selected = true;
-    this.graphical_group.attr({ opacity: 0.7 });
+    if (this.locked === false) {
+        this.selected = true;
+        this.graphical_group.attr({ opacity: 0.7 });
+    }
 }
 
 Pin.prototype.unselect = function() {
     this.selected = false;
     this.graphical_group.attr({ opacity: 1 });
+}
+
+Pin.prototype.lock = function() {
+    this.locked = true;
+}
+
+Pin.prototype.unlock = function() {
+    this.locked = false;
 }
 
 function parse_pin(line) {

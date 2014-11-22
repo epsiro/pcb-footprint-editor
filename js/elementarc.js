@@ -5,6 +5,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
     var parentThis = this;
 
     this.selected = false;
+    this.locked = false;
 
     this.rx = rx;
     this.ry = ry;
@@ -111,7 +112,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
     };
 
     var highlight_elementarc = function(e) {
-        if (global_dragging != true) {
+        if (global_dragging != true && parentThis.locked === false) {
 
             //parentThis.selected = true;
 
@@ -205,13 +206,23 @@ ElementArc.prototype.draw = function() {
 }
 
 ElementArc.prototype.select = function() {
-    this.selected = true;
-    this.graphical_group.attr({ opacity: 0.7 });
+    if (this.locked === false) {
+        this.selected = true;
+        this.graphical_group.attr({ opacity: 0.7 });
+    }
 }
 
 ElementArc.prototype.unselect = function() {
     this.selected = false;
     this.graphical_group.attr({ opacity: 1 });
+}
+
+ElementArc.prototype.lock = function() {
+    this.locked = true;
+}
+
+ElementArc.prototype.unlock = function() {
+    this.locked = false;
 }
 
 function parse_elementarc(line) {

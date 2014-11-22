@@ -6,6 +6,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     var parentThis = this;
 
     this.selected = false;
+    this.locked = false;
 
     /* all units in nm */
     this.x1 = x1;
@@ -259,7 +260,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     };
 
     var highlight_pad = function(e) {
-        if (global_dragging != true) {
+        if (global_dragging != true && parentThis.locked === false) {
 
             //parentThis.selected = true;
 
@@ -302,7 +303,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     this.anchor_nw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_se.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_sw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
-    this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    //this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.anchor_c.click(click_anchor);
     this.anchor_n.click(click_anchor);
@@ -536,13 +537,23 @@ Pad.prototype.get_info = function() {
 }
 
 Pad.prototype.select = function() {
-    this.selected = true;
-    this.graphical_group.attr({ opacity: 0.7 });
+    if (this.locked === false) {
+        this.selected = true;
+        this.graphical_group.attr({ opacity: 0.7 });
+    }
 }
 
 Pad.prototype.unselect = function() {
     this.selected = false;
     this.graphical_group.attr({ opacity: 1 });
+}
+
+Pad.prototype.lock = function() {
+    this.locked = true;
+}
+
+Pad.prototype.unlock = function() {
+    this.locked = false;
 }
 
 function add_pad(e) {
