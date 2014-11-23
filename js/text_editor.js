@@ -121,5 +121,3 @@ function new_component() {
     global_first_endpoint_object = null;
     global_second_endpoint_object = null;
 }
-
-new_component();

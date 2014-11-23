@@ -2,6 +2,26 @@ function add_object(changed_line, line_nr) {
 
     //var changed_line = editor.getLine(line);
 
+    if (changed_line.match(/Element\[/)) {
+        values = parse_element(changed_line);
+        object_instance = new Refdes(
+            values.name,
+            values.text_pos_x,
+            values.text_pos_y,
+            values.text_scale
+        );
+
+        console.log("Element added in objects[%d]: ", line_nr);
+        //console.log(object_instance);
+        object_instance.draw();
+        zoom_group.add(object_instance.graphical_group);
+
+        objects.splice(line_nr, 0, object_instance);
+        objects.forEach(update_line_number);
+
+        return 0;
+    }
+
     if (changed_line.match(/Pad/)) {
         values = parse_pad_line(changed_line);
         object_instance = new Pad(line_nr, line_nr,
@@ -106,10 +126,6 @@ function remove_object(line_nr) {
         return 1;
     }
 
-    if (object_instance === "placeholder") {
-        return 1;
-    }
-
     object_instance.graphical_group.remove();
     if (object_instance.mask != undefined) {
         object_instance.mask.remove();
@@ -126,6 +142,16 @@ function remove_object(line_nr) {
 }
 
 function edit_object(changed_line, line_nr) {
+
+    if (changed_line.match(/Element\[/)) {
+        values = parse_element(changed_line);
+
+        objects[line_nr].x = values.text_pos_x;
+        objects[line_nr].y = values.text_pos_y;
+        objects[line_nr].refdes_text = values.name;
+        objects[line_nr].text_scale = values.text_scale
+        objects[line_nr].draw();
+    }
 
     if (changed_line.match(/Pad/)) {
 
@@ -196,7 +222,3 @@ function update_line_number(element, index, array) {
 }
 
 var objects = new Array();
-
-objects.push("placeholder");
-objects.push("placeholder");
-
