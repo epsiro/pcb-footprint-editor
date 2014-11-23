@@ -98,6 +98,17 @@ function unlock_all_objects(e) {
     });
 }
 
+function move_selected_objects(dx, dy) {
+
+    objects.forEach( function (object, index, array) {
+        if (object.selected === true) {
+            object.move(dx, dy);
+        }
+    });
+}
+
+
+
 file_loaded = false;
 var tool_state = "pad";
 

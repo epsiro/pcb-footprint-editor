@@ -60,6 +60,9 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
         this.original_hole_diameter = parentThis.hole_diameter;
         this.original_pad_diameter = parentThis.pad_diameter;
 
+        this.last_dx = 0;
+        this.last_dy = 0;
+
         global_dragging = true;
 
         highlight_pin();
@@ -73,8 +76,18 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
         switch (this.node.classList[0]) {
 
             case 'anchor_c':
-               parentThis.cx = this.original_cx + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               parentThis.cy = this.original_cy + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+
+               if (parentThis.selected == false ) {
+                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
+               }
+
+               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+
+               this.last_dx = dx;
+               this.last_dy = dy;
+
                 break;
 
             case 'anchor_h':
@@ -149,7 +162,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
             parentThis.select();
         }
-    }
+    };
 
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_h.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
@@ -229,6 +242,15 @@ Pin.prototype.get_info = function() {
                 nm_to_mm(this.clearance_margin));
 
         return pad_code;
+}
+
+Pin.prototype.move = function(dx, dy) {
+
+        this.cx = this.cx + dx;
+        this.cy = this.cy + dy;
+
+        this.update_editor();
+
 }
 
 Pin.prototype.select = function() {

@@ -151,6 +151,9 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
         this.pad_size_original = parentThis.get_pad_size();
 
+        this.last_dx = 0;
+        this.last_dy = 0;
+
         global_dragging = true;
 
         highlight_pad();
@@ -239,14 +242,28 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
                 }
                 break;
 
-            default :
+            case 'anchor_c':
                 //this.attr('cursor', 'move');
+                // FIXME get rid of this:
                 var pad_size = {
                     x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
                     y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
                     width:  this.pad_size_original.width,
                     height: this.pad_size_original.height
                 }
+
+               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+
+               if (parentThis.selected == false ) {
+                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
+               }
+
+               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+
+               this.last_dx = dx;
+               this.last_dy = dy;
+
                 break;
         }
 
@@ -555,6 +572,17 @@ Pad.prototype.get_info = function() {
                 nm_to_mm(this.clearance_margin));
 
         return pad_code;
+}
+
+Pad.prototype.move = function(dx, dy) {
+
+        this.x1 = this.x1 + dx;
+        this.x2 = this.x2 + dx;
+        this.y1 = this.y1 + dy;
+        this.y2 = this.y2 + dy;
+
+        this.update_editor();
+
 }
 
 Pad.prototype.select = function() {

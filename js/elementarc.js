@@ -59,6 +59,9 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
         this.original_anchor_cx = this.attr("cx");
         this.original_anchor_cy = this.attr("cy");
 
+        this.last_dx = 0;
+        this.last_dy = 0;
+
         global_dragging = true;
 
         highlight_elementarc();
@@ -72,8 +75,18 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
         switch (this.node.classList[0]) {
 
             case 'anchor_c':
-                parentThis.rx = this.original_rx + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-                parentThis.ry = this.original_ry + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+
+               if (parentThis.selected == false ) {
+                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
+               }
+
+               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+
+               this.last_dx = dx;
+               this.last_dy = dy;
+
                 break;
 
             case 'anchor_m':
@@ -224,6 +237,15 @@ ElementArc.prototype.draw = function() {
     });
 
     this.update_anchors();
+}
+
+ElementArc.prototype.move = function(dx, dy) {
+
+        this.rx = this.rx + dx;
+        this.ry = this.ry + dy;
+
+        this.update_editor();
+
 }
 
 ElementArc.prototype.select = function() {
