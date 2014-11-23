@@ -108,11 +108,7 @@ var end_drag_workspace = function(e) {
         var selection_bbox = selection_box.getBBox();
 
         if (selection_bbox.width > 0 || selection_bbox.height > 0) {
-            objects.forEach( function(object, index, array) {
-                if (typeof object == "object") {
-                    object.unselect();
-                }
-            });
+            deselect_all_objects();
         }
 
         for (var i = 0; i < objects.length; i++) {
@@ -141,6 +137,14 @@ var end_drag_workspace = function(e) {
 
     }
 };
+
+var deselect_all_objects = function() {
+    objects.forEach( function(object, index, array) {
+        if (typeof object == "object") {
+            object.unselect();
+        }
+    });
+}
 
 paper.node.addEventListener("mousewheel", mouse_wheel_handler, false);
 paper.drag(drag_workspace, begin_drag_workspace, end_drag_workspace);

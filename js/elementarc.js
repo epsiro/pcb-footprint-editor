@@ -142,6 +142,26 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
         }
     };
 
+    var toggle_select = function (e) {
+
+        if (parentThis.selected == true) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.unselect();
+
+        } else if (parentThis.selected == false) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.select();
+        }
+    };
+
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_m.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_s.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
@@ -149,6 +169,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
 
     this.graphical_group = paper.group(this.arc, this.anchors);
     this.graphical_group.hover(highlight_elementarc, unhighlight_elementarc);
+    this.graphical_group.click(toggle_select);
     this.graphical_group.attr({class: "elementarc"});
 
     /* Start drag event on anchor*/

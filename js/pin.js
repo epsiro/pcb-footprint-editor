@@ -103,8 +103,6 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     var highlight_pin = function(e) {
         if (global_dragging != true && parentThis.locked === false) {
 
-            //parentThis.selected = true;
-
             parentThis.pad.attr({
                 fill: "#acb6c0"
             });
@@ -121,8 +119,6 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     var unhighlight_pin = function(e) {
         if (global_dragging != true) {
 
-            //parentThis.selected = false;
-
             parentThis.pad.attr({
                 fill: "#8c96a0"
             });
@@ -135,12 +131,33 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
         $("#object_info").hide();
     };
 
+    var toggle_select = function (e) {
+
+        if (parentThis.selected == true) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.unselect();
+
+        } else if (parentThis.selected == false) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.select();
+        }
+    }
+
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_h.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_p.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.hole, this.anchors);
     this.graphical_group.hover(highlight_pin, unhighlight_pin);
+    this.graphical_group.click(toggle_select);
     this.graphical_group.attr({class: "pin"});
 
 }

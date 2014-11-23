@@ -294,6 +294,26 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
         }
     };
 
+    var toggle_select = function (e) {
+
+        if (parentThis.selected == true) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.unselect();
+
+        } else if (parentThis.selected == false) {
+
+            if (e.shiftKey == false) {
+                deselect_all_objects();
+            }
+
+            parentThis.select();
+        }
+    };
+
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_n.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_e.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
@@ -317,6 +337,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
     this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.pad_line_ref, this.anchors);
     this.graphical_group.hover(highlight_pad, unhighlight_pad);
+    this.graphical_group.click(toggle_select);
     this.graphical_group.attr({class: "pad"});
 
 }
