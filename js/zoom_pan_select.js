@@ -103,15 +103,17 @@ var end_drag_workspace = function(e) {
     }
 
     if (e.button == 0) {
-        objects.forEach( function(object, index, array) {
-            if (typeof object == "object") {
-                object.unselect();
-            }
-        });
 
         selection_box.attr({ visibility: "hidden" });
-
         var selection_bbox = selection_box.getBBox();
+
+        if (selection_bbox.width > 0 || selection_bbox.height > 0) {
+            objects.forEach( function(object, index, array) {
+                if (typeof object == "object") {
+                    object.unselect();
+                }
+            });
+        }
 
         for (var i = 0; i < objects.length; i++) {
 
