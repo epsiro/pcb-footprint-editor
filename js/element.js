@@ -42,18 +42,19 @@ function Refdes(refdes_text, x, y, text_scale) {
        //console.log($(this.node).hasClass("anchor_c"));
         switch (this.node.classList[0]) {
 
-            case 'anchor_c':
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+        case 'anchor_t':
+            break;
 
-               parentThis.move(dx - this.last_dx, dy - this.last_dy);
+        case 'anchor_c':
+        default:
+            var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
-               this.last_dx = dx;
-               this.last_dy = dy;
-               break;
+            parentThis.move(dx - this.last_dx, dy - this.last_dy);
 
-            case 'anchor_t':
-                break;
+            this.last_dx = dx;
+            this.last_dy = dy;
+            break;
         }
 
         parentThis.update_editor();
@@ -65,6 +66,7 @@ function Refdes(refdes_text, x, y, text_scale) {
 
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_t.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.refdes.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.graphical_group = paper.group(this.refdes, this.anchors);
     this.draw();
