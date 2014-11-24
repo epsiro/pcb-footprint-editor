@@ -108,7 +108,7 @@ Refdes.prototype.move = function(dx, dy) {
 
 Refdes.prototype.update_editor = function() {
 
-    code = sprintf("Element[\"\" \"\" %s \"\" %.2fmm %.2fmm %.2fmm %.2fmm %d %d \"\"]",
+    code = sprintf("Element[\"\" \"\" \"%s\" \"\" %.2fmm %.2fmm %.2fmm %.2fmm %d %d \"\"]",
             this.refdes_text,
             1,
             1,
@@ -125,8 +125,10 @@ Refdes.prototype.update_editor = function() {
     );
 }
 
-Refdes.prototype.unselect = function() {
-}
+Refdes.prototype.select = function() {};
+Refdes.prototype.unselect = function() {};
+Refdes.prototype.lock = function() {};
+Refdes.prototype.unlock = function() {};
 
 function parse_element(line) {
     if ( ! line.match(/Element\[/)) {
