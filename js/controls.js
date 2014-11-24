@@ -42,6 +42,10 @@ $("#controls_copperplane").on("click", function() {
 $("#controls_undo").on("click", function() { editor.undo(); });
 $("#controls_redo").on("click", function() { editor.redo(); });
 
+$("#controls_load_component").on("click", function() { editor.setValue(localStorage["pcb_footprint"]); });
+$("#controls_save_component").on("click", function() { localStorage["pcb_footprint"] = editor.getValue(); });
+$("#controls_delete_component").on("click", function() { localStorage["pcb_footprint"] = ""; });
+
 $("#controls_new_component").on("click", new_component);
 $("#load_file").on("click", function() { $("#file_to_load").click(); });
 $("#file_to_load").on("change", load_file_as_text);
