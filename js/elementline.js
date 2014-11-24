@@ -61,7 +61,18 @@ function ElementLine(x1, y1, x2, y2, thickness) {
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
+            case 'anchor_e1':
+                parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y1 = this.original_y1 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+                break;
+
+            case 'anchor_e2':
+                parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+                parentThis.y2 = this.original_y2 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+                break;
+
             case 'anchor_c':
+            default:
                var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
                var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
@@ -74,16 +85,6 @@ function ElementLine(x1, y1, x2, y2, thickness) {
                this.last_dx = dx;
                this.last_dy = dy;
 
-                break;
-
-            case 'anchor_e1':
-                parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-                parentThis.y1 = this.original_y1 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
-                break;
-
-            case 'anchor_e2':
-                parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-                parentThis.y2 = this.original_y2 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
                 break;
         }
 
@@ -149,6 +150,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_e1.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_e2.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.line.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.graphical_group = paper.group(this.line, this.anchors);
     this.graphical_group.hover(highlight_elementline, unhighlight_elementline);

@@ -252,6 +252,7 @@ function Pad(line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness, 
                 break;
 
             case 'anchor_c':
+            default:
                 //this.attr('cursor', 'move');
                 // FIXME get rid of this:
                 var pad_size = {
@@ -349,7 +350,8 @@ function Pad(line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness, 
     this.anchor_nw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_se.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_sw.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
-    //this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.show_number.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.anchor_c.click(click_anchor);
     this.anchor_n.click(click_anchor);

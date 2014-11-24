@@ -74,21 +74,6 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
-            case 'anchor_c':
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
-
-               if (parentThis.selected == false ) {
-                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
-               }
-
-               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
-
-               this.last_dx = dx;
-               this.last_dy = dy;
-
-                break;
-
             case 'anchor_m':
                 var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
 
@@ -112,6 +97,22 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
                 if (Math.abs(parentThis.delta_angle) > 360) {
                     parentThis.delta_angle = sign(parentThis.delta_angle)*360;
                 }
+
+                break;
+
+            case 'anchor_c':
+            default:
+               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+
+               if (parentThis.selected == false ) {
+                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
+               }
+
+               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+
+               this.last_dx = dx;
+               this.last_dy = dy;
 
                 break;
         }
@@ -179,6 +180,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
     this.anchor_m.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_s.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_e.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.arc.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.graphical_group = paper.group(this.arc, this.anchors);
     this.graphical_group.hover(highlight_elementarc, unhighlight_elementarc);

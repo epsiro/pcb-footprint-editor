@@ -84,7 +84,22 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, numb
        //console.log($(this.node).hasClass("anchor_c"));
         switch (this.node.classList[0]) {
 
+            case 'anchor_h':
+                var new_hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+                if ( new_hole_diameter > 0 && new_hole_diameter < parentThis.pad_diameter) {
+                    parentThis.hole_diameter = new_hole_diameter;
+                }
+                break;
+
+            case 'anchor_p':
+                var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+                if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
+                    parentThis.pad_diameter = new_pad_diameter;
+                }
+                break;
+
             case 'anchor_c':
+            default:
                var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
                var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
@@ -99,19 +114,6 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, numb
 
                 break;
 
-            case 'anchor_h':
-                var new_hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
-                if ( new_hole_diameter > 0 && new_hole_diameter < parentThis.pad_diameter) {
-                    parentThis.hole_diameter = new_hole_diameter;
-                }
-                break;
-
-            case 'anchor_p':
-                var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
-                if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
-                    parentThis.pad_diameter = new_pad_diameter;
-                }
-                break;
         }
 
         parentThis.update_editor();
@@ -176,6 +178,9 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, numb
     this.anchor_c.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_h.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_p.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.pad.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.hole.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
+    this.show_number.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
     this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.hole, this.show_number, this.anchors);
     this.graphical_group.hover(highlight_pin, unhighlight_pin);
