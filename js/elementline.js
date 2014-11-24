@@ -61,31 +61,31 @@ function ElementLine(x1, y1, x2, y2, thickness) {
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
-            case 'anchor_e1':
-                parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-                parentThis.y1 = this.original_y1 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
-                break;
+        case 'anchor_e1':
+            parentThis.x1 = this.original_x1 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            parentThis.y1 = this.original_y1 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+            break;
 
-            case 'anchor_e2':
-                parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-                parentThis.y2 = this.original_y2 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
-                break;
+        case 'anchor_e2':
+            parentThis.x2 = this.original_x2 + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            parentThis.y2 = this.original_y2 + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+            break;
 
-            case 'anchor_c':
-            default:
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+        case 'anchor_c':
+        default:
+            var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
-               if (parentThis.selected == false ) {
-                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
-               }
+            if (parentThis.selected == false ) {
+                parentThis.move(dx - this.last_dx, dy - this.last_dy);
+            } else {
+                move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            }
 
-               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            this.last_dx = dx;
+            this.last_dy = dy;
 
-               this.last_dx = dx;
-               this.last_dy = dy;
-
-                break;
+            break;
         }
 
         parentThis.update_editor();

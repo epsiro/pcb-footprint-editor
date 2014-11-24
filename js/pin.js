@@ -84,35 +84,35 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, numb
        //console.log($(this.node).hasClass("anchor_c"));
         switch (this.node.classList[0]) {
 
-            case 'anchor_h':
-                var new_hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
-                if ( new_hole_diameter > 0 && new_hole_diameter < parentThis.pad_diameter) {
-                    parentThis.hole_diameter = new_hole_diameter;
-                }
-                break;
+        case 'anchor_h':
+            var new_hole_diameter = this.original_hole_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+            if ( new_hole_diameter > 0 && new_hole_diameter < parentThis.pad_diameter) {
+                parentThis.hole_diameter = new_hole_diameter;
+            }
+            break;
 
-            case 'anchor_p':
-                var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
-                if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
-                    parentThis.pad_diameter = new_pad_diameter;
-                }
-                break;
+        case 'anchor_p':
+            var new_pad_diameter = this.original_pad_diameter + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)*2);
+            if ( new_pad_diameter > 0 && new_pad_diameter > parentThis.hole_diameter) {
+                parentThis.pad_diameter = new_pad_diameter;
+            }
+            break;
 
-            case 'anchor_c':
-            default:
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+        case 'anchor_c':
+        default:
+            var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
-               if (parentThis.selected == false ) {
-                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
-               }
+            if (parentThis.selected == false ) {
+                parentThis.move(dx - this.last_dx, dy - this.last_dy);
+            } else {
+                move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            }
 
-               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            this.last_dx = dx;
+            this.last_dy = dy;
 
-               this.last_dx = dx;
-               this.last_dy = dy;
-
-                break;
+            break;
 
         }
 

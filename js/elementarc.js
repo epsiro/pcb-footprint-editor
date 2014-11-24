@@ -74,47 +74,47 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
-            case 'anchor_m':
-                var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
+        case 'anchor_m':
+            var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
 
-                parentThis.width  = Math.round(view_to_nm(polar_coord.radius) / mm_to_nm(0.1))*mm_to_nm(0.1);
-                parentThis.height = parentThis.width;
-                break;
+            parentThis.width  = Math.round(view_to_nm(polar_coord.radius) / mm_to_nm(0.1))*mm_to_nm(0.1);
+            parentThis.height = parentThis.width;
+            break;
 
-            case 'anchor_s':
-                var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
+        case 'anchor_s':
+            var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
 
-                parentThis.start_angle = Math.round(polar_coord.angle / 10) * 10;
-                //parentThis.delta_angle = +this.original_delta_angle - parentThis.start_angle;
-                break;
+            parentThis.start_angle = Math.round(polar_coord.angle / 10) * 10;
+            //parentThis.delta_angle = +this.original_delta_angle - parentThis.start_angle;
+            break;
 
-            case 'anchor_e':
-                var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
-                console.log(polar_coord);
+        case 'anchor_e':
+            var polar_coord = cartesian_to_polar(nm_to_view(this.original_rx), nm_to_view(this.original_ry), +this.original_anchor_cx + dx/zoom_level, +this.original_anchor_cy + dy/zoom_level);
+            console.log(polar_coord);
 
-                parentThis.delta_angle = Math.round(polar_coord.angle / 10) * 10 - parentThis.start_angle;
+            parentThis.delta_angle = Math.round(polar_coord.angle / 10) * 10 - parentThis.start_angle;
 
-                if (Math.abs(parentThis.delta_angle) > 360) {
-                    parentThis.delta_angle = sign(parentThis.delta_angle)*360;
-                }
+            if (Math.abs(parentThis.delta_angle) > 360) {
+                parentThis.delta_angle = sign(parentThis.delta_angle)*360;
+            }
 
-                break;
+            break;
 
-            case 'anchor_c':
-            default:
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+        case 'anchor_c':
+        default:
+            var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
-               if (parentThis.selected == false ) {
-                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
-               }
+            if (parentThis.selected == false ) {
+                parentThis.move(dx - this.last_dx, dy - this.last_dy);
+            } else {
+                move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            }
 
-               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            this.last_dx = dx;
+            this.last_dy = dy;
 
-               this.last_dx = dx;
-               this.last_dy = dy;
-
-                break;
+            break;
         }
 
         parentThis.update_editor();

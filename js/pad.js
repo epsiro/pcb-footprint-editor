@@ -175,106 +175,106 @@ function Pad(line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness, 
         /* Inspect cursor to determine which resize/move process to use */
         switch (this.node.classList[0]) {
 
-            case 'anchor_s':
-                var pad_size = {
-                    x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_s':
+            var pad_size = {
+                x:      this.pad_size_original.x,
+                y:      this.pad_size_original.y,
+                width:  this.pad_size_original.width,
+                height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_e':
-                var pad_size = {
-                    x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height
-                }
-                break;
+        case 'anchor_e':
+            var pad_size = {
+                x:      this.pad_size_original.x,
+                y:      this.pad_size_original.y,
+                width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height
+            }
+            break;
 
-            case 'anchor_n':
-                var pad_size = {
-                    x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
-                    width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_n':
+            var pad_size = {
+                x:      this.pad_size_original.x,
+                y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                width:  this.pad_size_original.width,
+                height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_w':
-                var pad_size = {
-                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height
-                }
-                break;
+        case 'anchor_w':
+            var pad_size = {
+                x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                y:      this.pad_size_original.y,
+                width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height
+            }
+            break;
 
-            case 'anchor_nw':
-                //this.attr('cursor', 'sw-resize');
-                var pad_size = {
-                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
-                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_nw':
+            //this.attr('cursor', 'sw-resize');
+            var pad_size = {
+                x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_ne':
-                //this.attr('cursor', 'sw-resize');
-                var pad_size = {
-                    x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
-                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_ne':
+            //this.attr('cursor', 'sw-resize');
+            var pad_size = {
+                x:      this.pad_size_original.x,
+                y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height - view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_se':
-                //this.attr('cursor', 'ne-resize');
-                var pad_size = {
-                    x:      this.pad_size_original.x,
-                    y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_se':
+            //this.attr('cursor', 'ne-resize');
+            var pad_size = {
+                x:      this.pad_size_original.x,
+                y:      this.pad_size_original.y,
+                width:  this.pad_size_original.width  + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_sw':
-                //this.attr('cursor', 'nw-resize');
-                var pad_size = {
-                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y,
-                    width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
-                }
-                break;
+        case 'anchor_sw':
+            //this.attr('cursor', 'nw-resize');
+            var pad_size = {
+                x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                y:      this.pad_size_original.y,
+                width:  this.pad_size_original.width  - view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                height: this.pad_size_original.height + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30))
+            }
+            break;
 
-            case 'anchor_c':
-            default:
-                //this.attr('cursor', 'move');
-                // FIXME get rid of this:
-                var pad_size = {
-                    x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
-                    y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
-                    width:  this.pad_size_original.width,
-                    height: this.pad_size_original.height
-                }
+        case 'anchor_c':
+        default:
+            //this.attr('cursor', 'move');
+            // FIXME get rid of this:
+            var pad_size = {
+                x:      this.pad_size_original.x      + view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30)),
+                y:      this.pad_size_original.y      + view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30)),
+                width:  this.pad_size_original.width,
+                height: this.pad_size_original.height
+            }
 
-               var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
-               var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
+            var dx = view_to_nm(Snap.snapTo(grid, dx/zoom_level, 30));
+            var dy = view_to_nm(Snap.snapTo(grid, dy/zoom_level, 30));
 
-               if (parentThis.selected == false ) {
-                   parentThis.move(dx - this.last_dx, dy - this.last_dy);
-               }
+            if (parentThis.selected == false ) {
+                parentThis.move(dx - this.last_dx, dy - this.last_dy);
+            } else {
+                move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            }
 
-               move_selected_objects(dx - this.last_dx, dy - this.last_dy);
+            this.last_dx = dx;
+            this.last_dy = dy;
 
-               this.last_dx = dx;
-               this.last_dy = dy;
-
-                break;
+            break;
         }
 
         parentThis.set_pad_size(pad_size);
