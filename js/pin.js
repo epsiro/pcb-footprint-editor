@@ -1,6 +1,7 @@
-function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
+function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, number) {
 
     this.line_number = 0;
+    this.number = number;
 
     var parentThis = this;
 
@@ -30,6 +31,14 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 
     this.hole = paper.circle(0, 0, 0).attr({
         fill: "white"
+    });
+
+    this.show_number = paper.text(0, 0, "").attr({
+        "font-size": 42,
+        fill: "red",
+        textAnchor: "middle",
+        "alignment-baseline": "central",
+        visibility: "visible"
     });
 
     console.log(this);
@@ -168,7 +177,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
     this.anchor_h.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
     this.anchor_p.drag(drag_anchor, drag_anchor_start, drag_anchor_end);
 
-    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.hole, this.anchors);
+    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.hole, this.show_number, this.anchors);
     this.graphical_group.hover(highlight_pin, unhighlight_pin);
     this.graphical_group.click(toggle_select);
     this.graphical_group.attr({class: "pin"});
@@ -178,13 +187,14 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter) {
 Pin.prototype.update_editor = function() {
 
     //Pin [rX rY Thickness Clearance Mask Drill "Name" "Number" SFlags]
-    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"\" \"\"]",
+    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"\"]",
             nm_to_mm(this.cx),
             nm_to_mm(this.cy),
             nm_to_mm(this.pad_diameter),
             nm_to_mm(this.clearance_margin),
             nm_to_mm(this.mask_margin + this.pad_diameter),
-            nm_to_mm(this.hole_diameter)
+            nm_to_mm(this.hole_diameter),
+            this.number
             );
 
     editor.replaceRange(
@@ -224,6 +234,12 @@ Pin.prototype.draw = function() {
         cx: nm_to_view(this.cx),
         cy: nm_to_view(this.cy),
         r: nm_to_view(this.hole_diameter/2)
+    });
+
+    this.show_number.attr({
+        x: nm_to_view(this.cx),
+        y: nm_to_view(this.cy),
+        text: this.number
     });
 
     $("#object_info").html(this.get_info());
@@ -282,12 +298,15 @@ function parse_pin(line) {
 
     //console.log(code_line);
 
-    var cx            = parse_length(code_line[0]);
-    var cy            = parse_length(code_line[1]);
-    var pad_diameter  = parse_length(code_line[2]);
-    var clearance     = parse_length(code_line[3]);
-    var mask_diameter = parse_length(code_line[4]);
-    var hole_diameter = parse_length(code_line[5]);
+    var cx             = parse_length(code_line[0]);
+    var cy             = parse_length(code_line[1]);
+    var pad_diameter   = parse_length(code_line[2]);
+    var clearance      = parse_length(code_line[3]);
+    var mask_diameter  = parse_length(code_line[4]);
+    var hole_diameter  = parse_length(code_line[5]);
+    var name           = code_line[6].replace(/"/g,"");
+    var number         = code_line[7].replace(/"/g,"");
+    var symbolic_flags = code_line[8].replace(/"/g,"");
 
     return {
         cx:cx,
@@ -295,7 +314,10 @@ function parse_pin(line) {
         pad_diameter:pad_diameter,
         clearance:clearance,
         mask_diameter:mask_diameter,
-        hole_diameter:hole_diameter
+        hole_diameter:hole_diameter,
+        name:name,
+        number:number,
+        symbolic_flags:symbolic_flags
     }
 
 }
@@ -311,14 +333,16 @@ function add_pin(e) {
     var pad_diameter = mm_to_nm(1.0);
     var clearance = mm_to_nm(1.0);
     var mask_diameter = mm_to_nm(1.2);
+    var number = 1;
 
-    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"\" \"\"]\n",
+    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"\"]\n",
             nm_to_mm(cx),
             nm_to_mm(cy),
             nm_to_mm(pad_diameter),
             nm_to_mm(clearance),
             nm_to_mm(mask_diameter),
-            nm_to_mm(hole_diameter)
+            nm_to_mm(hole_diameter),
+            number
             );
 
     editor.replaceRange(code, {line: get_last_line(), ch: 0});

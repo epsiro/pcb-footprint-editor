@@ -1,6 +1,6 @@
-function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness) {
+function Pad(line_number, x1, y1, x2, y2, thickness, clearance, mask_thickness, number) {
 
-    this.pad_number = pad_number;
+    this.number = number;
     this.line_number = line_number;
 
     var parentThis = this;
@@ -68,7 +68,16 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
 
     this.pad_line_ref = paper.line(0, 0, 0, 0).attr({
         stroke: "red",
-        strokeWidth: 2
+        strokeWidth: 2,
+        visibility: "hidden"
+    });
+
+    this.show_number = paper.text(0, 0, "").attr({
+        "font-size": 42,
+        fill: "red",
+        textAnchor: "middle",
+        "alignment-baseline": "central",
+        visibility: "visible"
     });
 
     var click_anchor = function() {
@@ -352,7 +361,7 @@ function Pad(pad_number, line_number, x1, y1, x2, y2, thickness, clearance, mask
     this.anchor_se.click(click_anchor);
     this.anchor_sw.click(click_anchor);
 
-    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.pad_line_ref, this.anchors);
+    this.graphical_group = paper.group(this.pad, this.clearance, this.mask, this.pad_line_ref, this.show_number, this.anchors);
     this.graphical_group.hover(highlight_pad, unhighlight_pad);
     this.graphical_group.click(toggle_select);
     this.graphical_group.attr({class: "pad"});
@@ -469,6 +478,12 @@ Pad.prototype.draw = function() {
         strokeWidth: nm_to_view(this.thickness + this.clearance_margin)
     });
 
+    this.show_number.attr({
+        x: nm_to_view(this.x1 + (this.x2 - this.x1)/2),
+        y: nm_to_view(this.y1 + (this.y2 - this.y1)/2),
+        text: this.number
+    });
+
     //console.log(this.mask);
 
     this.pad_line_ref.attr({x1: nm_to_view(this.x1)});
@@ -486,15 +501,19 @@ Pad.prototype.draw = function() {
 
 
 Pad.prototype.update_editor = function() {
-        pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"1\" \"square\"]",
+        code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"square\"]",
                 nm_to_mm(this.x1),
                 nm_to_mm(this.y1),
                 nm_to_mm(this.x2),
                 nm_to_mm(this.y2),
                 nm_to_mm(this.thickness),
                 nm_to_mm(this.clearance_margin),
-                nm_to_mm(this.thickness + this.mask_margin));
-        editor.replaceRange(pad_code, {line: this.line_number, ch: 0}, {line: this.line_number, ch: editor.getLine(this.line_number).length});
+                nm_to_mm(this.thickness + this.mask_margin),
+                this.number
+                );
+        editor.replaceRange(code,
+                {line: this.line_number, ch: 0},
+                {line: this.line_number, ch: editor.getLine(this.line_number).length});
 }
 
 
@@ -625,15 +644,18 @@ function add_pad(e) {
     var thickness = mm_to_nm(0.6);
     var mask_thickness = mm_to_nm(0.8);
     var clearance = mm_to_nm(1.0);
+    var number = 1;
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"1\" \"square\"]\n",
+    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"square\"]\n",
             nm_to_mm(x1),
             nm_to_mm(y1),
             nm_to_mm(x2),
             nm_to_mm(y2),
             nm_to_mm(thickness),
             nm_to_mm(clearance),
-            nm_to_mm(mask_thickness));
+            nm_to_mm(mask_thickness),
+            number
+            );
 
     editor.replaceRange(pad_code, {line: get_last_line(), ch: 0});
 }
@@ -652,6 +674,9 @@ function parse_pad_line(line) {
     var thickness      = parse_length(code_line[4]);
     var clearance      = parse_length(code_line[5]);
     var mask_thickness = parse_length(code_line[6]);
+    var name           = code_line[7].replace(/"/g,"");
+    var number         = code_line[8].replace(/"/g,"");
+    var symbolic_flags = code_line[9].replace(/"/g,"");
 
     return {
         x1:x1,
@@ -660,7 +685,10 @@ function parse_pad_line(line) {
         y2:y2,
         thickness:thickness,
         clearance:clearance,
-        mask_thickness:mask_thickness
+        mask_thickness:mask_thickness,
+        name:name,
+        number:number,
+        symbolic_flags:symbolic_flags
     }
 
 }

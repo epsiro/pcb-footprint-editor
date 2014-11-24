@@ -24,14 +24,15 @@ function add_object(changed_line, line_nr) {
 
     if (changed_line.match(/Pad/)) {
         values = parse_pad_line(changed_line);
-        object_instance = new Pad(line_nr, line_nr,
+        object_instance = new Pad(line_nr,
                 values.x1,
                 values.y1,
                 values.x2,
                 values.y2,
                 values.thickness,
                 values.clearance,
-                values.mask_thickness
+                values.mask_thickness,
+                values.number
                 );
 
         console.log("Pad added in objects[%d]: ", line_nr);
@@ -99,7 +100,8 @@ function add_object(changed_line, line_nr) {
                 values.pad_diameter,
                 values.clearance,
                 values.mask_diameter,
-                values.hole_diameter
+                values.hole_diameter,
+                values.number
                 );
 
         console.log("Pin added in objects[%d]: ", line_nr);
@@ -168,6 +170,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].thickness = values.thickness;
         objects[line_nr].mask_margin = values.mask_thickness - values.thickness;
         objects[line_nr].clearance_margin = values.clearance;
+        objects[line_nr].number = values.number;
         objects[line_nr].draw();
 
         return 0;
@@ -213,6 +216,7 @@ function edit_object(changed_line, line_nr) {
         objects[line_nr].clearance_margin = values.clearance;
         objects[line_nr].mask_margin = values.mask_diameter - values.pad_diameter;
         objects[line_nr].hole_diameter = values.hole_diameter;
+        objects[line_nr].number = values.number;
         objects[line_nr].draw();
 
         return 0;
