@@ -122,6 +122,10 @@ function remove_object(line_nr) {
     //console.log(objects);
     object_instance = objects[line_nr];
 
+    if (object_instance === "placeholder") {
+        return 1;
+    }
+
     if (object_instance === undefined) {
         return 1;
     }
@@ -222,3 +226,5 @@ function update_line_number(element, index, array) {
 }
 
 var objects = new Array();
+
+objects.push("placeholder");
