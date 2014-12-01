@@ -192,7 +192,7 @@ function Pin(cx, cy, pad_diameter, clearance, mask_diameter, hole_diameter, numb
 Pin.prototype.update_editor = function() {
 
     //Pin [rX rY Thickness Clearance Mask Drill "Name" "Number" SFlags]
-    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"\"]",
+    code = sprintf("    Pin[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm \"\" \"%d\" \"\"]",
             nm_to_mm(this.cx),
             nm_to_mm(this.cy),
             nm_to_mm(this.pad_diameter),
@@ -254,7 +254,7 @@ Pin.prototype.draw = function() {
 
 Pin.prototype.get_info = function() {
 
-        pad_code = sprintf("<strong>Pin</strong><br />x: %.2fmm, y: %.2fmm<br />Pad diameter: %.2fmm<br />Hole diameter: %.2fmm<br />Mask margin: %.2fmm<br />Clearance: %.2fmm",
+        pad_code = sprintf("<strong>Pin</strong><br />x: %.3fmm, y: %.3fmm<br />Pad diameter: %.3fmm<br />Hole diameter: %.3fmm<br />Mask margin: %.3fmm<br />Clearance: %.3fmm",
                 nm_to_mm(this.cx),
                 nm_to_mm(this.cy),
                 nm_to_mm(this.pad_diameter),
@@ -340,7 +340,7 @@ function add_pin(e) {
     var mask_diameter = mm_to_nm(1.2);
     var number = 1;
 
-    code = sprintf("    Pin[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"\"]\n",
+    code = sprintf("    Pin[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm \"\" \"%d\" \"\"]\n",
             nm_to_mm(cx),
             nm_to_mm(cy),
             nm_to_mm(pad_diameter),

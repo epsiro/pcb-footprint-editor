@@ -503,7 +503,7 @@ Pad.prototype.draw = function() {
 
 
 Pad.prototype.update_editor = function() {
-        code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"square\"]",
+        code = sprintf("    Pad[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm \"\" \"%d\" \"square\"]",
                 nm_to_mm(this.x1),
                 nm_to_mm(this.y1),
                 nm_to_mm(this.x2),
@@ -584,7 +584,7 @@ Pad.prototype.get_info = function() {
 
         pad_size = this.get_pad_size();
 
-        pad_code = sprintf("<strong>Pad</strong><br />x: %.2fmm, y: %.2fmm<br /> Pad width: %.2fmm<br />Pad height: %.2fmm<br />Mask margin: %.2fmm<br />Clearance margin: %.2fmm",
+        pad_code = sprintf("<strong>Pad</strong><br />x: %.3fmm, y: %.3fmm<br /> Pad width: %.3fmm<br />Pad height: %.3fmm<br />Mask margin: %.3fmm<br />Clearance margin: %.3fmm",
                 nm_to_mm(pad_size.x + pad_size.width/2),
                 nm_to_mm(pad_size.y + pad_size.height/2),
                 nm_to_mm(pad_size.width),
@@ -648,7 +648,7 @@ function add_pad(e) {
     var clearance = mm_to_nm(1.0);
     var number = 1;
 
-    pad_code = sprintf("    Pad[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm %.2fmm \"\" \"%d\" \"square\"]\n",
+    pad_code = sprintf("    Pad[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm %.3fmm \"\" \"%d\" \"square\"]\n",
             nm_to_mm(x1),
             nm_to_mm(y1),
             nm_to_mm(x2),
