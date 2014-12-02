@@ -110,7 +110,7 @@ Refdes.prototype.move = function(dx, dy) {
 
 Refdes.prototype.update_editor = function() {
 
-    code = sprintf("Element[\"\" \"\" \"%s\" \"\" %.3fmm %.3fmm %.3fmm %.3fmm %d %d \"\"]",
+    code = sprintf("Element[\"\" \"\" \"%s\" \"\" %.2fmm %.2fmm %.2fmm %.2fmm %d %d \"\"]",
             this.refdes_text,
             1,
             1,

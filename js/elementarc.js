@@ -200,7 +200,7 @@ function ElementArc(rx, ry, width, height, start_angle, delta_angle, thickness) 
 
 ElementArc.prototype.update_editor = function() {
 
-    code = sprintf("    ElementArc[%.3fmm %.3fmm %.3fmm %.3fmm %d %d %.3fmm]",
+    code = sprintf("    ElementArc[%.2fmm %.2fmm %.2fmm %.2fmm %d %d %.2fmm]",
             nm_to_mm(this.rx),
             nm_to_mm(this.ry),
             nm_to_mm(this.width),
@@ -310,7 +310,7 @@ function add_elementarc(e) {
     var delta_angle = 360;
     var thickness = mm_to_nm(0.2);
 
-    code = sprintf("    ElementArc[%.3fmm %.3fmm %.3fmm %.3fmm %d %d %.3fmm]\n",
+    code = sprintf("    ElementArc[%.2fmm %.2fmm %.2fmm %.2fmm %d %d %.2fmm]\n",
             nm_to_mm(rx),
             nm_to_mm(ry),
             nm_to_mm(width),

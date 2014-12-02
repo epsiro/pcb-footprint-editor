@@ -170,7 +170,7 @@ function ElementLine(x1, y1, x2, y2, thickness) {
 
 ElementLine.prototype.update_editor = function() {
 
-    code = sprintf("    ElementLine[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm]",
+    code = sprintf("    ElementLine[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm]",
             nm_to_mm(this.x1),
             nm_to_mm(this.y1),
             nm_to_mm(this.x2),
@@ -271,7 +271,7 @@ function add_elementline(e) {
 
     var thickness = mm_to_nm(0.2);
 
-    code = sprintf("    ElementLine[%.3fmm %.3fmm %.3fmm %.3fmm %.3fmm]\n",
+    code = sprintf("    ElementLine[%.2fmm %.2fmm %.2fmm %.2fmm %.2fmm]\n",
             nm_to_mm(x1),
             nm_to_mm(y1),
             nm_to_mm(x2),
