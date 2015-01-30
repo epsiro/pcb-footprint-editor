@@ -110,6 +110,8 @@ function ElementLine(x1, y1, x2, y2, thickness) {
             });
             editor.addLineClass(parentThis.line_number, "background", "selected_pad");
         }
+
+        $("#object_info").show().html(parentThis.get_info());
     };
 
     var unhighlight_elementline = function(e) {
@@ -125,6 +127,8 @@ function ElementLine(x1, y1, x2, y2, thickness) {
             });
             editor.removeLineClass(parentThis.line_number, "background", "selected_pad");
         }
+
+        $("#object_info").hide();
     };
 
     var toggle_select = function (e) {
@@ -200,7 +204,36 @@ ElementLine.prototype.draw = function() {
         strokeWidth: nm_to_view(this.thickness)
     });
 
+    $("#object_info").html(this.get_info());
+
     this.update_anchors();
+}
+
+ElementLine.prototype.get_info = function() {
+
+    var length = Math.sqrt( Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) );
+    var angle = Math.atan2( (this.y2 - this.y1), (this.x2 - this.x1) ) * (180/Math.PI);
+
+    if (typeof length === 'undefined') {
+        length = 0;
+    }
+
+    if (typeof angle === 'undefined') {
+        angle = 0;
+    }
+
+    elementline_code = sprintf("<strong>ElementLine</strong><br />x1: %.2fmm, y1: %.2fmm<br />x2: %.2fmm, y2: %.2fmm<br />Thickness: %.2fmm<br />Length: %.2fmm<br />Angle: %.2f<br />dx: %.2fmm, dy: %.2fmm",
+            nm_to_mm(this.x1),
+            nm_to_mm(this.y1),
+            nm_to_mm(this.x2),
+            nm_to_mm(this.y2),
+            nm_to_mm(this.thickness),
+            nm_to_mm(length),
+            angle,
+            nm_to_mm(this.x2 - this.x1),
+            nm_to_mm(this.y2 - this.y1));
+
+    return elementline_code;
 }
 
 ElementLine.prototype.move = function(dx, dy) {
