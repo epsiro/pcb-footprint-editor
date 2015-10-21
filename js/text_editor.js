@@ -105,7 +105,7 @@ $('#vim_mode_cb').click(function () {
 });
 
 function new_component() {
-    var element_header = 'Element["" "0805" "0805" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
+    var element_header = 'Element["" "" "" "" 1000 1000 -1.5mm -2.5mm 0 100 ""]\n(\n';
     var element_end = ')';
 
     editor.setValue(element_header + element_end);
