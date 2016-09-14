@@ -44,9 +44,15 @@ var begin_drag_workspace = function(posx, posy, e) {
     //console.log(e.button);
 
     if (e.button == 2) {
+
+        this.button = 2;
+
         this.origin_x = origin_x;
         this.origin_y = origin_y;
+
     } else if (e.button == 0) {
+
+        this.button = 0;
 
         this.original_posx = posx - $('#svg').offset().left;///zoom_level;
         this.original_posy = posy - $('#svg').offset().top ;///zoom_level;
@@ -66,12 +72,12 @@ var drag_workspace = function(dx, dy, posx, posy, e) {
         return;
     }
 
-    if (e.button == 2) {
+    if (this.button == 2) {
         origin_x = this.origin_x + dx;
         origin_y = this.origin_y + dy;
         zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
 
-    } else if (e.button == 0) {
+    } else if (this.button == 0) {
 
         var offset_x = 0;
         var offset_y = 0;
@@ -102,7 +108,7 @@ var end_drag_workspace = function(e) {
         return;
     }
 
-    if (e.button == 0) {
+    if (this.button == 0) {
 
         selection_box.attr({ visibility: "hidden" });
         var selection_bbox = selection_box.getBBox();
