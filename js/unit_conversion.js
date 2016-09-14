@@ -32,6 +32,12 @@ function hundredth_mil_to_nm(number) {
 
 function parse_length(bracket, s) {
 
+    var pos_nm = s.indexOf("nm");
+    if (pos_nm > -1) {
+        return s.slice(0, pos_nm).trim();
+
+    }
+
     var pos_mm = s.indexOf("mm");
     if (pos_mm > -1) {
         return mm_to_nm(s.slice(0, pos_mm).trim());
