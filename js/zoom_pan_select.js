@@ -1,19 +1,13 @@
 function mouse_wheel_handler (ev) {
     ev.preventDefault();
 
-    if (ev.wheelDelta > 0) {
+    if (ev.deltaY < 0) {
         if (zoom_level < 3) {
-            if (zoom_level >= 0.25) {
-                zoom_level += 0.25;
-            } else {
-                zoom_level += 0.05;
-            }
+            zoom_level += 0.10;
         }
     } else {
-        if (zoom_level > 0.25) {
-            zoom_level -= 0.25;
-        } else if (zoom_level > 0.15) {
-            zoom_level -= 0.05;
+        if (zoom_level > 0.15) {
+            zoom_level -= 0.10;
         }
     }
 
@@ -30,7 +24,7 @@ function mouse_wheel_handler (ev) {
         grid_big.attr({ fill: grid_pattern_mm });
     }
 
-    console.log(zoom_level);
+    //console.log(zoom_level);
 
     zoom_group.transform("translate(" + origin_x + "," + origin_y + ") scale(" + zoom_level + "," + zoom_level + ")");
 
@@ -152,7 +146,7 @@ var deselect_all_objects = function() {
     });
 }
 
-paper.node.addEventListener("mousewheel", mouse_wheel_handler, false);
+paper.node.addEventListener("wheel", mouse_wheel_handler, false);
 paper.drag(drag_workspace, begin_drag_workspace, end_drag_workspace);
 
 var zoom_level = 1;
