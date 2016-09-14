@@ -299,16 +299,17 @@ function parse_pin(line) {
         throw new UserException("InvalidFormat");
     }
 
-    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    var bracket = determine_bracket(line);
+    var code_line = split_line(line);
 
     //console.log(code_line);
 
-    var cx             = parse_length(code_line[0]);
-    var cy             = parse_length(code_line[1]);
-    var pad_diameter   = parse_length(code_line[2]);
-    var clearance      = parse_length(code_line[3]);
-    var mask_diameter  = parse_length(code_line[4]);
-    var hole_diameter  = parse_length(code_line[5]);
+    var cx             = parse_length(bracket, code_line[0]);
+    var cy             = parse_length(bracket, code_line[1]);
+    var pad_diameter   = parse_length(bracket, code_line[2]);
+    var clearance      = parse_length(bracket, code_line[3]);
+    var mask_diameter  = parse_length(bracket, code_line[4]);
+    var hole_diameter  = parse_length(bracket, code_line[5]);
     var name           = code_line[6].replace(/"/g,"");
     var number         = code_line[7].replace(/"/g,"");
     var symbolic_flags = code_line[8].replace(/"/g,"");

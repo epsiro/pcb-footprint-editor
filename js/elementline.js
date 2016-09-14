@@ -272,15 +272,16 @@ function parse_elementline(line) {
         throw new UserException("InvalidFormat");
     }
 
-    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    var bracket = determine_bracket(line);
+    var code_line = split_line(line);
 
     //console.log(code_line);
 
-    var x1 = parse_length(code_line[0]);
-    var y1 = parse_length(code_line[1]);
-    var x2 = parse_length(code_line[2]);
-    var y2 = parse_length(code_line[3]);
-    var thickness = parse_length(code_line[4]);
+    var x1 = parse_length(bracket, code_line[0]);
+    var y1 = parse_length(bracket, code_line[1]);
+    var x2 = parse_length(bracket, code_line[2]);
+    var y2 = parse_length(bracket, code_line[3]);
+    var thickness = parse_length(bracket, code_line[4]);
 
     return {
         x1:x1,

@@ -30,7 +30,7 @@ function hundredth_mil_to_nm(number) {
     return number*254
 }
 
-function parse_length(s) {
+function parse_length(bracket, s) {
 
     var pos_mm = s.indexOf("mm");
     if (pos_mm > -1) {
@@ -43,15 +43,30 @@ function parse_length(s) {
         return mil_to_nm(s.slice(0, pos_mil).trim());
     }
 
-    var bracket = "square";
-
     if ($.isNumeric(s)) {
-        if (bracket == "round") {
+        if (bracket == '(') {
             return mil_to_nm(s.trim());
-        } else if (bracket == "square") {
+        } else if (bracket == '[') {
             return hundredth_mil_to_nm(s.trim());
         }
     }
+}
+
+function determine_bracket(line) {
+
+    if (line.indexOf('[') != -1) {
+        return '[';
+    } else if (line.indexOf('(') != -1) {
+        return '(';
+    } else {
+        throw new UserException("InvalidFormat");
+    }
+}
+
+function split_line(line) {
+    var bracket = determine_bracket(line);
+    var right_bracket = bracket == '[' ? ']' : ')';
+    return line.substring(line.indexOf(bracket) + 1, line.indexOf(right_bracket)).match(/\S+/g);
 }
 
 function sign(x) {

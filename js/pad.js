@@ -667,15 +667,16 @@ function parse_pad_line(line) {
         throw new UserException("InvalidFormat");
     }
 
-    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    var bracket = determine_bracket(line);
+    var code_line = split_line(line);
 
-    var x1             = parse_length(code_line[0]);
-    var y1             = parse_length(code_line[1]);
-    var x2             = parse_length(code_line[2]);
-    var y2             = parse_length(code_line[3]);
-    var thickness      = parse_length(code_line[4]);
-    var clearance      = parse_length(code_line[5]);
-    var mask_thickness = parse_length(code_line[6]);
+    var x1             = parse_length(bracket, code_line[0]);
+    var y1             = parse_length(bracket, code_line[1]);
+    var x2             = parse_length(bracket, code_line[2]);
+    var y2             = parse_length(bracket, code_line[3]);
+    var thickness      = parse_length(bracket, code_line[4]);
+    var clearance      = parse_length(bracket, code_line[5]);
+    var mask_thickness = parse_length(bracket, code_line[6]);
     var name           = code_line[7].replace(/"/g,"");
     var number         = code_line[8].replace(/"/g,"");
     var symbolic_flags = code_line[9].replace(/"/g,"");

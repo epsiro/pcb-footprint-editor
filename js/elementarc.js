@@ -275,15 +275,16 @@ function parse_elementarc(line) {
         throw new UserException("InvalidFormat");
     }
 
-    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    var bracket = determine_bracket(line);
+    var code_line = split_line(line);
 
-    var rx = parse_length(code_line[0]);
-    var ry = parse_length(code_line[1]);
-    var width = parse_length(code_line[2]);
-    var height = parse_length(code_line[3]);
+    var rx = parse_length(bracket, code_line[0]);
+    var ry = parse_length(bracket, code_line[1]);
+    var width = parse_length(bracket, code_line[2]);
+    var height = parse_length(bracket, code_line[3]);
     var start_angle = code_line[4].trim();
     var delta_angle = code_line[5].trim();
-    var thickness = parse_length(code_line[6]);
+    var thickness = parse_length(bracket, code_line[6]);
 
     return {
         rx: rx,

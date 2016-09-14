@@ -133,11 +133,12 @@ Refdes.prototype.lock = function() {};
 Refdes.prototype.unlock = function() {};
 
 function parse_element(line) {
-    if ( ! line.match(/Element\[/)) {
+    if ( ! line.match(/Element/)) {
         throw new UserException("InvalidFormat");
     }
 
-    code_line = line.substring(line.indexOf('[') + 1).match(/\S+/g);
+    var bracket = determine_bracket(line);
+    var code_line = split_line(line);
     //code_line.match(/\w+(\".*?\")?/g)
 
     //console.log(code_line);
@@ -146,10 +147,10 @@ function parse_element(line) {
     var description = code_line[1].replace(/"/g,"");
     var name = code_line[2].replace(/"/g,"");
     var value = code_line[3].replace(/"/g,"");
-    var mark_x = parse_length(code_line[4]);
-    var mark_y = parse_length(code_line[5]);
-    var text_pos_x = parse_length(code_line[6]);
-    var text_pos_y = parse_length(code_line[7]);
+    var mark_x = parse_length(bracket, code_line[4]);
+    var mark_y = parse_length(bracket, code_line[5]);
+    var text_pos_x = parse_length(bracket, code_line[6]);
+    var text_pos_y = parse_length(bracket, code_line[7]);
     var text_direction = code_line[8];
     var text_scale = code_line[9];
     var text_symbolic_flags = code_line[10].replace(/"/g,"");
